@@ -1,0 +1,30 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+/* ------------------------Header-------------------------- */
+
+/* .first {
+    background-color: rgb(237, 233, 233);
+    height: 10px;
+    width: 100%;
+} */
+.box__search input {
+    background-color: transparent;
+    border-bottom: 1px solid;
+
+    outline: none;
+    /* border: 1px solid black; */
+}
+/* DetailProduct.css */
+.btn-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.btn-selected {
+    background-color: #007bff;
+    color: white;
+}
