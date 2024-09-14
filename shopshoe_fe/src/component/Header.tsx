@@ -18,10 +18,10 @@ export const IconCart = styled(LocalMallOutlinedIcon)({
         color: "rgb(92, 88, 88)", // Ví dụ đổi màu
     },
     "@media (max-width: 739px) ": {
-        fontSize: "3.5rem",
+        fontSize: "2.5rem",
         position: "absolute",
-        top: "20px",
-        right: "-230px",
+        top: "25px",
+        right: "20px",
     },
 });
 
