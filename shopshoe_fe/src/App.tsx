@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import ManagerCate from "./page/admin/category/ManagerCate";
 import CategoryForm from "./page/admin/category/CategoryForm";
-import AuthForm from "./component/AuthForm";
+import AuthForm from "./page/AuthForm";
 import LayoutAdmin from "./component/layout/LayoutAdmin";
 import LayoutClient from "./component/layout/LayoutClient";
 function App() {

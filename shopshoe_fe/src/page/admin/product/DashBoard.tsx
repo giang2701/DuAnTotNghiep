@@ -4,12 +4,16 @@ import {
     ProductContext,
     ProductContextType,
 } from "../../../context/ProductContext";
+import DialogRemove from "../../../component/DialogRemove";
 
 const DashBoard = () => {
     // console.log(data);
-    const { state, removeProduct } = useContext(
-        ProductContext
-    ) as ProductContextType;
+    const { state, removeProduct, confirm, setConfirm, setIdDelete } =
+        useContext(ProductContext) as ProductContextType;
+    const handleConfirm = (_id: string) => {
+        setConfirm(true);
+        setIdDelete(_id);
+    };
     return (
         <>
             <div className="container">
@@ -46,7 +50,7 @@ const DashBoard = () => {
                                         <button
                                             className="btn btn-danger"
                                             onClick={() =>
-                                                removeProduct(item._id!)
+                                                handleConfirm(item._id!)
                                             }
                                         >
                                             Delete
@@ -63,6 +67,11 @@ const DashBoard = () => {
                         ))}
                     </tbody>
                 </table>
+                <DialogRemove
+                    isOpen={confirm} //  để rõ hơn về việc điều khiển việc mở/đóng hộp thoại
+                    onCloseDialog={setConfirm} //  để chỉ rõ rằng hàm này dùng để đóng hộp thoại
+                    onConfirmDelete={removeProduct} //  để chỉ rõ rằng hàm này dùng để xác nhận xóa
+                />
             </div>
         </>
     );

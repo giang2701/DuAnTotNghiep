@@ -280,6 +280,7 @@ const Hompage = (props: Props) => {
                             </div>
                         </div>
                     </div>
+                    {/* men */}
                     <div
                         id="men"
                         className={`category-section ${
