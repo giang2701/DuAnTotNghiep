@@ -13,9 +13,21 @@ const TymButton = () => {
     return (
         <IconButton onClick={handleLike} color="error">
             {liked ? (
-                <FavoriteIcon sx={{ fontSize: 25 }} />
+                <FavoriteIcon
+                    sx={{
+                        fontSize: 25,
+                        marginLeft: "0px",
+                        marginTop: "-0px",
+                    }}
+                />
             ) : (
-                <FavoriteBorderIcon sx={{ fontSize: 25 }} />
+                <FavoriteBorderIcon
+                    sx={{
+                        fontSize: 25,
+                        marginLeft: "0px",
+                        marginTop: "-0px",
+                    }}
+                />
             )}
         </IconButton>
     );
