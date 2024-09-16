@@ -1,4 +1,4 @@
-# Cài đặt môi trường (......)
+# Cài đặt môi trường (.......)
 
 -   npm create vite -- --template react-ts +Tên dự án
 -   npm i sass -D :cài đặt sass
