@@ -510,9 +510,9 @@ const Hompage = (props: Props) => {
                             </div>
                             <div className=" profile_quote">
                                 <p>
-                                    Nike Air Max 2017 features full-length
-                                    cushioning and a sleek, modern design for
-                                    maximum comfort.
+                                    Epic Adidas embodies athletic excellence and
+                                    innovation, merging performance with iconic
+                                    style for all.
                                 </p>
                             </div>
                         </div>

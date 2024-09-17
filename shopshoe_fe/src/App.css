@@ -407,6 +407,13 @@ ul li:hover {
     justify-content: center;
     width: max-content;
 }
+.product__slip p {
+    float: left;
+    margin-left: 15px;
+}
+.product__slip .btn__tym {
+    margin-top: 30px;
+}
 .see__more {
     width: 150px;
     height: 55px;

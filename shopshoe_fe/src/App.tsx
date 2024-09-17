@@ -3,29 +3,19 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import instance from "./api";
 import "./App.css";
 import { Product } from "./interface/Products";
-
-import FormProduct from "./page/admin/product/FormProduct";
-import Hompage from "./page/Hompage";
-import DetailProduct from "./page/DetailProduct";
-import DashBoard from "./page/admin/product/DashBoard";
-import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import ManagerCate from "./page/admin/category/ManagerCate";
-import CategoryForm from "./page/admin/category/CategoryForm";
-import AuthForm from "./page/AuthForm";
+import "react-toastify/dist/ReactToastify.css";
 import LayoutAdmin from "./component/layout/LayoutAdmin";
 import LayoutClient from "./component/layout/LayoutClient";
+import CategoryForm from "./page/admin/category/CategoryForm";
+import ManagerCate from "./page/admin/category/ManagerCate";
+import DashBoard from "./page/admin/product/DashBoard";
+import FormProduct from "./page/admin/product/FormProduct";
+import Login from "./page/Auth/Login";
+import Register from "./page/Auth/Register";
+import DetailProduct from "./page/DetailProduct";
+import Hompage from "./page/Hompage";
 function App() {
-    const [product, setProduct] = useState<Product[]>([]);
-    const nav = useNavigate();
-    const getAlldata = async () => {
-        const { data } = await instance.get("/products");
-        // console.log(data.data);
-        setProduct(data.data);
-    };
-    useEffect(() => {
-        getAlldata();
-    }, []);
     return (
         <>
             <Routes>
@@ -34,8 +24,8 @@ function App() {
                     <Route index element={<Hompage />} />
                     <Route path="/detail/:id" element={<DetailProduct />} />
                 </Route>
-                <Route path="/login" element={<AuthForm isLogin />} />
-                <Route path="/register" element={<AuthForm />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
                 {/*================admin===========================*/}
                 {/* >>San Pham */}
                 <Route path="/admin" element={<LayoutAdmin />}>
