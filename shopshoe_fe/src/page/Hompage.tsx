@@ -250,10 +250,8 @@ const Hompage = (props: Props) => {
                                                     style={{
                                                         color: "#57585a",
                                                         fontSize: "14px",
-                                                        lineHeight: "16px",
                                                         fontWeight: "400",
                                                         marginBottom: "10px",
-                                                        display: "block",
                                                         textTransform:
                                                             "capitalize",
                                                         textDecoration: "none",
@@ -308,10 +306,8 @@ const Hompage = (props: Props) => {
                                                     style={{
                                                         color: "#57585a",
                                                         fontSize: "14px",
-                                                        lineHeight: "16px",
                                                         fontWeight: "400",
                                                         marginBottom: "10px",
-                                                        display: "block",
                                                         textTransform:
                                                             "capitalize",
                                                         textDecoration: "none",
@@ -361,10 +357,8 @@ const Hompage = (props: Props) => {
                                     style={{
                                         color: "#57585a",
                                         fontSize: "14px",
-                                        lineHeight: "16px",
                                         fontWeight: "400",
                                         marginBottom: "10px",
-                                        display: "block",
                                         textTransform: "capitalize",
                                         textDecoration: "none",
                                         margin: "20px 0px",

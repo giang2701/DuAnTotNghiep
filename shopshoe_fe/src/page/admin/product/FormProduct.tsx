@@ -8,17 +8,22 @@ import {
     ProductContextType,
 } from "../../../context/ProductContext";
 import { Category } from "../../../interface/Category";
+import RichTextEditor from "../../../component/RichTextEditor";
 
 const FormProduct = () => {
     const { id } = useParams();
     const { handleProduct } = useContext(ProductContext) as ProductContextType;
     const [categories, setCategories] = useState<Category[]>([]);
     const [formattedPrice, setFormattedPrice] = useState<string>("");
+    // Khai báo state cho description
+    const [description, setDescription] = useState("");
+
     const {
         handleSubmit,
         register,
         reset,
         control,
+        setValue, // Import thêm setValue từ useForm
         formState: { errors },
     } = useForm<Product>({
         defaultValues: {
@@ -43,6 +48,7 @@ const FormProduct = () => {
         control,
         name: "sizeStock",
     });
+    // chuyển đổi giá về đ
     const formatPrice = (price: number): string => {
         return new Intl.NumberFormat("vi-VN", {
             style: "currency",
@@ -51,45 +57,50 @@ const FormProduct = () => {
             .format(price)
             .replace("₫", "đ");
     };
-
     const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = parseInt(event.target.value, 10);
         setFormattedPrice(formatPrice(value));
     };
+    // Đổ dữ liệu khi edit
     useEffect(() => {
         if (id) {
             (async () => {
                 try {
                     const { data } = await instance.get(`/products/${id}`);
+
+                    // Cập nhật size khi lấy dữ liệu từ backend
                     const existingData = data.data;
                     const defaultStock = Array.from({ length: 12 }, (_, i) => ({
                         size: 34 + i,
                         stock: 0,
                     }));
-
                     const updatedSizeStock = defaultStock.map((sizeObj) => {
                         const existingStock = existingData.sizeStock.find(
                             (item: any) => item.size === sizeObj.size
                         );
                         return existingStock || sizeObj;
                     });
-
                     reset({
                         ...existingData,
                         sizeStock: updatedSizeStock,
                         category: existingData.category?._id || "",
                     });
 
+                    // Cập nhật Price khi lấy dữ liệu từ backend
                     if (existingData.price) {
                         setFormattedPrice(formatPrice(existingData.price));
                     }
+
+                    // Cập nhật description khi lấy dữ liệu từ backend
+                    setValue("description", existingData.description);
+                    setDescription(existingData.description); // Cập nhật state nội bộ để hiển thị giá trị
                 } catch (error) {
                     console.error("Error fetching product data:", error);
                 }
             })();
         }
-    }, [id, reset]);
-    // Danh muc
+    }, [id, reset, setValue]);
+
     useEffect(() => {
         (async () => {
             const { data } = await instance.get(`/categorys`);
@@ -97,6 +108,7 @@ const FormProduct = () => {
             setCategories(data.data);
         })();
     }, []);
+
     return (
         <div className="container">
             <h1 className="text-center">
@@ -152,11 +164,19 @@ const FormProduct = () => {
                     <label htmlFor="description" className="form-label">
                         Description
                     </label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        {...register("description")}
+                    {/* Cập nhật giá trị từ RichTextEditor và truyền vào React Hook Form */}
+                    <RichTextEditor
+                        value={description}
+                        onChange={(value: any) => {
+                            setDescription(value); // Cập nhật state nội bộ
+                            setValue("description", value); // Cập nhật giá trị trong React Hook Form
+                        }}
                     />
+                    {errors.description && (
+                        <span className="text-danger">
+                            Description is required
+                        </span>
+                    )}
                 </div>
                 <div className="mb-3">
                     <label htmlFor="images" className="form-label">

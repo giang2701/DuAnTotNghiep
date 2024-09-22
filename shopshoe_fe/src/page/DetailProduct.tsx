@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import instance from "../api";
 import { Product } from "../interface/Products";
+import ContentDisplay from "../component/ContentDisplay";
 
 type Props = {};
 
@@ -112,6 +113,9 @@ const DetailProduct = (props: Props) => {
                                 +
                             </button>
                         </div>
+                    </div>
+                    <div className="mt-3">
+                        <ContentDisplay content={product.description} />
                     </div>
                 </div>
             </div>
