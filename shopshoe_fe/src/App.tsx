@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
-import instance from "./api";
+// import { useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
+// import instance from "./api";
 import "./App.css";
-import { Product } from "./interface/Products";
+// import { Product } from "./interface/Products";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LayoutAdmin from "./component/layout/LayoutAdmin";
