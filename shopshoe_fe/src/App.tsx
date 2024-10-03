@@ -1,8 +1,5 @@
-import { useEffect, useState } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
-import instance from "./api";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import { Product } from "./interface/Products";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LayoutAdmin from "./component/layout/LayoutAdmin";
@@ -15,8 +12,7 @@ import Login from "./page/Auth/Login";
 import Register from "./page/Auth/Register";
 import DetailProduct from "./page/DetailProduct";
 import Hompage from "./page/Hompage";
-import Category from "./page/Category1";
-import C1 from "./page/C1";
+import Product_List from "./page/Product_List";
 function App() {
     return (
         <>
@@ -24,8 +20,7 @@ function App() {
                 {/* Client */}
                 <Route path="/" element={<LayoutClient />}>
                     <Route index element={<Hompage />} />
-                    <Route path="/category" element={<Category/>} />
-                    <Route path="/C1" element={<C1/>} />
+                    <Route path="/Product_List" element={<Product_List/>} />
                     <Route path="/detail/:id" element={<DetailProduct />} />
                 </Route>
                 <Route path="/login" element={<Login />} />
