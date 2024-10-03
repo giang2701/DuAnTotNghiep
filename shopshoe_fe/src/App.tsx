@@ -15,6 +15,8 @@ import Login from "./page/Auth/Login";
 import Register from "./page/Auth/Register";
 import DetailProduct from "./page/DetailProduct";
 import Hompage from "./page/Hompage";
+import Category from "./page/Category1";
+import C1 from "./page/C1";
 function App() {
     return (
         <>
@@ -22,6 +24,8 @@ function App() {
                 {/* Client */}
                 <Route path="/" element={<LayoutClient />}>
                     <Route index element={<Hompage />} />
+                    <Route path="/category" element={<Category/>} />
+                    <Route path="/C1" element={<C1/>} />
                     <Route path="/detail/:id" element={<DetailProduct />} />
                 </Route>
                 <Route path="/login" element={<Login />} />
