@@ -16,37 +16,31 @@ import Register from "./page/Auth/Register";
 import DetailProduct from "./page/DetailProduct";
 import Hompage from "./page/Hompage";
 function App() {
-    return (
-        <>
-            <Routes>
-                {/* Client */}
-                <Route path="/" element={<LayoutClient />}>
-                    <Route index element={<Hompage />} />
-                    <Route path="/detail/:id" element={<DetailProduct />} />
-                </Route>
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                {/*================admin===========================*/}
-                {/* >>San Pham */}
-                <Route path="/admin" element={<LayoutAdmin />}>
-                    <Route index element={<DashBoard />} />
-                    <Route path="/admin/add" element={<FormProduct />} />
-                    <Route path="/admin/edit/:id" element={<FormProduct />} />
-                    {/* >>Danh Muc */}
-                    <Route path="/admin/category" element={<ManagerCate />} />
-                    <Route
-                        path="/admin/category-add"
-                        element={<CategoryForm />}
-                    />
-                    <Route
-                        path="/admin/category-edit/:id"
-                        element={<CategoryForm />}
-                    />
-                </Route>
-            </Routes>
-            <ToastContainer />
-        </>
-    );
+  return (
+    <>
+      <Routes>
+        {/* Client */}
+        <Route path="/" element={<LayoutClient />}>
+          <Route index element={<Hompage />} />
+          <Route path="/detail/:id" element={<DetailProduct />} />
+        </Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        {/*================admin===========================*/}
+        {/* >>San Pham */}
+        <Route path="/admin" element={<LayoutAdmin />}>
+          <Route index element={<DashBoard />} />
+          <Route path="/admin/add" element={<FormProduct />} />
+          <Route path="/admin/edit/:id" element={<FormProduct />} />
+          {/* >>Danh Muc */}
+          <Route path="/admin/category" element={<ManagerCate />} />
+          <Route path="/admin/category-add" element={<CategoryForm />} />
+          <Route path="/admin/category-edit/:id" element={<CategoryForm />} />
+        </Route>
+      </Routes>
+      <ToastContainer />
+    </>
+  );
 }
 
 export default App;
