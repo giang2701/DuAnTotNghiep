@@ -20,7 +20,7 @@ function App() {
                 {/* Client */}
                 <Route path="/" element={<LayoutClient />}>
                     <Route index element={<Hompage />} />
-                    <Route path="/Product_List" element={<Product_List/>} />
+                    <Route path="/Product_List" element={<Product_List />} />
                     <Route path="/detail/:id" element={<DetailProduct />} />
                 </Route>
                 <Route path="/login" element={<Login />} />

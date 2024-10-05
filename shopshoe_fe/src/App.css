@@ -60,7 +60,7 @@ html {
     margin-left: 200px;
 }
 
-.search input {
+.company .search input {
     background-color: transparent;
     border-bottom: 1px solid;
     outline: none;
@@ -1286,10 +1286,11 @@ ul li:hover {
     border-radius: 10px;
 
 }
+
 .shop-sidebar__header {
     font-family: 'Roboto', sans-serif;
     font-size: 20px;
-    margin: 15px 0px 15px 22px ;
+    margin: 15px 0px 15px 22px;
     color: #120101;
 }
 
@@ -1305,26 +1306,29 @@ ul li:hover {
     padding: 10px 0;
     cursor: pointer;
     border-bottom: 1px solid #ddd;
-    color:  #333;
+    color: #333;
     font-size: 15px;
-    
+
 }
 
 .button_icon {
     margin-left: 125px;
     font-size: 18px;
-    color:  #333;
+    color: #333;
 }
+
 .button_icon2 {
     margin-left: 152px;
     font-size: 18px;
-    color:  #333;
+    color: #333;
 }
+
 .button_icon3 {
     margin-left: 156px;
     font-size: 18px;
-    color:  #333;
+    color: #333;
 }
+
 .shop-sidebar__filter:hover {
     color: #ff4500;
 }
@@ -1354,9 +1358,8 @@ ul li:hover {
     color: #fff;
     margin-left: 30px;
 }
-button_icon
 
-.shop-sidebar__reset-button:hover,
+button_icon .shop-sidebar__reset-button:hover,
 .shop-sidebar__filter-button:hover {
     background-color: #ff4500;
     color: #fff;
@@ -1459,17 +1462,20 @@ button_icon
     cursor: pointer;
 
 }
-.text_item{
+
+.text_item {
     margin-left: 10px;
     font-family: 'Roboto', sans-serif;
     font-size: 13px;
 
 }
-.item_price{
+
+.item_price {
     font-family: 'Roboto', sans-serif;
     font-size: 13px;
 }
-.item_gender{
+
+.item_gender {
     margin-left: 10px;
     font-family: 'Roboto', sans-serif;
     font-size: 13px;
