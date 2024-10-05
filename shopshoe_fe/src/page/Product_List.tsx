@@ -8,12 +8,18 @@ export default function Product_List() {
   const { state } = useContext(ProductContext) as ProductContextType
   const { state1 } = useContext(CategoryContext) as CategoryContextType
   const [gender, setGender] = useState('None');
-  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState([0, 10000000]);
   const [isBrandOpen, setIsBrandOpen] = useState(false);
   const [isGenderOpen, setIsGenderOpen] = useState(false);
   const [isPriceRangeOpen, setIsPriceRangeOpen] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState(state.products);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 16;
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+
   // const [Categories, setCategories] = useState(state1.categories);
   console.log(state1.category);
 
@@ -29,11 +35,20 @@ export default function Product_List() {
     setGender(e.target.value);
   };
 
-   
+
   // thêm vào mãng thương hiệu để lọc
   const updateBrandSelection = (brand: string) => {
-    setSelectedBrand(prevBrand => (prevBrand === brand ? null : brand));
-  };
+    setSelectedBrands((prevBrands) => {
+      if (prevBrands.includes(brand)) {
+        return prevBrands.filter((b) => b !== brand)
+      } else {
+        return [...prevBrands, brand]
+      }
+    })
+
+  }
+
+
 
   const updatePriceRange = (e, type) => {
     const value = parseInt(e.target.value);
@@ -51,12 +66,15 @@ export default function Product_List() {
   const applyFilters = () => {
     const filtered = state.products.filter((product) => {
       const category = state1.category.find(cat => cat._id === product.category?._id);
-      const matchesBrand = !selectedBrand || (product && product?.brand === selectedBrand);
+      const matchesBrand = selectedBrands.length === 0 || (product && selectedBrands.includes(product.brand));
       const matchesGender = gender === 'None' || (category && category.title === gender);
       const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1];
+      console.log(matchesBrand);
+
       return matchesGender && matchesPrice && matchesBrand;
     });
     setFilteredProducts(filtered);
+    setCurrentPage(1);
   };
 
   const formatCurrency = (price: number): string => {
@@ -67,6 +85,7 @@ export default function Product_List() {
       .format(price)
       .replace("₫", "đ");
   };
+
 
   return (
     <>
@@ -84,43 +103,45 @@ export default function Product_List() {
         <aside className="shop-sidebar">
           <div className="shop-sidebar__header">Bộ Lọc</div>
           <ul className="shop-sidebar__filters">
-          <li
+            <li
               className="shop-sidebar__filter"
               onClick={() => setIsBrandOpen(prev => !prev)}
             >
               Thương Hiệu
+              {isBrandOpen ? (<div className='button_icon'>-</div>) : (<div className='button_icon'>+</div>)}
             </li>
             {isBrandOpen && (
               <div className="shop-sidebar__sub-list">
                 <label className="shop-sidebar__sub-item">
                   <input
-                   type="checkbox"
-                   name="brand"
-                   value="Adidas"
-                   checked={selectedBrand === 'Adidas'}
-                   onChange={() => updateBrandSelection('Adidas')}
+                    type="checkbox"
+                    name="Adidas"
+                    value="Adidas"
+                    checked={selectedBrands.includes('Adidas')}
+                    onChange={() => updateBrandSelection('Adidas')}
                   />
-                  Adidas
+                  <div className="text_item">Adidas</div>
                 </label>
                 <label className="shop-sidebar__sub-item">
                   <input
-                     type="checkbox"
-                     name="brand"
-                     value="Nike "
-                     checked={selectedBrand === 'Nike '}
-                     onChange={() => updateBrandSelection('Nike ')}
+                    type="checkbox"
+                    name="Nike"
+                    value="Nike "
+                    checked={selectedBrands.includes('Nike ')}
+                    onChange={() => updateBrandSelection('Nike ')}
                   />
-                  Nike 
+                  <div className="text_item">Nike</div>
+
                 </label>
                 <label className="shop-sidebar__sub-item">
                   <input
-                   type="checkbox"
-                   name="brand"
-                   value="moka "
-                   checked={selectedBrand === 'moka '}
-                   onChange={() => updateBrandSelection('moka ')}
+                    type="checkbox"
+                    name="brand"
+                    value="moka "
+                    checked={selectedBrands.includes('moka ')}
+                    onChange={() => updateBrandSelection('moka ')}
                   />
-                  moka
+                  <div className="text_item">moka</div>
                 </label>
               </div>
             )}
@@ -129,6 +150,7 @@ export default function Product_List() {
               onClick={() => setIsGenderOpen(prev => !prev)}
             >
               Giới Tính
+              {isGenderOpen ? (<div className='button_icon2'>-</div>) : (<div className='button_icon2'>+</div>)}
             </li>
             {isGenderOpen && (
               <div className="shop-sidebar__sub-list">
@@ -140,7 +162,7 @@ export default function Product_List() {
                     checked={gender === 'Nam'}
                     onChange={updateGender}
                   />
-                  Nam
+                  <div className="item_gender">Nam</div>
                 </label>
                 <label className="shop-sidebar__sub-item">
                   <input
@@ -150,17 +172,7 @@ export default function Product_List() {
                     checked={gender === 'Nữ'}
                     onChange={updateGender}
                   />
-                  Nữ
-                </label>
-                <label className="shop-sidebar__sub-item">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="None"
-                    checked={gender === 'None'}
-                    onChange={updateGender}
-                  />
-                  Danh Mục Mặc Định
+                  <div className="item_gender">Nữ</div>
                 </label>
               </div>
             )}
@@ -170,6 +182,8 @@ export default function Product_List() {
               onClick={() => setIsPriceRangeOpen(prev => !prev)}
             >
               Mức giá
+              {isPriceRangeOpen ? (<div className='button_icon3'>-</div>) : (<div className='button_icon3'>+</div>)}
+
             </li>
             {isPriceRangeOpen && (
               <div className="shop-sidebar__range-slider">
@@ -183,7 +197,7 @@ export default function Product_List() {
                   className="slider-input"
                   id="price-range"
                 />
-                <span>{priceRange[0].toLocaleString()} đ</span>
+                <span className='item_price'>{priceRange[0].toLocaleString()} đ</span>
               </div>
             )}
           </ul>
@@ -215,8 +229,9 @@ export default function Product_List() {
           <section className="shop-product-grid">
             <div className="container">
               <div className="Container__product gallery">
-                {filteredProducts.length > 0 ? (
-                  filteredProducts.map((item) => (
+
+                {currentProducts.length > 0 ? (
+                  currentProducts.map((item) => (
                     <div className="product gallery" key={item._id}>
                       <div className="product-img">
                         <img src={`${item.images}`} alt="" className="img-fluid" />
@@ -251,11 +266,49 @@ export default function Product_List() {
                     </div>
                   ))
                 ) : (
-                  <p>Không tìm thấy sản phẩm nào phù hợp.</p>
+                  <h3>Không tìm thấy sản phẩm nào phù hợp</h3>
                 )}
               </div>
             </div>
           </section>
+          <div className="pagination">
+            <button
+              onClick={() => setCurrentPage(1)}
+              disabled={currentPage === 1}
+            >
+              Trang đầu
+            </button>
+            <button
+              onClick={() => setCurrentPage(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              «
+            </button>
+
+            {[...Array(Math.ceil(filteredProducts.length / productsPerPage)).keys()].map((number) => (
+              <button
+                key={number + 1}
+                onClick={() => setCurrentPage(number + 1)}
+                className={currentPage === number + 1 ? 'active' : ''}
+              >
+                {number + 1}
+              </button>
+            ))}
+
+            <button
+              onClick={() => setCurrentPage(currentPage + 1)}
+              disabled={currentPage * productsPerPage >= filteredProducts.length}
+            >
+              »
+            </button>
+            <button
+              onClick={() => setCurrentPage(Math.ceil(filteredProducts.length / productsPerPage))}
+              disabled={currentPage === Math.ceil(filteredProducts.length / productsPerPage)}
+            >
+              Trang cuối
+            </button>
+          </div>
+
         </main>
       </div>
     </>
