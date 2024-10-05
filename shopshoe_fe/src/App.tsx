@@ -1,8 +1,5 @@
-import { useEffect, useState } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
-import instance from "./api";
-import "./App.css";
-import { Product } from "./interface/Products";
+import { Route, Routes, } from "react-router-dom";
+import "./App.css"
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LayoutAdmin from "./component/layout/LayoutAdmin";
@@ -15,6 +12,7 @@ import Login from "./page/Auth/Login";
 import Register from "./page/Auth/Register";
 import DetailProduct from "./page/DetailProduct";
 import Hompage from "./page/Hompage";
+import Product_List from "./page/Product_list";
 function App() {
   return (
     <>
@@ -23,6 +21,7 @@ function App() {
         <Route path="/" element={<LayoutClient />}>
           <Route index element={<Hompage />} />
           <Route path="/detail/:id" element={<DetailProduct />} />
+          <Route path="/product_list" element={<Product_List />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

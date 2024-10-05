@@ -6,14 +6,14 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 export type CategoryContextType = {
-    state: { category: Category[] };
+    state1: { category: Category[] };
     dispatch: React.Dispatch<any>;
     removeCategory: (_id: string | undefined) => void;
     handleCategory: (data: Category) => void;
 };
 export const CategoryContext = createContext({} as CategoryContextType);
 const CategoryProvider = ({ children }: { children: React.ReactNode }) => {
-    const [state, dispatch] = useReducer(categoryReducer, { category: [] });
+    const [state1, dispatch] = useReducer(categoryReducer, { category: [] });
     const nav = useNavigate();
     //get all category
     useEffect(() => {
@@ -62,7 +62,7 @@ const CategoryProvider = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <CategoryContext.Provider
-            value={{ state, dispatch, removeCategory, handleCategory }}
+            value={{ state1, dispatch, removeCategory, handleCategory }}
         >
             {children}
         </CategoryContext.Provider>
