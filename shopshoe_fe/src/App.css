@@ -785,7 +785,10 @@ ul li:hover {
   font-size: 2rem;
   height: 55px;
 }
-
+.box__link__register {
+  width: 400px;
+  margin-left: 100px;
+}
 .box__link__register p:nth-child(1) {
   font-size: 2rem;
   font-weight: bold;
