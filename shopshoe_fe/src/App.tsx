@@ -1,5 +1,5 @@
-import { Route, Routes, } from "react-router-dom";
-import "./App.css"
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LayoutAdmin from "./component/layout/LayoutAdmin";
@@ -22,9 +22,10 @@ function App() {
           <Route index element={<Hompage />} />
           <Route path="/detail/:id" element={<DetailProduct />} />
           <Route path="/product_list" element={<Product_List />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+
         {/*================admin===========================*/}
         {/* >>San Pham */}
         <Route path="/admin" element={<LayoutAdmin />}>
