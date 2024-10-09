@@ -10,17 +10,6 @@ import {
 import { Category } from "../../../interface/Category";
 import RichTextEditor from "../../../component/RichTextEditor";
 import axios from "axios";
-import {
-    Container,
-    Typography,
-    Box,
-    Button,
-    TextField,
-    Select,
-    MenuItem,
-    FormControl,
-    InputLabel,
-} from "@mui/material";
 
 const FormProduct = () => {
     const { id } = useParams();
@@ -29,7 +18,6 @@ const FormProduct = () => {
     const [formattedPrice, setFormattedPrice] = useState<string>("");
     const [description, setDescription] = useState("");
 
-    // State để quản lý ảnh sản phẩm và ảnh danh mục
     const [imgURL, setImgURL] = useState<string | null>(null);
     const [imgCategoryURLs, setImgCategoryURLs] = useState<string[]>([]);
 
@@ -78,7 +66,6 @@ const FormProduct = () => {
         setFormattedPrice(formatPrice(value));
     };
 
-    // Upload file ảnh lên Cloudinary
     const uploadFile = async (file: File) => {
         const CLOUD_NAME = "dq3lk241i";
         const PRESET_NAME = "datn_upload";
@@ -95,7 +82,6 @@ const FormProduct = () => {
         return response.data.secure_url;
     };
 
-    // Xử lý thêm ảnh sản phẩm
     const handleImgChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
         if (files && files.length > 0) {
@@ -104,7 +90,6 @@ const FormProduct = () => {
         }
     };
 
-    // Xử lý thêm ảnh danh mục
     const handleImgCategoryChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
         if (files) {
@@ -118,8 +103,19 @@ const FormProduct = () => {
             (async () => {
                 try {
                     const { data } = await instance.get(`/products/${id}`);
-
                     const existingData = data.data;
+
+                    if (existingData.images) {
+                        setImgURL(existingData.images);
+                    }
+
+                    if (
+                        existingData.imgCategory &&
+                        existingData.imgCategory.length > 0
+                    ) {
+                        setImgCategoryURLs(existingData.imgCategory);
+                    }
+
                     const defaultStock = Array.from({ length: 12 }, (_, i) => ({
                         size: 34 + i,
                         stock: 0,
@@ -157,60 +153,53 @@ const FormProduct = () => {
     }, []);
 
     return (
-        <Container maxWidth="lg">
-            <Typography
-                style={{ fontSize: "40px", marginBottom: "30px", paddingTop: "24px" }}
-                variant="h1"
-                component="h1"
-            >
-                {id ? "Product Edit" : "Product Add"}
-            </Typography>
+        <div className="container">
+            <h1>{id ? "Product Edit" : "Product Add"}</h1>
             <form
                 onSubmit={handleSubmit((data: Product) => {
                     const updatedData = {
                         ...data,
                         _id: id,
-                        images: imgURL || data?.images, // Thêm ảnh vào đối tượng gửi đi
+                        images: imgURL || data?.images,
+                        imgCategory: imgCategoryURLs,
                     };
-                    console.log("Dữ liệu gửi lên:", updatedData); // Kiểm tra dữ liệu
+                    console.log("Dữ liệu gửi lên:", updatedData);
+
                     handleProduct(updatedData);
                 })}
             >
-                <FormControl fullWidth margin="normal">
-                    <TextField
+                <div className="form-group">
+                    <label>Title</label>
+                    <input
                         {...register("title", { required: true })}
-                        label="Title"
-                        variant="outlined"
-                        error={!!errors.title}
-                        helperText={errors.title && "Title is required"}
+                        className={`form-control ${errors.title ? "is-invalid" : ""}`}
                     />
-                </FormControl>
+                    {errors.title && <div className="invalid-feedback">Title is required</div>}
+                </div>
 
-                <FormControl fullWidth margin="normal">
-                    <TextField
+                <div className="form-group">
+                    <label>Brand</label>
+                    <input
                         {...register("brand", { required: true })}
-                        label="Brand"
-                        variant="outlined"
-                        error={!!errors.brand}
-                        helperText={errors.brand && "Brand is required"}
+                        className={`form-control ${errors.brand ? "is-invalid" : ""}`}
                     />
-                </FormControl>
+                    {errors.brand && <div className="invalid-feedback">Brand is required</div>}
+                </div>
 
-                <FormControl fullWidth margin="normal">
-                    <TextField
+                <div className="form-group">
+                    <label>Price</label>
+                    <input
                         {...register("price", { required: true })}
-                        label="Price"
-                        variant="outlined"
                         type="number"
+                        className={`form-control ${errors.price ? "is-invalid" : ""}`}
                         onChange={handlePriceChange}
-                        error={!!errors.price}
-                        helperText={errors.price && "Price is required"}
                     />
-                    <Box mt={1}>{formattedPrice}</Box>
-                </FormControl>
+                    {errors.price && <div className="invalid-feedback">Price is required</div>}
+                    <div>{formattedPrice}</div>
+                </div>
 
-                <FormControl fullWidth margin="normal">
-                    <label htmlFor="description">Description</label>
+                <div className="form-group">
+                    <label>Description</label>
                     <RichTextEditor
                         value={description}
                         onChange={(value: any) => {
@@ -219,109 +208,75 @@ const FormProduct = () => {
                         }}
                     />
                     {errors.description && (
-                        <Box style={{ color: "red", margin: "8px 0" }}>
-                            Description is required
-                        </Box>
+                        <div className="text-danger">Description is required</div>
                     )}
-                </FormControl>
+                </div>
 
-                {/* Thêm ảnh sản phẩm */}
-                <FormControl fullWidth margin="normal">
-                    <TextField
+                <div className="form-group">
+                    <label>Product Image</label>
+                    <input
                         type="file"
                         onChange={handleImgChange}
-                        variant="outlined"
-                        error={!!errors.images}
-                        helperText={errors.images && "Không được để trống"}
+                        className={`form-control ${errors.images ? "is-invalid" : ""}`}
                     />
                     {imgURL && (
-                        <Box mt={1}>
-                            <img
-                                src={imgURL}
-                                alt="Uploaded Product"
-                                style={{ width: "100px", height: "auto" }}
-                            />
-                        </Box>
+                        <div>
+                            <img src={imgURL} alt="Uploaded Product" width="100" />
+                        </div>
                     )}
-                </FormControl>
+                </div>
 
-                {/* Thêm ảnh danh mục */}
-                <FormControl fullWidth margin="normal">
-                    <TextField
+                <div className="form-group">
+                    <label>Category Images</label>
+                    <input
                         type="file"
                         onChange={handleImgCategoryChange}
-                        inputProps={{ multiple: true }}
-                        variant="outlined"
-                        error={!!errors.imgCategory}
-                        helperText={errors.imgCategory && "Không được để trống"}
+                        multiple
+                        className={`form-control ${errors.imgCategory ? "is-invalid" : ""}`}
                     />
                     {imgCategoryURLs.length > 0 && (
-                        <Box mt={1} sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                             {imgCategoryURLs.map((img, index) => (
-                                <Box key={index} sx={{ display: "flex" }}>
-                                    <img
-                                        src={img}
-                                        alt={`Uploaded Category ${index}`}
-                                        style={{ width: "80px", height: "80px" }}
-                                    />
-                                </Box>
+                                <img key={index} src={img} alt={`Category ${index}`} width="80" />
                             ))}
-                        </Box>
+                        </div>
                     )}
-                </FormControl>
+                </div>
 
-
-
-                <FormControl fullWidth margin="normal">
-                    <InputLabel htmlFor="category">Category</InputLabel>
-                    <Select
-                        {...register("category")}
-                        defaultValue=""
-                        variant="outlined"
-                    >
+                <div className="form-group">
+                    <label>Category</label>
+                    <select {...register("category")} className="form-control">
                         {categories.map((category) => (
-                            <MenuItem key={category._id} value={category._id}>
+                            <option key={category._id} value={category._id}>
                                 {category.title}
-                            </MenuItem>
+                            </option>
                         ))}
-                    </Select>
-                </FormControl>
+                    </select>
+                </div>
 
-                <Box mt={2}>
-                    <Typography variant="h6">Size Stock</Typography>
-                    <Box display="flex" flexWrap="wrap">
+                <div>
+                    <h6>Size Stock</h6>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
                         {fields.map((item, index) => (
-                            <FormControl
-                                key={item.id}
-                                margin="normal"
-                                style={{ width: "120px", marginRight: "16px" }}
-                            >
-                                <TextField
-                                    label={`Size ${item.size}`}
-                                    variant="outlined"
+                            <div key={item.id} style={{ flexBasis: "120px" }}>
+                                <label>{`Size ${item.size}`}</label>
+                                <input
                                     {...register(`sizeStock.${index}.stock` as const, {
                                         valueAsNumber: true,
                                     })}
+                                    type="number"
+                                    className="form-control"
                                 />
-                            </FormControl>
+                            </div>
                         ))}
-                    </Box>
-                </Box>
+                    </div>
+                </div>
 
-                <Button
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                    style={{
-                        marginTop: "20px",
-                        marginBottom: "20px",
-                        backgroundColor: "black",
-                    }}
-                >
+                <button type="submit" className="btn btn-primary" style={{ marginTop: "20px" }}>
                     Submit
-                </Button>
+                </button>
             </form>
-        </Container >
+        </div>
     );
 };
 

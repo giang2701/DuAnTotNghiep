@@ -16,7 +16,7 @@ export interface Product {
     price: number;
     description?: string; // description is optional
     images: string;
-    imgCategory: FileList;
+    imgCategory: string[];
     createdAt: string;
     updatedAt: string;
     category?: Category;

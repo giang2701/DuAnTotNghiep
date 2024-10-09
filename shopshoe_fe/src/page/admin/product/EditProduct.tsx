@@ -14,19 +14,48 @@ import {
   MenuItem,
   InputLabel,
 } from "@mui/material";
-import RichTextEditor from "../../../component/RichTextEditor"; // Giữ phần RichTextEditor cho phần description
+import RichTextEditor from "../../../component/RichTextEditor";
 import { Category } from "../../../interface/Category";
 
 type Props = {
   onsubmit: (data: Product) => void;
 };
 
-const EditProduct = ({ onsubmit }: Props) => {
+const EditProduct = () => {
   const { id } = useParams();
-  const [categories, setCategories] = useState([]);
+  const [category, setCategories] = useState([]);
   const [description, setDescription] = useState("");
-  const [imgURL, setImgURL] = useState<string | null>(null); // Quản lý ảnh sản phẩm
-  const [imgCategoryURLs, setImgCategoryURLs] = useState<string[]>([]); // Quản lý ảnh danh mục
+  const [imgURL, setImgURL] = useState<string | null>(null);
+  const [productData, setProductData] = useState<Product | null>(null);
+  // const [imgCategoryURLs, setImgCategoryURLs] = useState<string[]>([]); // Quản lý ảnh danh mục
+
+  const uploadFile = async (file: File) => {
+    const CLOUD_NAME = "dq3lk241i";
+    const PRESET_NAME = "datn_upload";
+    const FOLDER_NAME = "datn";
+    const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+    const formData = new FormData();
+    formData.append("upload_preset", PRESET_NAME);
+    formData.append("folder", FOLDER_NAME);
+    formData.append("file", file);
+
+    const response = await axios.post(api, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return response.data.secure_url;
+  };
+
+
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const uploadedImageUrl = await uploadFile(file);
+
+      // Cập nhật URL ảnh mới vào state và form
+      setImgURL(uploadedImageUrl);  // Thêm dòng này
+      setValue("images", uploadedImageUrl);
+    }
+  };
 
   const {
     handleSubmit,
@@ -59,58 +88,32 @@ const EditProduct = ({ onsubmit }: Props) => {
     name: "sizeStock",
   });
 
-  // Upload file ảnh lên Cloudinary
-  const uploadFile = async (file: File) => {
-    const CLOUD_NAME = "dzafnopsc";
-    const PRESET_NAME = "nthShop";
-    const FOLDER_NAME = "NTHSHOP";
-    const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
-    const formData = new FormData();
-    formData.append("upload_preset", PRESET_NAME);
-    formData.append("folder", FOLDER_NAME);
-    formData.append("file", file);
 
-    const response = await axios.post(api, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-    return response.data.secure_url;
-  };
-
-  // Xử lý thêm ảnh sản phẩm
-  const handleImgChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      const url = await uploadFile(files[0]);
-      setImgURL(url); // Cập nhật URL ảnh sản phẩm
-    }
-  };
-
-  // Xử lý thêm ảnh danh mục
-  const handleImgCategoryChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      const urls = await Promise.all(Array.from(files).map(uploadFile));
-      setImgCategoryURLs(urls); // Cập nhật URL ảnh danh mục
-    }
-  };
 
   useEffect(() => {
-    if (id) {
-      // Fetch dữ liệu sản phẩm khi có ID
-      (async () => {
-        try {
-          const { data } = await axios.get(`/products/${id}`);
-          const productData = data.data;
+    const fetchProduct = async () => {
+      try {
+        const { data } = await axios.get(`/products/${id}`);
+        setProductData(data);
+        setDescription(data.description); // Cập nhật mô tả vào state nếu cần
+        setImgURL(data.images); // Cập nhật ảnh nếu có
 
-          reset(productData);
-          setDescription(productData.description); // Cập nhật description
-          setImgURL(productData.images); // Cập nhật URL ảnh
-        } catch (error) {
-          console.error("Error fetching product data:", error);
-        }
-      })();
-    }
 
+        reset({
+          title: data.title,
+          brand: data.brand,
+          price: data.price,
+          description: data.description,
+          category: data.category, // Đặt giá trị mặc định cho category
+          images: data.images, // Đặt ảnh đã có vào form
+          sizeStock: data.sizeStock || [], // Đặt dữ liệu stock theo size nếu có
+        });
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu sản phẩm:", error);
+      }
+    };
+
+    fetchProduct();
     // Fetch danh mục
     (async () => {
       const { data } = await axios.get("/categorys");
@@ -118,6 +121,20 @@ const EditProduct = ({ onsubmit }: Props) => {
     })();
   }, [id, reset]);
 
+
+  const onSubmit = async (data: Product) => {
+    try {
+      const updatedProduct = {
+        ...data,
+        images: imgURL || data.images,
+      };
+
+      const response = await axios.put(`/products/${id}`, updatedProduct);
+      console.log("API response: ", response.data); // Kiểm tra dữ liệu trả về từ API
+    } catch (error) {
+      console.error("Lỗi khi cập nhật sản phẩm:", error);
+    }
+  };
   return (
     <Container maxWidth="lg">
       <Typography
@@ -127,16 +144,7 @@ const EditProduct = ({ onsubmit }: Props) => {
       >
         Product Edit
       </Typography>
-      <form
-        onSubmit={handleSubmit((data: any) =>
-          onsubmit({
-            ...data,
-            _id: id,
-            images: imgURL, // Lưu URL của ảnh sản phẩm
-            imgCategory: imgCategoryURLs.length ? imgCategoryURLs : data.imgCategory,
-          })
-        )}
-      >
+      <form onSubmit={handleSubmit(onSubmit)}>
         <FormControl fullWidth margin="normal">
           <TextField
             {...register("title", { required: true })}
@@ -188,55 +196,47 @@ const EditProduct = ({ onsubmit }: Props) => {
         <FormControl fullWidth margin="normal">
           <TextField
             type="file"
-            onChange={handleImgChange}
+            onChange={handleImageChange}
             variant="outlined"
             error={!!errors.images}
             helperText={errors.images && "Không được để trống"}
           />
-          {imgURL && (
+          {/* Hiển thị ảnh mới nếu có, nếu không hiển thị ảnh cũ */}
+          {imgURL ? (
             <Box mt={1}>
               <img
-                src={imgURL}
+                src={`${imgURL}?${new Date().getTime()}`}
                 alt="Uploaded Product"
                 style={{ width: "100px", height: "auto" }}
               />
             </Box>
-          )}
-        </FormControl>
-
-        {/* Thêm ảnh danh mục */}
-        <FormControl fullWidth margin="normal">
-          <TextField
-            type="file"
-            onChange={handleImgCategoryChange}
-            inputProps={{ multiple: true }}
-            variant="outlined"
-            error={!!errors.imgCategory}
-            helperText={errors.imgCategory && "Không được để trống"}
-          />
-          {imgCategoryURLs.length > 0 && (
-            <Box mt={1} sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
-              {imgCategoryURLs.map((img, index) => (
-                <Box key={index} sx={{ display: "flex" }}>
-                  <img
-                    src={img}
-                    alt={`Uploaded Category ${index}`}
-                    style={{ width: "80px", height: "80px" }}
-                  />
-                </Box>
-              ))}
-            </Box>
+          ) : (
+            productData?.images && (
+              <Box mt={1}>
+                <img
+                  src={`${productData.images}?${new Date().getTime()}`}
+                  alt="Current Product"
+                  style={{ width: "100px", height: "auto" }}
+                />
+              </Box>
+            )
           )}
         </FormControl>
 
         <FormControl fullWidth margin="normal">
           <InputLabel htmlFor="category">Category</InputLabel>
-          <Select {...register("category")} defaultValue="" variant="outlined">
-            {categories.map((category: Category) => (
-              <MenuItem key={category._id} value={category._id}>
-                {category.title}
-              </MenuItem>
-            ))}
+          <Select
+            {...register("category", { required: true })} // Thêm required nếu cần
+            defaultValue={productData?.category || ""} // Hiển thị danh mục của sản phẩm hiện tại
+            variant="outlined"
+            error={!!errors.category}
+          >
+            {category &&
+              category.map((item: Category, index: number) => (
+                <MenuItem key={index} value={item._id}>
+                  {item.title}
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
 
