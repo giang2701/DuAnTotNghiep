@@ -17,6 +17,8 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import DOMPurify from "dompurify";
 import TymButton from "../component/Btn__tym";
 import { ProductContext, ProductContextType } from "../context/ProductContext";
+import ContentDisplay from "../component/ContentDisplay";
+import ImgProductDetail from "./ImgProductDetail";
 
 type Props = {};
 
@@ -74,7 +76,6 @@ const DetailProduct = (props: Props) => {
       setStock(stock + 1);
     }
   };
-
   const decrementStock = () => {
     if (selectedSize !== null && stock > 0) {
       setStock(stock - 1);

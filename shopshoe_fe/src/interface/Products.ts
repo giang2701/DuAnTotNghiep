@@ -15,7 +15,8 @@ export interface Product {
     sizeStock: sizeStock[]; // sizeStock is an array of sizeStock objects
     price: number;
     description?: string; // description is optional
-    images?: string[];
+    images: string;
+    imgCategory: string[];
     createdAt: string;
     updatedAt: string;
     category?: Category;
