@@ -46,59 +46,80 @@ const ProductProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
-    const handleProduct = async (product: Product) => {
+    const handleProduct = async (product: Product, file?: File, categoryFiles?: File[]) => {
         try {
-            if (product._id) {
-                console.log(product);
-                const {
-                    _id,
-                    createdAt,
-                    updatedAt,
-                    sizeStock,
-                    images,
-                    ...updatedData
-                } = product;
+            let imageUrl = product.images; // Giữ nguyên URL ảnh cũ nếu không có ảnh mới
+            let categoryImageUrls = product.imgCategory || [];
 
-                // Clean up sizeStock to remove _id fields
-                const cleanedSizeStock = sizeStock.map(
-                    ({ _id, ...item }) => item
+            // Kiểm tra nếu có file mới thì upload ảnh sản phẩm chính
+            if (file) {
+                const formData = new FormData();
+                formData.append("file", file);
+                formData.append("upload_preset", "datn_upload");
+                formData.append("folder", "datn");
+
+                const response = await instance.post(
+                    `https://api.cloudinary.com/v1_1/dq3lk241i/image/upload`,
+                    formData
                 );
+                imageUrl = response.data.secure_url; // Cập nhật URL ảnh mới
+            }
 
-                // Kiểm tra nếu mảng images không có phần tử hoặc tất cả các phần tử đều rỗng
-                if (
-                    !images ||
-                    images.length === 0 ||
-                    images.every((image) => !image.trim())
-                ) {
-                    console.error("Images field is required");
-                    return;
-                }
-                // Chuyển đổi mảng images thành chuỗi
-                const imagesString = images.join(",");
+
+            if (categoryFiles && categoryFiles.length > 0) {
+                const categoryUploads = await Promise.all(
+                    categoryFiles.map(async (categoryFile) => {
+                        const formData = new FormData();
+                        formData.append("file", categoryFile);
+                        formData.append("upload_preset", "datn_upload");
+                        formData.append("folder", "datn");
+
+                        const response = await instance.post(
+                            `https://api.cloudinary.com/v1_1/dq3lk241i/image/upload`,
+                            formData
+                        );
+                        return response.data.secure_url; // Trả về URL ảnh sau khi upload
+                    })
+                );
+                categoryImageUrls = categoryUploads; // Cập nhật lại imgCategory với URL các ảnh mới
+            }
+
+            if (product._id) {
+                const { _id, createdAt, updatedAt, sizeStock, ...updatedData } = product;
+
+                // Clean up sizeStock để loại bỏ các _id
+                const cleanedSizeStock = sizeStock.map(({ _id, ...item }) => item);
+
+                // Cập nhật payload với URL ảnh mới và imgCategory
                 const payload = {
                     ...updatedData,
                     sizeStock: cleanedSizeStock,
-                    images: imagesString,
+                    images: imageUrl, // URL ảnh sản phẩm chính
+                    imgCategory: categoryImageUrls, // URL các ảnh danh mục
                 };
 
-                const { data } = await instance.put(
-                    `/products/${product._id}`,
-                    payload
-                );
+                // Gửi yêu cầu cập nhật sản phẩm
+                const { data } = await instance.put(`/products/${product._id}`, payload);
                 dispatch({ type: "UPDATE_PRODUCT", payload: data.data });
-                // alert(data.message);
-                toast.success("Update successfully");
+                toast.success("Cập nhật sản phẩm thành công");
                 nav("/admin");
             } else {
-                const { data } = await instance.post(`/products`, product);
+                // Thêm sản phẩm mới nếu không có _id
+                const { data } = await instance.post(`/products`, {
+                    ...product,
+                    images: imageUrl,
+                    imgCategory: categoryImageUrls, // Thêm mảng ảnh danh mục mới
+                });
+                console.log("Dữ liệu gửi lên API:", {
+                    ...product,
+                    images: imageUrl,
+                    imgCategory: categoryImageUrls, // Mảng URL ảnh danh mục
+                });
                 dispatch({ type: "ADD_PRODUCT", payload: data.data });
-                // alert(data.message);
-                toast.success("Add successfully");
+                toast.success("Thêm sản phẩm thành công");
                 nav("/admin");
             }
-            nav("/admin");
         } catch (error) {
-            console.log(error);
         }
     };
 

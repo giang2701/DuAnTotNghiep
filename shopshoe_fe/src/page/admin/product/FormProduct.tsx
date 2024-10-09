@@ -9,21 +9,24 @@ import {
 } from "../../../context/ProductContext";
 import { Category } from "../../../interface/Category";
 import RichTextEditor from "../../../component/RichTextEditor";
+import axios from "axios";
 
 const FormProduct = () => {
     const { id } = useParams();
     const { handleProduct } = useContext(ProductContext) as ProductContextType;
     const [categories, setCategories] = useState<Category[]>([]);
     const [formattedPrice, setFormattedPrice] = useState<string>("");
-    // Khai báo state cho description
     const [description, setDescription] = useState("");
+
+    const [imgURL, setImgURL] = useState<string | null>(null);
+    const [imgCategoryURLs, setImgCategoryURLs] = useState<string[]>([]);
 
     const {
         handleSubmit,
         register,
         reset,
         control,
-        setValue, // Import thêm setValue từ useForm
+        setValue,
         formState: { errors },
     } = useForm<Product>({
         defaultValues: {
@@ -48,7 +51,7 @@ const FormProduct = () => {
         control,
         name: "sizeStock",
     });
-    // chuyển đổi giá về đ
+
     const formatPrice = (price: number): string => {
         return new Intl.NumberFormat("vi-VN", {
             style: "currency",
@@ -57,19 +60,62 @@ const FormProduct = () => {
             .format(price)
             .replace("₫", "đ");
     };
+
     const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = parseInt(event.target.value, 10);
         setFormattedPrice(formatPrice(value));
     };
-    // Đổ dữ liệu khi edit
+
+    const uploadFile = async (file: File) => {
+        const CLOUD_NAME = "dq3lk241i";
+        const PRESET_NAME = "datn_upload";
+        const FOLDER_NAME = "datn";
+        const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+        const formData = new FormData();
+        formData.append("upload_preset", PRESET_NAME);
+        formData.append("folder", FOLDER_NAME);
+        formData.append("file", file);
+
+        const response = await axios.post(api, formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
+        return response.data.secure_url;
+    };
+
+    const handleImgChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+        if (files && files.length > 0) {
+            const url = await uploadFile(files[0]);
+            setImgURL(url);
+        }
+    };
+
+    const handleImgCategoryChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+        if (files) {
+            const urls = await Promise.all(Array.from(files).map(uploadFile));
+            setImgCategoryURLs(urls);
+        }
+    };
+
     useEffect(() => {
         if (id) {
             (async () => {
                 try {
                     const { data } = await instance.get(`/products/${id}`);
-
-                    // Cập nhật size khi lấy dữ liệu từ backend
                     const existingData = data.data;
+
+                    if (existingData.images) {
+                        setImgURL(existingData.images);
+                    }
+
+                    if (
+                        existingData.imgCategory &&
+                        existingData.imgCategory.length > 0
+                    ) {
+                        setImgCategoryURLs(existingData.imgCategory);
+                    }
+
                     const defaultStock = Array.from({ length: 12 }, (_, i) => ({
                         size: 34 + i,
                         stock: 0,
@@ -86,14 +132,12 @@ const FormProduct = () => {
                         category: existingData.category?._id || "",
                     });
 
-                    // Cập nhật Price khi lấy dữ liệu từ backend
                     if (existingData.price) {
                         setFormattedPrice(formatPrice(existingData.price));
                     }
 
-                    // Cập nhật description khi lấy dữ liệu từ backend
                     setValue("description", existingData.description);
-                    setDescription(existingData.description); // Cập nhật state nội bộ để hiển thị giá trị
+                    setDescription(existingData.description);
                 } catch (error) {
                     console.error("Error fetching product data:", error);
                 }
@@ -104,94 +148,103 @@ const FormProduct = () => {
     useEffect(() => {
         (async () => {
             const { data } = await instance.get(`/categorys`);
-            console.log(data);
             setCategories(data.data);
         })();
     }, []);
 
     return (
         <div className="container">
-            <h1 className="text-center">
-                {id ? "Product Edit" : "Product Add"}
-            </h1>
+            <h1>{id ? "Product Edit" : "Product Add"}</h1>
             <form
-                onSubmit={handleSubmit((data) =>
-                    handleProduct({ ...data, _id: id })
-                )}
+                onSubmit={handleSubmit((data: Product) => {
+                    const updatedData = {
+                        ...data,
+                        _id: id,
+                        images: imgURL || data?.images,
+                        imgCategory: imgCategoryURLs,
+                    };
+                    console.log("Dữ liệu gửi lên:", updatedData);
+
+                    handleProduct(updatedData);
+                })}
             >
-                <div className="mb-3">
-                    <label htmlFor="title" className="form-label">
-                        Title
-                    </label>
+                <div className="form-group">
+                    <label>Title</label>
                     <input
-                        type="text"
-                        className="form-control"
                         {...register("title", { required: true })}
+                        className={`form-control ${errors.title ? "is-invalid" : ""}`}
                     />
-                    {errors.title && (
-                        <span className="text-danger">Title is required</span>
-                    )}
+                    {errors.title && <div className="invalid-feedback">Title is required</div>}
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="brand" className="form-label">
-                        Brand
-                    </label>
+
+                <div className="form-group">
+                    <label>Brand</label>
                     <input
-                        type="text"
-                        className="form-control"
                         {...register("brand", { required: true })}
+                        className={`form-control ${errors.brand ? "is-invalid" : ""}`}
                     />
-                    {errors.brand && (
-                        <span className="text-danger">Brand is required</span>
-                    )}
+                    {errors.brand && <div className="invalid-feedback">Brand is required</div>}
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="price" className="form-label">
-                        Price
-                    </label>
+
+                <div className="form-group">
+                    <label>Price</label>
                     <input
-                        type="number"
-                        className="form-control"
                         {...register("price", { required: true })}
+                        type="number"
+                        className={`form-control ${errors.price ? "is-invalid" : ""}`}
                         onChange={handlePriceChange}
                     />
-                    {errors.price && (
-                        <span className="text-danger">Price is required</span>
-                    )}
+                    {errors.price && <div className="invalid-feedback">Price is required</div>}
                     <div>{formattedPrice}</div>
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="description" className="form-label">
-                        Description
-                    </label>
-                    {/* Cập nhật giá trị từ RichTextEditor và truyền vào React Hook Form */}
+
+                <div className="form-group">
+                    <label>Description</label>
                     <RichTextEditor
                         value={description}
                         onChange={(value: any) => {
-                            setDescription(value); // Cập nhật state nội bộ
-                            setValue("description", value); // Cập nhật giá trị trong React Hook Form
+                            setDescription(value);
+                            setValue("description", value);
                         }}
                     />
                     {errors.description && (
-                        <span className="text-danger">
-                            Description is required
-                        </span>
+                        <div className="text-danger">Description is required</div>
                     )}
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="images" className="form-label">
-                        Images
-                    </label>
+
+                <div className="form-group">
+                    <label>Product Image</label>
                     <input
-                        type="text"
-                        className="form-control"
-                        {...register("images")}
+                        type="file"
+                        onChange={handleImgChange}
+                        className={`form-control ${errors.images ? "is-invalid" : ""}`}
                     />
+                    {imgURL && (
+                        <div>
+                            <img src={imgURL} alt="Uploaded Product" width="100" />
+                        </div>
+                    )}
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="" className="form-label">
-                        Category
-                    </label>
+
+                <div className="form-group">
+                    <label>Category Images</label>
+                    <input
+                        type="file"
+                        onChange={handleImgCategoryChange}
+                        multiple
+                        className={`form-control ${errors.imgCategory ? "is-invalid" : ""}`}
+                    />
+                    {imgCategoryURLs.length > 0 && (
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                            {imgCategoryURLs.map((img, index) => (
+                                <img key={index} src={img} alt={`Category ${index}`} width="80" />
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                <div className="form-group">
+                    <label>Category</label>
                     <select {...register("category")} className="form-control">
                         {categories.map((category) => (
                             <option key={category._id} value={category._id}>
@@ -200,37 +253,28 @@ const FormProduct = () => {
                         ))}
                     </select>
                 </div>
-                <div className="mb-3">
-                    <label className="form-label">Size Stock</label>
-                    <div className="d-flex flex-wrap flex-shrink-1">
+
+                <div>
+                    <h6>Size Stock</h6>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
                         {fields.map((item, index) => (
-                            <div
-                                key={item.id}
-                                className="mb-2 w-25 d-flex align-items-center"
-                            >
-                                <label
-                                    htmlFor={`sizeStock.${index}.size`}
-                                    className="form-label me-3"
-                                >
-                                    Size {item.size}
-                                </label>
+                            <div key={item.id} style={{ flexBasis: "120px" }}>
+                                <label>{`Size ${item.size}`}</label>
                                 <input
+                                    {...register(`sizeStock.${index}.stock` as const, {
+                                        valueAsNumber: true,
+                                    })}
                                     type="number"
-                                    className="form-control w-25"
-                                    {...register(
-                                        `sizeStock.${index}.stock` as const,
-                                        { valueAsNumber: true }
-                                    )}
+                                    className="form-control"
                                 />
                             </div>
                         ))}
                     </div>
                 </div>
-                <div className="mb-3">
-                    <button className="btn btn-primary" type="submit">
-                        Submit
-                    </button>
-                </div>
+
+                <button type="submit" className="btn btn-primary" style={{ marginTop: "20px" }}>
+                    Submit
+                </button>
             </form>
         </div>
     );

@@ -1,0 +1,14 @@
+:root {
+  font-family: "Anton SC", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* * {
+  font-family: "Anton SC", sans-serif !important;
+} */
