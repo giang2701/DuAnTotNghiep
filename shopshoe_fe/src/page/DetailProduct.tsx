@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import instance from "../api";
 import { Product } from "../interface/Products";
 import ContentDisplay from "../component/ContentDisplay";
+import ImgProductDetail from "./ImgProductDetail";
 
 type Props = {};
 
@@ -66,6 +67,7 @@ const DetailProduct = (props: Props) => {
                         className="img-fluid"
                     />
                 </div>
+                <ImgProductDetail product={product} />
                 <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12">
                     <h1>{product.title}</h1>
                     <p>Thương hiệu: {product.brand}</p>
@@ -75,15 +77,13 @@ const DetailProduct = (props: Props) => {
                         {product.sizeStock.map((item, index) => (
                             <button
                                 key={index}
-                                className={`btn m-1 ${
-                                    item.stock === 0
-                                        ? "btn-disabled btn-secondary opacity-25" // Nếu hết hàng
-                                        : "btn-outline-primary " // Nếu còn hàng
-                                } ${
-                                    selectedSize === item.size
+                                className={`btn m-1 ${item.stock === 0
+                                    ? "btn-disabled btn-secondary opacity-25" // Nếu hết hàng
+                                    : "btn-outline-primary " // Nếu còn hàng
+                                    } ${selectedSize === item.size
                                         ? "btn-selected"
                                         : ""
-                                }`}
+                                    }`}
                                 onClick={() =>
                                     handleSizeClick(item.size, item.stock)
                                 }
