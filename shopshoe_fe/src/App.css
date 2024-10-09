@@ -670,10 +670,6 @@ ul li:hover {
 .profile_detail span:nth-child(2) {
     margin-left: 55px;
 }
-
-/* .profile_detail:nth-child(2) span {
-      
-  } */
 .sub__company:hover .profile_detail span {
     bottom: 90px;
 }
@@ -693,7 +689,7 @@ ul li:hover {
     bottom: 0px;
 }
 
-/* DetailProduct.css */
+/* ===============================DetailProduct.css============================== */
 .btn-disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -709,133 +705,11 @@ ul li:hover {
     margin-top: -350px;
 }
 .information_detailproduct {
-    margin-left: -45px;
+    margin-left: -20px;
 }
-/* *************** zoom img*************** */
-
-/* |**********************************************************
-   |  LOGIN
-   | **********************************************************
-*/
-.row {
-    /* margin-left: 100px; */
-    padding-left: 130px;
-}
-.box__login {
-    width: 540px;
-    position: relative;
-    /* background-color: #007bff; */
-    padding-right: 150px;
-}
-.box__login::after {
-    content: "";
-    width: 1px;
-    height: 250px;
-    background-color: #c7c3c0;
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-.box__login p:nth-child(1) {
-    /* color: #ff0051; */
-    font-weight: bold;
-    font-size: 2rem;
-    text-align: center;
-}
-.box__login p:nth-child(2) {
-    /* color: #ff0051; */
-    font-size: 1.3rem;
-    color: #a5a5ac;
-    text-align: center;
-    margin-bottom: 2rem;
-    margin-top: 1rem;
-}
-.box__login form .form-control {
-    width: 100%;
-}
-.box__login button {
-    width: 100%;
-    border-radius: 0px;
-    border-top-left-radius: 20px;
-    border-end-end-radius: 20px;
-    background-color: #000;
-    color: #fff;
-    font-size: 2rem;
-    height: 55px;
-}
-.box__link__register {
-    width: 400px;
-    margin-left: 100px;
-}
-.box__link__register p:nth-child(1) {
-    font-size: 2rem;
-    font-weight: bold;
-    text-align: center;
-}
-.box__link__register p:nth-child(2) {
-    font-size: 1.3rem;
-    color: #a5a5ac;
-    text-align: center;
-}
-.box__link__register p:nth-child(3) {
-    font-size: 1.3rem;
-    color: #a5a5ac;
-    text-align: center;
-}
-.btn_link_register {
-    width: 100%;
-    border-radius: 0px;
-    border-top-left-radius: 20px;
-    border-end-end-radius: 20px;
-    background-color: #000;
-    color: #fff;
-    font-size: 2rem;
-    height: 55px;
-}
-.btn_link_register__mobile {
-    display: none;
-}
-/* |**********************************************************
-   |  REGISTER
-   | **********************************************************
-*/
-.register {
-    margin-left: 400px;
-    /* background-color: #007bff; */
-    width: 500px;
-}
-.register p {
-    margin-left: 160px;
-    font-size: 40px;
-    font-weight: 600;
-}
-.form-control {
-    width: 500px;
-    height: 45px;
-}
-.form-label {
-    font-size: 15px;
-}
-.form-control {
-    font-size: 16px;
-}
-.button-register {
-    width: 100%;
-    border-radius: 0;
-    border-top-left-radius: 12px;
-    border-end-end-radius: 12px;
-    font-size: 19px;
-    background-color: #000;
-    color: #f8f7f7;
-    margin-left: 1px;
-}
-.button-register:hover {
-    color: #000;
-    background-color: white;
-    border: 1px solid black;
-}
-.images-container {
-    width: 55rem;
+/* /* *************** zoom img*************** */
+*/ .images-container {
+    width: 50rem;
     height: 53rem;
     border-radius: 10px;
     overflow: hidden;
@@ -1067,6 +941,127 @@ ul li:hover {
 }
 .price_detail {
     font-size: 2.1rem;
+}
+/* |**********************************************************
+   |  LOGIN
+   | **********************************************************
+*/
+.row {
+    /* margin-left: 100px; */
+    padding-left: 0px;
+}
+.box__login {
+    width: 540px;
+    position: relative;
+    /* background-color: #007bff; */
+    padding-right: 150px;
+}
+.box__login::after {
+    content: "";
+    width: 1px;
+    height: 250px;
+    background-color: #c7c3c0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.box__login p:nth-child(1) {
+    /* color: #ff0051; */
+    font-weight: bold;
+    font-size: 2rem;
+    text-align: center;
+}
+.box__login p:nth-child(2) {
+    /* color: #ff0051; */
+    font-size: 1.3rem;
+    color: #a5a5ac;
+    text-align: center;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+}
+.box__login form .form-control {
+    width: 100%;
+}
+.box__login button {
+    width: 100%;
+    border-radius: 0px;
+    border-top-left-radius: 20px;
+    border-end-end-radius: 20px;
+    background-color: #000;
+    color: #fff;
+    font-size: 2rem;
+    height: 55px;
+}
+.box__link__register {
+    width: 400px;
+    margin-left: 100px;
+}
+.box__link__register p:nth-child(1) {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+}
+.box__link__register p:nth-child(2) {
+    font-size: 1.3rem;
+    color: #a5a5ac;
+    text-align: center;
+}
+.box__link__register p:nth-child(3) {
+    font-size: 1.3rem;
+    color: #a5a5ac;
+    text-align: center;
+}
+.btn_link_register {
+    width: 100%;
+    border-radius: 0px;
+    border-top-left-radius: 20px;
+    border-end-end-radius: 20px;
+    background-color: #000;
+    color: #fff;
+    font-size: 2rem;
+    height: 55px;
+}
+.btn_link_register__mobile {
+    display: none;
+}
+/* |**********************************************************
+   |  REGISTER
+   | **********************************************************
+*/
+.register {
+    margin-left: 400px;
+    /* background-color: #007bff; */
+    width: 500px;
+}
+.register p {
+    margin-left: 160px;
+    font-size: 40px;
+    font-weight: 600;
+}
+.form-control {
+    width: 500px;
+    height: 45px;
+}
+.form-label {
+    font-size: 15px;
+}
+.form-control {
+    font-size: 16px;
+}
+.button-register {
+    width: 100%;
+    border-radius: 0;
+    border-top-left-radius: 12px;
+    border-end-end-radius: 12px;
+    font-size: 19px;
+    background-color: #000;
+    color: #f8f7f7;
+    margin-left: 1px;
+}
+.button-register:hover {
+    color: #000;
+    background-color: white;
+    border: 1px solid black;
 }
 
 /* **********************************************************Admin********************************************************** */
@@ -1369,8 +1364,8 @@ ul li:hover {
         top: -42px;
         left: 267px;
         transition: all 0.2s ease-in-out;
-        /* }//detai */
     }
+    /* ===============================Detail=========================================== */
     .images-container {
         width: 45rem;
         height: 53rem;
@@ -1383,7 +1378,7 @@ ul li:hover {
         margin-top: 10px;
     }
 
-    /* footer */
+    /* ===============================footer=============================== */
     .footer-container {
         flex-direction: column;
         align-items: center;
@@ -1802,20 +1797,6 @@ ul li:hover {
         background-color: #000;
         color: #f8f7f7;
     }
-    /* footer */
-    .footer-logo h3 {
-        font-size: 20px;
-    }
-
-    .action__sub__header__mobile i {
-        position: absolute;
-        left: 0px;
-        border: none;
-        height: 35px;
-        padding: 10px;
-        cursor: pointer;
-    }
-
     .bars__column__mobile .overlay__mobile {
         position: fixed;
         top: 0;
@@ -1849,22 +1830,6 @@ ul li:hover {
         padding: 10px 0;
     }
 
-    .menu-drawer .btn__login {
-        margin-left: 50px;
-        margin-bottom: 10px;
-        width: 250px;
-        height: 40px;
-        line-height: 17px;
-        border-top-left-radius: 10px;
-        border-end-end-radius: 10px;
-        transition: all 0.2s ease-in-out;
-    }
-
-    .menu-drawer .btn__login:hover {
-        background-color: #000000;
-        color: #fff;
-    }
-
     .menu-drawer .Category__sub__header__mobile {
         margin-left: 50px;
     }
@@ -1878,20 +1843,6 @@ ul li:hover {
         font-weight: 600;
     }
 
-    .contact__sub__header__mobile {
-        margin-left: 50px;
-    }
-
-    .contact__sub__header__mobile p {
-        font-size: 1.5rem;
-        margin-right: 50px;
-        line-height: 24px;
-        cursor: pointer;
-        font-weight: 700;
-        border-bottom: 2px solid black;
-        width: 60px;
-    }
-
     .menu-checkbox:checked ~ .overlay__mobile {
         display: block;
     }
@@ -1899,21 +1850,6 @@ ul li:hover {
     .menu-checkbox:checked ~ .menu-drawer {
         transform: translateX(0%);
         opacity: 1;
-    }
-
-    /* Banner */
-    .bannerStylePC__Tablet {
-        display: none;
-    }
-
-    .bannerStyle__Mobile {
-        display: block;
-    }
-
-    .bannerStyle__Mobile img {
-        /* width: 100%; */
-        height: 250px;
-        border-radius: 40px;
     }
 
     .carousel-inner {
@@ -1924,10 +1860,6 @@ ul li:hover {
         width: 100vw;
         border-radius: 0px;
         border: none;
-    }
-
-    .container-fluid {
-        --bs-gutter-x: 0rem;
     }
 
     .see__more {
@@ -1944,7 +1876,7 @@ ul li:hover {
         left: 110px;
         transition: all 0.2s ease-in-out;
     }
-    /* //detailproduct */
+    /* ===============================detailproduct=============================== */
     .images-container {
         width: 48rem;
         height: 53rem;
@@ -2005,7 +1937,7 @@ ul li:hover {
         letter-spacing: 3.5px;
         text-transform: uppercase;
     }
-    /* footer */
+    /* ===============================footer=============================== */
     .footer-logo h3 {
         font-size: 20px;
     }
