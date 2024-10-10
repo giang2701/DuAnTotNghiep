@@ -4,27 +4,36 @@ import Products from "../model/Products.js";
 export const createProduct = async (req, res, next) => {
     try {
         console.log("createProduct");
-        const data = await Products.create(req.body);
-        console.log(data);
-        // // Kiểm tra và lưu đường dẫn file ảnh vào cơ sở dữ liệu
-        // if (req.file) {
-        //     req.body.images = req.file.path; // Lưu đường dẫn của tệp hình ảnh
-        // }
+
+        // Kiểm tra và upload ảnh danh mục (nếu có)
+        let imgCategoryUrls = [];
+        if (req.body.imgCategory && Array.isArray(req.body.imgCategory)) {
+            // Giả sử mỗi ảnh đã được upload từ frontend và là URL hợp lệ
+            imgCategoryUrls = req.body.imgCategory; // Nhận URL các ảnh danh mục từ request
+        }
+
+        // Tạo sản phẩm mới với các ảnh danh mục
+        const data = await Products.create({
+            ...req.body,
+            imgCategory: imgCategoryUrls, // Lưu URL các ảnh danh mục vào DB
+        });
+
+        // Cập nhật danh mục liên quan
         const updateCategory = await Category.findByIdAndUpdate(
             req.body.category,
-            {
-                $push: { products: data._id },
-            },
+            { $push: { products: data._id } },
             { new: true }
         );
+
         if (data && updateCategory) {
             return res.status(201).json({
                 success: true,
                 data,
-                message: "Tao san pham thanh cong!",
+                message: "Tạo sản phẩm thành công!",
             });
         }
     } catch (error) {
+        console.error("Error creating product:", error);
         next(error);
     }
 };
