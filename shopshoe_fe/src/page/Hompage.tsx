@@ -179,6 +179,64 @@ const Hompage = (props: Props) => {
                     <span className="visually-hidden">Next</span>
                 </button>
             </div>
+            {/* ==========================IMAGE PRODUCTS DISPLAY================================ */}
+            <div className="display__products ">
+                {/* ----1---- */}
+                <div className="sub__display__products">
+                    <div className="sub__display__products__img">
+                        <img
+                            src="../../public/images/display__products__3.png"
+                            alt="Giày Hoka Clifton 9 Running 'Orange' 1127895-SSEG"
+                        />
+                    </div>
+                    <p>Giày Hoka Clifton 9 Running 'Orange'</p>
+                </div>
+                {/* ----2---- */}
+                <div className="sub__display__products">
+                    <div className="sub__display__products__img">
+                        <img
+                            src="../../public/images/display__products__1.png"
+                            alt="Nike Air Max 270 React"
+                        />
+                    </div>
+                    <p>Nike Air Max 270 React</p>
+                </div>
+                {/* ----3---- */}
+                <div className="sub__display__products ">
+                    <div className="sub__display__products__img">
+                        <img
+                            src="../../public/images/display__products__5.png"
+                            alt="VANS OLD SKOOL STRAWBERRY PINK TRUE WHITE"
+                        />
+                    </div>
+                    <p>VANS OLD SKOOL STRAWBERRY PINK TRUE WHITE</p>
+                </div>
+                {/* ----4---- */}
+                <div className="sub__display__products">
+                    <div className="sub__display__products__img">
+                        <img
+                            src="../../public/images/display__products__4.png"
+                            alt="Deichmann - Graceland Chunky tenisky"
+                        />
+                    </div>
+                    <p>Deichmann - Graceland Chunky tenisky</p>
+                </div>
+
+                {/* ----3----
+                <div className="sub__display__products d-nne">
+                    <div className="sub__display__products__img">
+                        <img
+                            src="../../public/images/display__products__2.png"
+                            alt="Skechers (WMNS) Lander S PINK/PURPLE Chunky Shoes
+                        149896-PKLV"
+                        />
+                    </div>
+                    <p>
+                        Skechers (WMNS) Lander S PINK/PURPLE Chunky Shoes
+                        149896-PKLV
+                    </p>
+                </div> */}
+            </div>
             {/* ==========================NEW ARRIVAL================================ */}
             <div className="title__products__new_arrival">
                 <p>NEW ARRIVAL</p>
@@ -208,7 +266,7 @@ const Hompage = (props: Props) => {
                         <div className="container">
                             <div className="scroll container">
                                 <div className="product__slip">
-                                    {productCate2.map((item) => (
+                                    {productCate2.slice(0, 8).map((item) => (
                                         <div className="product" key={item._id}>
                                             <div className="product-img">
                                                 <img
@@ -261,7 +319,7 @@ const Hompage = (props: Props) => {
                         <div className="container">
                             <div className="scroll">
                                 <div className="product__slip">
-                                    {productCate.map((item) => (
+                                    {productCate.slice(0, 8).map((item) => (
                                         <div
                                             className="product "
                                             key={item._id}
@@ -313,18 +371,18 @@ const Hompage = (props: Props) => {
             <div className="title__products__GALLERY">
                 <p>GALLERY</p>
             </div>
-            <div className="container">
-                <div className="Container__product gallery">
-                    {state.products.slice(0, 8).map((item) => (
-                        <div className="product gallery" key={item._id}>
-                            <div className="product-img">
+            <div className="container-fluid box__gallery">
+                <div className="Container__product__gallery ">
+                    {state.products.slice(0, 10).map((item) => (
+                        <div className="product__gallery" key={item._id}>
+                            <div className="product__gallery__img ">
                                 <img
                                     src={`${item.images}`}
                                     alt=""
                                     className="img-fluid"
                                 />
                             </div>
-                            <div className="product-name">
+                            <div className="product__gallery__name">
                                 <Link
                                     to={`/detail/${item._id}`}
                                     style={{
@@ -353,7 +411,9 @@ const Hompage = (props: Props) => {
                         </div>
                     ))}
                 </div>
-                <div className="see__more">Xem Tất Cả</div>
+                <Link to="/product_list" className="nav-link">
+                    <div className="see__more">Xem Tất Cả</div>
+                </Link>
             </div>
             {/*========================================Content about==========================*/}
             <div className="about container-fluid" id="about">
