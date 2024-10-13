@@ -7,7 +7,7 @@ import {
 
 const ManagerCate = () => {
     // console.log(data);
-    const { state, removeCategory } = useContext(
+    const { state1, removeCategory } = useContext(
         CategoryContext
     ) as CategoryContextType;
     return (
@@ -24,7 +24,7 @@ const ManagerCate = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {state.category.map((item) => (
+                        {state1.category.map((item) => (
                             <tr key={item._id}>
                                 <td>{item.title}</td>
                                 <td>
