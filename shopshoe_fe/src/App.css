@@ -1632,16 +1632,18 @@ ul li:hover {
   appearance: none;
   width: 20px;
   height: 20px;
-  background: #000;
+  background: #ddd;
   border-radius: 50%;
 }
 
 .slider-input::-moz-range-thumb {
   width: 20px;
   height: 20px;
-  background: #000;
+  background: #ddd;
   border-radius: 50%;
 }
+
+
 
 /* Radio */
 .shop-sidebar__sub-list {
@@ -2327,7 +2329,7 @@ input[type="radio"]:checked {
   }
 
   /**********************************_catogery************************************************************************/
-  .shop-product-grid {
+  shop-sidebar__sub-list .shop-product-grid {
     margin-left: 45px;
   }
 
@@ -2519,14 +2521,14 @@ input[type="radio"]:checked {
     appearance: none;
     width: 20px;
     height: 20px;
-    background: #000;
+    background: #ddd;
     border-radius: 50%;
   }
 
   .slider-input::-moz-range-thumb {
     width: 20px;
     height: 20px;
-    background: #000;
+    background: #ddd;
     border-radius: 50%;
   }
 
@@ -3749,14 +3751,14 @@ input[type="radio"]:checked {
     appearance: none;
     width: 18px;
     height: 18px;
-    background: #000;
+    background: #ddd;
     border-radius: 50%;
   }
 
   .slider-input::-moz-range-thumb {
     width: 18px;
     height: 18px;
-    background: #000;
+    background: #ddd;
     border-radius: 50%;
   }
 
