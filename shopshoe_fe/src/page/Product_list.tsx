@@ -6,7 +6,6 @@ import {
     CategoryContext,
     CategoryContextType,
 } from "../context/CategoryContext";
-import { red } from "@mui/material/colors";
 
 export default function Product_List() {
     const { state } = useContext(ProductContext) as ProductContextType;

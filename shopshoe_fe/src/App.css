@@ -1647,11 +1647,14 @@ ul li:hover {
 
 /* Radio */
 .shop-sidebar__sub-list {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
   padding: 10px;
   border-radius: 8px;
+  max-height: calc(5.5em * 5);
   margin: 15px 0px;
+
 }
 
 .shop-sidebar__sub-item {
@@ -2330,8 +2333,17 @@ input[type="radio"]:checked {
 
   /**********************************_catogery************************************************************************/
   shop-sidebar__sub-list .shop-product-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     margin-left: 45px;
+    max-height: calc(4.5em * 5);
+    grid-gap: 20px;
+
   }
+
+
+
+
 
   .container-products__list {
     margin-top: 100px;
@@ -2534,11 +2546,13 @@ input[type="radio"]:checked {
 
   /* Radio */
   .shop-sidebar__sub-list {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     flex-direction: column;
     padding: 10px;
     border-radius: 8px;
     margin: 15px 0px;
+    max-height: calc(4.5em * 5)
   }
 
   .shop-sidebar__sub-item {
@@ -3764,11 +3778,13 @@ input[type="radio"]:checked {
 
   /* Radio */
   .shop-sidebar__sub-list {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     flex-direction: column;
     padding: 8px;
     border-radius: 8px;
     margin: 10px 0px;
+    max-height: calc(4.5em * 5)
   }
 
   .shop-sidebar__sub-item {
