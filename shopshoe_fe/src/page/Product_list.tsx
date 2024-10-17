@@ -25,6 +25,7 @@ export default function Product_List() {
         indexOfFirstProduct,
         indexOfLastProduct
     );
+    const uniqueBrands = Array.from(new Set(state.products.map(product => product.brand)));
 
     // const [Categories, setCategories] = useState(state1.categories);
     console.log(state1.category);
@@ -131,48 +132,20 @@ export default function Product_List() {
                             </li>
                             {isBrandOpen && (
                                 <div className="shop-sidebar__sub-list">
-                                    <label className="shop-sidebar__sub-item">
-                                        <input
-                                            type="checkbox"
-                                            name="Adidas"
-                                            value="Adidas"
-                                            checked={selectedBrands.includes(
-                                                "Adidas"
-                                            )}
-                                            onChange={() =>
-                                                updateBrandSelection("Adidas")
-                                            }
-                                        />
-                                        <div className="text_item">Adidas</div>
-                                    </label>
-                                    <label className="shop-sidebar__sub-item">
-                                        <input
-                                            type="checkbox"
-                                            name="Nike"
-                                            value="Nike "
-                                            checked={selectedBrands.includes(
-                                                "Nike "
-                                            )}
-                                            onChange={() =>
-                                                updateBrandSelection("Nike ")
-                                            }
-                                        />
-                                        <div className="text_item">Nike</div>
-                                    </label>
-                                    <label className="shop-sidebar__sub-item">
-                                        <input
-                                            type="checkbox"
-                                            name="brand"
-                                            value="moka "
-                                            checked={selectedBrands.includes(
-                                                "moka "
-                                            )}
-                                            onChange={() =>
-                                                updateBrandSelection("moka ")
-                                            }
-                                        />
-                                        <div className="text_item">moka</div>
-                                    </label>
+                                    {uniqueBrands.map((brand) => (
+                                        <label className="shop-sidebar__sub-item" key={brand}>
+                                            <input
+                                                className="input1"
+                                                type="checkbox"
+                                                name={brand}
+                                                value={brand}
+                                                checked={selectedBrands.includes(brand)}
+                                                onChange={() =>
+                                                    updateBrandSelection(brand)
+                                                }
+                                            />
+                                            <div className="text_item">{brand}</div>
+                                        </label>))}
                                 </div>
                             )}
                             <li
@@ -351,7 +324,7 @@ export default function Product_List() {
                                 ...Array(
                                     Math.ceil(
                                         filteredProducts.length /
-                                            productsPerPage
+                                        productsPerPage
                                     )
                                 ).keys(),
                             ].map((number) => (
@@ -382,7 +355,7 @@ export default function Product_List() {
                                     setCurrentPage(
                                         Math.ceil(
                                             filteredProducts.length /
-                                                productsPerPage
+                                            productsPerPage
                                         )
                                     )
                                 }
@@ -390,7 +363,7 @@ export default function Product_List() {
                                     currentPage ===
                                     Math.ceil(
                                         filteredProducts.length /
-                                            productsPerPage
+                                        productsPerPage
                                     )
                                 }
                             >
