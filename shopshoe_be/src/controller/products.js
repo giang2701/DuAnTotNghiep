@@ -4,7 +4,7 @@ import Products from "../model/Products.js";
 export const createProduct = async (req, res, next) => {
     try {
         console.log("createProduct");
-
+        console.log("Request Body:", req.body);
         // Kiểm tra và upload ảnh danh mục (nếu có)
         let imgCategoryUrls = [];
         if (req.body.imgCategory && Array.isArray(req.body.imgCategory)) {
@@ -16,6 +16,7 @@ export const createProduct = async (req, res, next) => {
         const data = await Products.create({
             ...req.body,
             imgCategory: imgCategoryUrls, // Lưu URL các ảnh danh mục vào DB
+            sizes: req.body.sizes,
         });
 
         // Cập nhật danh mục liên quan
@@ -44,9 +45,17 @@ export const updateProductById = async (req, res, next) => {
         // if (req.file) {
         //     req.body.images = req.file.path; // Lưu đường dẫn của tệp hình ảnh
         // }
-        const data = await Products.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-        });
+        console.log(req.body);
+        const data = await Products.findByIdAndUpdate(
+            req.params.id,
+            {
+                ...req.body,
+                sizes: req.body.sizes, // Cập nhật lại mảng sizes từ body
+            },
+            {
+                new: true,
+            }
+        );
 
         if (data) {
             return res.status(200).json({
@@ -80,6 +89,7 @@ export const getProductById = async (req, res, next) => {
         const data = await Products.findById(req.params.id).populate(
             "category"
         );
+        // console.log(data);
         if (data) {
             return res.status(200).json({
                 message: "Tim san pham thanh cong!",
@@ -91,7 +101,28 @@ export const getProductById = async (req, res, next) => {
         next(error);
     }
 };
+export const getProductByIdSize = async (req, res, next) => {
+    try {
+        const data = await Products.findById(req.params.id)
+            .populate("sizeStock.size") // đảm bảo tên đúng và có mô hình tương ứng
+            .exec();
 
+        if (!data) {
+            return res.status(404).json({
+                message: "Sản phẩm không tồn tại!",
+                success: false,
+            });
+        }
+
+        return res.status(200).json({
+            message: "Tìm sản phẩm thành công!",
+            success: true,
+            data,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 export const getAllProducts = async (req, res, next) => {
     try {
         const data = await Products.find().populate("category");

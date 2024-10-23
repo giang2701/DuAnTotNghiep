@@ -12,6 +12,7 @@ const RichTextEditor = ({ value, onChange }: TypeRichTextEditor) => {
             value={value}
             onChange={onChange} // Gọi hàm onChange từ props để cập nhật giá trị bên ngoài
             className="quill__description"
+            style={{ height: "250px", marginTop: "-0px" }}
         />
     );
 };

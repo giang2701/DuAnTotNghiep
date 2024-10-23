@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-const productSchema = Joi.object({
+export const validateProduct = Joi.object({
     title: Joi.string().required().min(3).messages({
         "string.base": "Title must be a string",
         "string.empty": "Title cannot be empty",
@@ -21,8 +21,10 @@ const productSchema = Joi.object({
         .items(
             Joi.object({
                 size: Joi.optional(),
-                stock: Joi.number().required().integer().messages({
+                stock: Joi.number().required().min(0).messages({
                     "number.base": "Stock must be a number",
+                    "number.empty": "Stock cannot be empty",
+                    "number.min": "Stock minimum value is 0",
                 }),
                 price: Joi.number().required().min(0).messages({
                     "number.base": "Price must be a number",
@@ -31,12 +33,10 @@ const productSchema = Joi.object({
                 }),
             })
         )
-        .min(1)
         .required()
         .messages({
-            "array.min": "At least one size-stock pair is required",
+            "array.base": "SizeStock must be an array",
         }),
-    description: Joi.string().optional(),
     images: Joi.string().uri().messages({
         "string.base": "Images must be a string",
         "string.uri": "Images must be a valid URL",
@@ -54,6 +54,8 @@ const productSchema = Joi.object({
         "string.base": "Category must be a string",
         "any.required": "Category is required",
     }),
+    description: Joi.string().required().messages({
+        "string.base": "Description must be a string",
+        "any.required": "Description is required",
+    }),
 });
-
-export default productSchema;

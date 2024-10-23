@@ -46,7 +46,11 @@ const ProductProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
-    const handleProduct = async (product: Product, file?: File, categoryFiles?: File[]) => {
+    const handleProduct = async (
+        product: Product,
+        file?: File,
+        categoryFiles?: File[]
+    ) => {
         try {
             let imageUrl = product.images; // Giữ nguyên URL ảnh cũ nếu không có ảnh mới
             let categoryImageUrls = product.imgCategory || [];
@@ -64,8 +68,6 @@ const ProductProvider = ({ children }: { children: React.ReactNode }) => {
                 );
                 imageUrl = response.data.secure_url; // Cập nhật URL ảnh mới
             }
-
-
             if (categoryFiles && categoryFiles.length > 0) {
                 const categoryUploads = await Promise.all(
                     categoryFiles.map(async (categoryFile) => {
@@ -85,21 +87,21 @@ const ProductProvider = ({ children }: { children: React.ReactNode }) => {
             }
 
             if (product._id) {
-                const { _id, createdAt, updatedAt, sizeStock, ...updatedData } = product;
-
-                // Clean up sizeStock để loại bỏ các _id
-                const cleanedSizeStock = sizeStock.map(({ _id, ...item }) => item);
-
+                const { ...updatedData } = product;
                 // Cập nhật payload với URL ảnh mới và imgCategory
                 const payload = {
                     ...updatedData,
-                    sizeStock: cleanedSizeStock,
                     images: imageUrl, // URL ảnh sản phẩm chính
                     imgCategory: categoryImageUrls, // URL các ảnh danh mục
                 };
 
                 // Gửi yêu cầu cập nhật sản phẩm
-                const { data } = await instance.put(`/products/${product._id}`, payload);
+                const { data } = await instance.put(
+                    `/products/${product._id}`,
+                    payload
+                );
+                console.log(" Dữ liệu gữi lên API:", data.data);
+
                 dispatch({ type: "UPDATE_PRODUCT", payload: data.data });
                 toast.success("Cập nhật sản phẩm thành công");
                 nav("/admin");
@@ -120,6 +122,8 @@ const ProductProvider = ({ children }: { children: React.ReactNode }) => {
                 nav("/admin");
             }
         } catch (error) {
+            console.log(error);
+            toast.error(error as string);
         }
     };
 

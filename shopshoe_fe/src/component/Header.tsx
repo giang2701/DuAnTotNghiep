@@ -27,8 +27,6 @@ export const IconCart = styled(LocalMallOutlinedIcon)({
     },
 });
 
-type Props = {};
-
 const Header = () => {
     const navigate = useNavigate();
     const [category, setCategory] = useState<Category[]>([]);
@@ -68,6 +66,7 @@ const Header = () => {
             try {
                 const { data } = await instance.get("/products");
                 setProducts(data.data);
+                // console.log(data.data);
             } catch (error) {
                 console.error("Error fetching products:", error);
             }

@@ -11,27 +11,22 @@ const productSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        sizeStock: [
-            {
-                size: {
-                    type: Number,
-                    required: true,
-                },
-                stock: {
-                    type: Number,
-                    required: true,
-                },
-            },
-        ],
         price: {
             type: Number,
             required: true,
         },
+        sizeStock: [
+            {
+                size: { type: mongoose.Schema.Types.ObjectId, ref: "Size" }, // Đảm bảo ref là "Size"
+                stock: { type: Number, required: true },
+                price: { type: Number, required: true },
+            },
+        ],
         description: {
             type: String,
         },
         images: {
-            type: [String], // Changed to an array of strings
+            type: [String],
         },
         imgCategory: {
             type: [String],

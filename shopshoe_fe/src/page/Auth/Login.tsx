@@ -24,6 +24,7 @@ const Login = () => {
                 password: data.password,
             });
             contextLogin(res.data.accessToken, res.data.user);
+            toast.success("Login successfully");
             nav("/");
         } catch (error: any) {
             toast.error(error.response.data.message);
@@ -32,6 +33,7 @@ const Login = () => {
     return (
         <>
             <div className="container">
+                <img src="../../../public" alt="" />
                 <div className="row row__login">
                     <div className="col-xl-6 col-lg-6 col-md-12 col-ms-12 box__login">
                         <p>Bạn đã có tài khoản Zokong</p>

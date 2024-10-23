@@ -31,9 +31,7 @@ const CategoryForm = () => {
 
     return (
         <div className="container">
-            <h1 className="text-center">
-                {id ? "Category Edit" : "Category Add"}
-            </h1>
+            <h1 className="my-3">{id ? "Category Edit" : "Category Add"}</h1>
             <form
                 onSubmit={handleSubmit((data) =>
                     handleCategory({ ...data, _id: id })

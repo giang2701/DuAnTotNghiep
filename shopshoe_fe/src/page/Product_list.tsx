@@ -25,10 +25,12 @@ export default function Product_List() {
         indexOfFirstProduct,
         indexOfLastProduct
     );
-    const uniqueBrands = Array.from(new Set(state.products.map(product => product.brand)));
+    const uniqueBrands = Array.from(
+        new Set(state.products.map((product) => product.brand))
+    );
 
     // const [Categories, setCategories] = useState(state1.categories);
-    console.log(state1.category);
+    // console.log(state1.category);
 
     useEffect(() => {
         setGender("None");
@@ -60,7 +62,7 @@ export default function Product_List() {
         }
     };
 
-    console.log(filteredProducts);
+    // console.log(filteredProducts);
 
     const applyFilters = () => {
         const filtered = state.products.filter((product) => {
@@ -75,7 +77,7 @@ export default function Product_List() {
             const matchesPrice =
                 product.price >= priceRange[0] &&
                 product.price <= priceRange[1];
-            console.log(matchesBrand);
+            // console.log(matchesBrand);
 
             return matchesGender && matchesPrice && matchesBrand;
         });
@@ -133,19 +135,27 @@ export default function Product_List() {
                             {isBrandOpen && (
                                 <div className="shop-sidebar__sub-list">
                                     {uniqueBrands.map((brand) => (
-                                        <label className="shop-sidebar__sub-item" key={brand}>
+                                        <label
+                                            className="shop-sidebar__sub-item"
+                                            key={brand}
+                                        >
                                             <input
                                                 className="input1"
                                                 type="checkbox"
                                                 name={brand}
                                                 value={brand}
-                                                checked={selectedBrands.includes(brand)}
+                                                checked={selectedBrands.includes(
+                                                    brand
+                                                )}
                                                 onChange={() =>
                                                     updateBrandSelection(brand)
                                                 }
                                             />
-                                            <div className="text_item">{brand}</div>
-                                        </label>))}
+                                            <div className="text_item">
+                                                {brand}
+                                            </div>
+                                        </label>
+                                    ))}
                                 </div>
                             )}
                             <li
@@ -324,7 +334,7 @@ export default function Product_List() {
                                 ...Array(
                                     Math.ceil(
                                         filteredProducts.length /
-                                        productsPerPage
+                                            productsPerPage
                                     )
                                 ).keys(),
                             ].map((number) => (
@@ -355,7 +365,7 @@ export default function Product_List() {
                                     setCurrentPage(
                                         Math.ceil(
                                             filteredProducts.length /
-                                            productsPerPage
+                                                productsPerPage
                                         )
                                     )
                                 }
@@ -363,7 +373,7 @@ export default function Product_List() {
                                     currentPage ===
                                     Math.ceil(
                                         filteredProducts.length /
-                                        productsPerPage
+                                            productsPerPage
                                     )
                                 }
                             >

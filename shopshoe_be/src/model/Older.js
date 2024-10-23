@@ -12,7 +12,7 @@ const orderSchema = new Schema(
         userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
         products: [orderItemSchema], // Mảng các sản phẩm trong đơn hàng
         totalPrice: { type: Number, required: true },
-        voucher: { type: String, enum: ["sale15", "sale20"] }, // Mã giảm giá, nếu có
+        // voucher: { type: String, enum: ["sale15", "sale20"] }, // Mã giảm giá, nếu có
         status: {
             type: String,
             enum: ["pending", "shipping", "completed", "cancelled"],

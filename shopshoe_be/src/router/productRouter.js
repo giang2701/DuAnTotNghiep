@@ -3,6 +3,7 @@ import {
     createProduct,
     getAllProducts,
     getProductById,
+    getProductByIdSize,
     removeProductById,
     updateProductById,
 } from "../controller/products.js";
@@ -15,6 +16,7 @@ import { checkIsAdmin } from "../middlewares/checkAdmin.js";
 const productRouter = Router();
 
 productRouter.get("/:id", getProductById);
+productRouter.get("/:id", getProductByIdSize);
 productRouter.get("/", getAllProducts);
 
 // admin mới đk làm!
@@ -28,7 +30,7 @@ productRouter.post(
 productRouter.put(
     "/:id",
     // upload.single("images"),
-    validBodyRequest(productSchema),
+    // validBodyRequest(productSchema),
     updateProductById
 );
 productRouter.delete("/:id", removeProductById);

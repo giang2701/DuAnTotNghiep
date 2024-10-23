@@ -1,10 +1,11 @@
 import { Category } from "./Category";
+import { Size } from "./Size";
 
 // Define the interface for sizeStock, which is an array of objects
 export interface sizeStock {
-    _id: string;
-    size: number; // size is required
+    size: Size;
     stock: number; // stock is required
+    price: number; // price is required
 }
 
 // Define the interface for Product
@@ -12,8 +13,8 @@ export interface Product {
     _id?: string;
     title: string;
     brand: string;
-    sizeStock: sizeStock[]; // sizeStock is an array of sizeStock objects
     price: number;
+    sizeStock: sizeStock[]; // sizeStock is an array of sizeStock objects
     description?: string; // description is optional
     images: string;
     imgCategory: string[];

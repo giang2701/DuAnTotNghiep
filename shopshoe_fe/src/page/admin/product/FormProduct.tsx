@@ -1,20 +1,22 @@
+import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import { Product } from "../../../interface/Products";
 import instance from "../../../api";
+import RichTextEditor from "../../../component/RichTextEditor";
 import {
     ProductContext,
     ProductContextType,
 } from "../../../context/ProductContext";
 import { Category } from "../../../interface/Category";
-import RichTextEditor from "../../../component/RichTextEditor";
-import axios from "axios";
+import { Product } from "../../../interface/Products";
+import { Size } from "../../../interface/Size";
 
 const FormProduct = () => {
     const { id } = useParams();
     const { handleProduct } = useContext(ProductContext) as ProductContextType;
     const [categories, setCategories] = useState<Category[]>([]);
+    const [sizes, setSizes] = useState<Size[]>([]);
     const [formattedPrice, setFormattedPrice] = useState<string>("");
     const [description, setDescription] = useState("");
 
@@ -31,27 +33,9 @@ const FormProduct = () => {
     } = useForm<Product>({
         defaultValues: {
             category: {} as Category,
-            sizeStock: [
-                { size: 34, stock: 0 },
-                { size: 35, stock: 0 },
-                { size: 36, stock: 0 },
-                { size: 37, stock: 0 },
-                { size: 38, stock: 0 },
-                { size: 39, stock: 0 },
-                { size: 40, stock: 0 },
-                { size: 41, stock: 0 },
-                { size: 42, stock: 0 },
-                { size: 43, stock: 0 },
-                { size: 44, stock: 0 },
-                { size: 45, stock: 0 },
-            ],
         },
     });
-    const { fields } = useFieldArray({
-        control,
-        name: "sizeStock",
-    });
-
+    // Price
     const formatPrice = (price: number): string => {
         return new Intl.NumberFormat("vi-VN", {
             style: "currency",
@@ -60,12 +44,11 @@ const FormProduct = () => {
             .format(price)
             .replace("₫", "đ");
     };
-
     const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = parseInt(event.target.value, 10);
         setFormattedPrice(formatPrice(value));
     };
-
+    // -----
     const uploadFile = async (file: File) => {
         const CLOUD_NAME = "dq3lk241i";
         const PRESET_NAME = "datn_upload";
@@ -82,60 +65,62 @@ const FormProduct = () => {
         return response.data.secure_url;
     };
 
-    const handleImgChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImgChange = async (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
         const files = event.target.files;
         if (files && files.length > 0) {
             const url = await uploadFile(files[0]);
             setImgURL(url);
         }
     };
-
-    const handleImgCategoryChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImgCategoryChange = async (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
         const files = event.target.files;
         if (files) {
             const urls = await Promise.all(Array.from(files).map(uploadFile));
             setImgCategoryURLs(urls);
         }
     };
-
+    // size
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: "sizeStock", // Tên trường quản lý danh sách size
+    });
+    // đổ dữ liệu khi edit
     useEffect(() => {
         if (id) {
             (async () => {
                 try {
                     const { data } = await instance.get(`/products/${id}`);
                     const existingData = data.data;
-
+                    // images
                     if (existingData.images) {
                         setImgURL(existingData.images);
                     }
-
                     if (
                         existingData.imgCategory &&
                         existingData.imgCategory.length > 0
                     ) {
                         setImgCategoryURLs(existingData.imgCategory);
                     }
+                    // Đảm bảo sizeStock được định dạng đúng
+                    const updatedSizeStock = existingData.sizeStock.map(
+                        (item: any) => ({
+                            size: { _id: item.size }, // Giả sử item.size là _id từ bảng Size
+                            stock: item.stock,
+                            price: item.price,
+                        })
+                    );
+                    console.log("Existing Data:", existingData);
+                    console.log("Updated Size Stock:", updatedSizeStock);
 
-                    const defaultStock = Array.from({ length: 12 }, (_, i) => ({
-                        size: 34 + i,
-                        stock: 0,
-                    }));
-                    const updatedSizeStock = defaultStock.map((sizeObj) => {
-                        const existingStock = existingData.sizeStock.find(
-                            (item: any) => item.size === sizeObj.size
-                        );
-                        return existingStock || sizeObj;
-                    });
                     reset({
                         ...existingData,
-                        sizeStock: updatedSizeStock,
+                        sizeStock: updatedSizeStock, // Cập nhật sizeStock với dữ liệu mới
                         category: existingData.category?._id || "",
                     });
-
-                    if (existingData.price) {
-                        setFormattedPrice(formatPrice(existingData.price));
-                    }
-
                     setValue("description", existingData.description);
                     setDescription(existingData.description);
                 } catch (error) {
@@ -144,138 +129,326 @@ const FormProduct = () => {
             })();
         }
     }, [id, reset, setValue]);
-
+    // đổ dữ liệu khi cate vào form
     useEffect(() => {
         (async () => {
             const { data } = await instance.get(`/categorys`);
             setCategories(data.data);
         })();
     }, []);
+    // đổ dữ liệu khi cate vào form
+    useEffect(() => {
+        (async () => {
+            const { data } = await instance.get(`/size`);
+            setSizes(data.data);
+        })();
+    }, []);
+    // console.log(sizes);
 
     return (
         <div className="container">
-            <h1>{id ? "Product Edit" : "Product Add"}</h1>
-            <form
-                onSubmit={handleSubmit((data: Product) => {
-                    const updatedData = {
-                        ...data,
-                        _id: id,
-                        images: imgURL || data?.images,
-                        imgCategory: imgCategoryURLs,
-                    };
-                    console.log("Dữ liệu gửi lên:", updatedData);
-
-                    handleProduct(updatedData);
-                })}
+            <h1
+                className="mt-2"
+                style={{ display: "inline-block", fontFamily: "serif" }}
             >
-                <div className="form-group">
-                    <label>Title</label>
-                    <input
-                        {...register("title", { required: true })}
-                        className={`form-control ${errors.title ? "is-invalid" : ""}`}
-                    />
-                    {errors.title && <div className="invalid-feedback">Title is required</div>}
-                </div>
+                Sản Phẩm
+            </h1>
+            <span style={{ marginLeft: "5px", fontFamily: "serif" }}>
+                {id ? "Chỉnh Sửa" : "Tạo Mới"}
+            </span>
+            <div className="information_productsForm mt-2">
+                <form
+                    onSubmit={handleSubmit((data: Product) => {
+                        const updatedData = {
+                            ...data,
+                            _id: id,
+                            images: imgURL || data?.images,
+                            imgCategory: imgCategoryURLs,
+                            sizeStock: data?.sizeStock,
+                        };
+                        console.log("Dữ liệu gửi lên:", updatedData);
 
-                <div className="form-group">
-                    <label>Brand</label>
-                    <input
-                        {...register("brand", { required: true })}
-                        className={`form-control ${errors.brand ? "is-invalid" : ""}`}
-                    />
-                    {errors.brand && <div className="invalid-feedback">Brand is required</div>}
-                </div>
-
-                <div className="form-group">
-                    <label>Price</label>
-                    <input
-                        {...register("price", { required: true })}
-                        type="number"
-                        className={`form-control ${errors.price ? "is-invalid" : ""}`}
-                        onChange={handlePriceChange}
-                    />
-                    {errors.price && <div className="invalid-feedback">Price is required</div>}
-                    <div>{formattedPrice}</div>
-                </div>
-
-                <div className="form-group">
-                    <label>Description</label>
-                    <RichTextEditor
-                        value={description}
-                        onChange={(value: any) => {
-                            setDescription(value);
-                            setValue("description", value);
-                        }}
-                    />
-                    {errors.description && (
-                        <div className="text-danger">Description is required</div>
-                    )}
-                </div>
-
-                <div className="form-group">
-                    <label>Product Image</label>
-                    <input
-                        type="file"
-                        onChange={handleImgChange}
-                        className={`form-control ${errors.images ? "is-invalid" : ""}`}
-                    />
-                    {imgURL && (
-                        <div>
-                            <img src={imgURL} alt="Uploaded Product" width="100" />
-                        </div>
-                    )}
-                </div>
-
-                <div className="form-group">
-                    <label>Category Images</label>
-                    <input
-                        type="file"
-                        onChange={handleImgCategoryChange}
-                        multiple
-                        className={`form-control ${errors.imgCategory ? "is-invalid" : ""}`}
-                    />
-                    {imgCategoryURLs.length > 0 && (
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-                            {imgCategoryURLs.map((img, index) => (
-                                <img key={index} src={img} alt={`Category ${index}`} width="80" />
-                            ))}
-                        </div>
-                    )}
-                </div>
-
-                <div className="form-group">
-                    <label>Category</label>
-                    <select {...register("category")} className="form-control">
-                        {categories.map((category) => (
-                            <option key={category._id} value={category._id}>
-                                {category.title}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                <div>
-                    <h6>Size Stock</h6>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
-                        {fields.map((item, index) => (
-                            <div key={item.id} style={{ flexBasis: "120px" }}>
-                                <label>{`Size ${item.size}`}</label>
+                        handleProduct(updatedData);
+                    })}
+                >
+                    <div className="row d-flex">
+                        <div className="col-6">
+                            {" "}
+                            {/* Title */}
+                            <div className="form-group mb-2">
+                                <label className="form-label">Title</label>
                                 <input
-                                    {...register(`sizeStock.${index}.stock` as const, {
-                                        valueAsNumber: true,
-                                    })}
-                                    type="number"
-                                    className="form-control"
+                                    {...register("title", { required: true })}
+                                    className={`form-control ${
+                                        errors.title ? "is-invalid" : ""
+                                    }`}
                                 />
+                                {errors.title && (
+                                    <div className="invalid-feedback">
+                                        Title is required
+                                    </div>
+                                )}
                             </div>
-                        ))}
-                    </div>
-                </div>
+                            {/* Brand */}
+                            <div className="form-group mb-2">
+                                <label className="form-label">Brand</label>
+                                <input
+                                    {...register("brand", { required: true })}
+                                    className={`form-control ${
+                                        errors.brand ? "is-invalid" : ""
+                                    }`}
+                                />
+                                {errors.brand && (
+                                    <div className="invalid-feedback">
+                                        Brand is required
+                                    </div>
+                                )}
+                            </div>
+                            {/* price */}
+                            <div className="form-group mb-2">
+                                <label className="form-label">Price</label>
+                                <input
+                                    {...register("price", { required: true })}
+                                    className={`form-control ${
+                                        errors.price ? "is-invalid" : ""
+                                    }`}
+                                    onChange={handlePriceChange}
+                                />
+                                <p className="fs-5 text-danger fw-medium">
+                                    {formattedPrice}
+                                </p>
+                                {errors.price && (
+                                    <div className="invalid-feedback">
+                                        price is required
+                                    </div>
+                                )}
+                            </div>
+                            {/* Description */}
+                            <div
+                                className="form-group mb-2 "
+                                style={{ width: "500px" }}
+                            >
+                                <label className="form-label">
+                                    Description
+                                </label>
+                                <RichTextEditor
+                                    value={description}
+                                    onChange={(value: any) => {
+                                        setDescription(value);
+                                        setValue("description", value);
+                                    }}
+                                />
+                                {errors.description && (
+                                    <div className="text-danger">
+                                        Description is required
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        <div className="col-6">
+                            {/* images */}
+                            <div className="form-group mb-2">
+                                <label className="form-label">
+                                    Ảnh Sản Phẩm
+                                </label>
 
-                <button type="submit" className="btn btn-primary" style={{ marginTop: "20px" }}>
-                    Submit
-                </button>
-            </form>
+                                <div className="custom-file-upload">
+                                    <input
+                                        type="file"
+                                        onChange={handleImgChange}
+                                        className={`file-input ${
+                                            errors.images ? "is-invalid" : ""
+                                        }`}
+                                    />
+                                    {imgURL ? (
+                                        <img
+                                            src={imgURL}
+                                            alt="Uploaded Product"
+                                            className="uploaded-img"
+                                        />
+                                    ) : (
+                                        <span className="upload-placeholder">
+                                            +
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                            {/* images category*/}
+                            <div className="form-group mb-2">
+                                <label className="form-label">Nhóm Ảnh</label>
+                                <div className="custom-multiple-upload">
+                                    <input
+                                        type="file"
+                                        onChange={handleImgCategoryChange}
+                                        multiple
+                                        className={`file-input ${
+                                            errors.imgCategory
+                                                ? "is-invalid"
+                                                : ""
+                                        }`}
+                                    />
+                                    {imgCategoryURLs.length === 0 && (
+                                        <span className="upload-placeholder">
+                                            Chọn ảnh
+                                        </span>
+                                    )}
+                                    <div className="images-preview">
+                                        {imgCategoryURLs.map((img, index) => (
+                                            <div
+                                                key={index}
+                                                className="image-container"
+                                            >
+                                                <img
+                                                    src={img}
+                                                    alt={`Category ${index}`}
+                                                    className="preview-img"
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                            {/* category */}
+                            <div className="form-group mb-2">
+                                <label className="form-label">Category</label>
+                                <select
+                                    {...register("category")}
+                                    className="form-control "
+                                >
+                                    <option selected>
+                                        -- Select Category --
+                                    </option>
+                                    {categories.map((category) => (
+                                        <option
+                                            key={category._id}
+                                            value={category._id}
+                                        >
+                                            {category.title}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            {/* size */}
+                            <div>
+                                <label htmlFor="size" className="form-label">
+                                    Size
+                                </label>
+                                {fields.map((field, index) => (
+                                    <div
+                                        key={field.id}
+                                        className="size-stock-row d-flex mb-2"
+                                    >
+                                        <select
+                                            {...register(
+                                                `sizeStock.${index}.size._id`
+                                            )}
+                                            style={{
+                                                width: "100px",
+                                                height: "25px",
+                                            }}
+                                        >
+                                            {/* Đổ danh sách size từ API */}
+                                            {sizes.map((size) => (
+                                                <option
+                                                    key={size._id}
+                                                    value={size._id}
+                                                    className="form-control"
+                                                >
+                                                    {size.nameSize}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <input
+                                            type="number"
+                                            {...register(
+                                                `sizeStock.${index}.stock`
+                                            )}
+                                            placeholder="Số lượng"
+                                            style={{
+                                                width: "100px",
+                                                height: "25px",
+                                            }}
+                                            min={0}
+                                        />
+
+                                        <input
+                                            type="number"
+                                            {...register(
+                                                `sizeStock.${index}.price`
+                                            )}
+                                            placeholder="Giá"
+                                            className={`form-control ${
+                                                errors.price ? "is-invalid" : ""
+                                            }`}
+                                            onChange={handlePriceChange}
+                                            style={{
+                                                width: "100px",
+                                                height: "25px",
+                                            }}
+                                            min={0}
+                                        />
+
+                                        <button
+                                            type="button"
+                                            onClick={() => remove(index)}
+                                            style={{
+                                                width: "20px",
+                                                height: "20px",
+                                                borderRadius: "50%",
+                                                border: "none",
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                                color: "white",
+                                                backgroundColor: "black",
+                                                marginTop: "2px",
+                                                marginLeft: "5px",
+                                                paddingTop: "2px",
+                                                paddingRight: "1px",
+                                            }}
+                                        >
+                                            <i className="fa-solid fa-trash"></i>
+                                        </button>
+                                    </div>
+                                ))}
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        append({
+                                            size: { _id: "" },
+                                            stock: 0,
+                                            price: 0,
+                                        })
+                                    }
+                                    style={{
+                                        width: "70px",
+                                        height: "25px",
+
+                                        border: "none",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        color: "white",
+                                        backgroundColor: "black",
+                                        marginTop: "10px",
+
+                                        paddingRight: "1px",
+                                    }}
+                                >
+                                    Thêm Size
+                                </button>
+                            </div>
+                            <button
+                                type="submit"
+                                className="btn btn-primary"
+                                style={{ marginTop: "20px" }}
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };

@@ -136,6 +136,7 @@ const Hompage = (props: Props) => {
                             className="d-block w-100"
                             alt="..."
                         />
+                        <img src="../" alt="" />
                         <div className="carousel-caption slide-up">
                             <p className="introduction">
                                 Discover the Latest Trends in Footwear
