@@ -2244,6 +2244,14 @@ label {
 .box_loginImage img {
   width: 800px;
 }
+/* |**********************************************************
+   |  Quản lý user
+   | ********************************************************** */
+.box-sort {
+  border-radius: 0;
+  border: 1px solid rgb(182, 178, 178);
+  margin-bottom: 10px;
+}
 /* --Mobile & content__layoutAdminablet */
 @media (max-widbox_table_productsh: 1024px) {
 }
