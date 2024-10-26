@@ -8,28 +8,27 @@ const UserList = () => {
   const [editingUserId, setEditingUserId] = useState<string | null>(null);
   const [editedRole, setEditedRole] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [isSortedAsc, setIsSortedAsc] = useState<boolean>(true); // State để kiểm tra thứ tự sắp xếp
+  const [isSortedAsc, setIsSortedAsc] = useState<boolean>(true);
+  const [showInactive, setShowInactive] = useState(false);
 
   useEffect(() => {
     (async () => {
       const { data } = await instance.get("/user");
       setUser(data.data);
-      setFilteredUsers(data.data); // Ban đầu hiển thị toàn bộ danh sách
+      setFilteredUsers(data.data);
     })();
   }, []);
 
-  // Xóa
   const handleDelete = async (_id: string) => {
     if (window.confirm("Bạn có chắc muốn xóa người dùng này không?")) {
       await instance.delete(`/user/${_id}`);
-      const updateUsers = user.filter((item) => item._id !== _id);
-      setUser(updateUsers);
-      setFilteredUsers(updateUsers);
+      const updatedUsers = user.filter((item) => item._id !== _id);
+      setUser(updatedUsers);
+      setFilteredUsers(updatedUsers);
     }
   };
 
-  // Sửa
-  const handleEditCLick = (user: User) => {
+  const handleEditClick = (user: User) => {
     setEditingUserId(user._id);
     setEditedRole(user.role);
   };
@@ -50,7 +49,21 @@ const UserList = () => {
     }
   };
 
-  // Lọc người dùng dựa trên từ khóa tìm kiếm
+  const toggleActiveStatus = async (userId: string, currentStatus: boolean) => {
+    try {
+      const updatedStatus = !currentStatus;
+      await instance.put(`/user/${userId}`, { isActive: updatedStatus });
+
+      const updatedUsers = user.map((item) =>
+        item._id === userId ? { ...item, isActive: updatedStatus } : item
+      );
+      setUser(updatedUsers);
+      setFilteredUsers(updatedUsers);
+    } catch (error) {
+      console.error("Failed to update user status", error);
+    }
+  };
+
   useEffect(() => {
     const filtered = user.filter((item) =>
       item.username.toLowerCase().includes(searchTerm.toLowerCase())
@@ -58,7 +71,6 @@ const UserList = () => {
     setFilteredUsers(filtered);
   }, [searchTerm, user]);
 
-  // Sắp xếp danh sách người dùng theo tên A-Z hoặc Z-A
   const handleSort = () => {
     const sortedUsers = [...filteredUsers].sort((a, b) =>
       isSortedAsc
@@ -66,14 +78,13 @@ const UserList = () => {
         : b.username.localeCompare(a.username)
     );
     setFilteredUsers(sortedUsers);
-    setIsSortedAsc(!isSortedAsc); // Đảo chiều sắp xếp cho lần nhấn nút tiếp theo
+    setIsSortedAsc(!isSortedAsc);
   };
 
   return (
     <div>
       <div className="container" style={{ paddingTop: "5px" }}>
         <div className="box_table_products">
-          {/* Thanh tìm kiếm và nút sắp xếp */}
           <div
             className="container"
             style={{
@@ -88,7 +99,6 @@ const UserList = () => {
                 <span>Tìm kiếm</span>
               </div>
               <div className="body_table_products p-3 bg-white">
-                {/* Thêm Pagination của MUI */}
                 <div
                   className="d-flex align-items-center"
                   style={{ gap: "10px" }}
@@ -107,8 +117,8 @@ const UserList = () => {
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="form-control"
                       style={{
-                        paddingLeft: "40px", // Giảm độ rộng của ô input
-                        height: "43px", // Đảm bảo ô input cao tương tự như nút
+                        paddingLeft: "40px",
+                        height: "43px",
                         marginTop: "1px",
                         marginLeft: "1px",
                         border: "1px solid black",
@@ -124,7 +134,7 @@ const UserList = () => {
                         transform: "translateY(-50%)",
                         fontSize: "16px",
                         color: "#aaa",
-                        pointerEvents: "none", // Để chuột không tương tác với biểu tượng
+                        pointerEvents: "none",
                       }}
                       role="img"
                       aria-label="search"
@@ -152,6 +162,7 @@ const UserList = () => {
                   <th>Email người dùng</th>
                   <th>Quyền truy cập</th>
                   <th>Thanh điều hướng</th>
+                  <th> Active/ deactive</th>
                 </tr>
               </thead>
               <tbody>
@@ -162,7 +173,10 @@ const UserList = () => {
                       <td className="text-center">{item.email}</td>
                       <td className="text-center">{item.role}</td>
                       <td>
-                        <div className="d-flex justify-content-center">
+                        <div
+                          className="d-flex justify-content-center"
+                          style={{ gap: "10px" }}
+                        >
                           <button
                             className="me-3"
                             onClick={() => handleDelete(item._id)}
@@ -177,8 +191,9 @@ const UserList = () => {
                           >
                             <i className="fa-solid fa-trash"></i>
                           </button>
+
                           <button
-                            onClick={() => handleEditCLick(item)}
+                            onClick={() => handleEditClick(item)}
                             style={{
                               borderRadius: "5px",
                               width: "70px",
@@ -186,13 +201,29 @@ const UserList = () => {
                               backgroundColor: "red",
                               color: "white",
                               border: "none",
-                              fontSize: "1.3rem",
-                              paddingLeft: "1px",
                             }}
                           >
                             Cập nhật
                           </button>
                         </div>
+                      </td>
+                      <td className="d-flex justify-content-center">
+                        <button
+                          className="Button_admin "
+                          onClick={() =>
+                            toggleActiveStatus(item._id, item.isActive)
+                          }
+                          style={{
+                            borderRadius: "5px",
+                            width: "90px",
+                            height: "30px",
+                            backgroundColor: item.isActive ? "green" : "gray",
+                            color: "white",
+                            border: "none",
+                          }}
+                        >
+                          {item.isActive ? "Tài khoản" : "Khóa Tài Khoản"}
+                        </button>
                       </td>
                     </tr>
                   ))
@@ -209,7 +240,6 @@ const UserList = () => {
         </div>
       </div>
 
-      {/* Hiển thị form chỉnh sửa quyền truy cập và overlay */}
       {editingUserId && (
         <div className="overlay__phanquyen">
           <div className="boxPhanQuyen">
@@ -225,14 +255,11 @@ const UserList = () => {
               </select>
             </label>
             <div className="mt-3">
-              <button
-                className="btn btn-success me-2 saveDecentralization1"
-                onClick={handleSaveEdit}
-              >
+              <button className="btn btn-success me-2" onClick={handleSaveEdit}>
                 Lưu
               </button>
               <button
-                className="btn btn-secondary saveDecentralization2"
+                className="btn btn-secondary"
                 onClick={() => setEditingUserId(null)}
               >
                 Hủy

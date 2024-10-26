@@ -1,7 +1,7 @@
 import User from "../model/User.js";
 export const getAllUser = async (req, res, next) => {
   try {
-    const data = await User.find();
+    const data = await User.find({});
     console.log(data);
     if (data) {
       return res.status(200).json({
@@ -37,6 +37,24 @@ export const deleteUserById = async (req, res, next) => {
     if (data) {
       return res.status(200).json({
         message: "Xoa thong tin nguoi dung thanh cong",
+        success: true,
+        data,
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+// Hàm cập nhật trạng thái active/deactive của người dùng
+export const updateUserStatus = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { isActive } = req.body;
+    const data = await User.findByIdAndUpdate(id, { isActive }, { new: true });
+    console.log("Trang thai moi cua User:", isActive);
+    if (data) {
+      return res.status(200).json({
+        message: "Cap nhat trang thai tai khoan thanh cong",
         success: true,
         data,
       });
