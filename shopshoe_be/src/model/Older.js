@@ -1,18 +1,50 @@
 import mongoose, { Schema } from "mongoose";
 
-// Định nghĩa schema cho một mục trong đơn hàng
-const orderItemSchema = new Schema({
-    product: { type: Schema.Types.ObjectId, ref: "Product", required: true },
-    quantity: { type: Number, required: true },
-});
-
 // Định nghĩa schema cho đơn hàng
 const orderSchema = new Schema(
     {
         userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
-        products: [orderItemSchema], // Mảng các sản phẩm trong đơn hàng
-        totalPrice: { type: Number, required: true },
-        // voucher: { type: String, enum: ["sale15", "sale20"] }, // Mã giảm giá, nếu có
+        products: [
+            {
+                product: {
+                    type: Schema.Types.ObjectId,
+                    ref: "Product",
+                    required: true,
+                },
+                quantity: {
+                    type: Number,
+                    required: true,
+                    min: [1, "Số lượng phải lớn hơn hoặc bằng 1"],
+                },
+                size: {
+                    // Thêm trường size
+                    type: Schema.Types.ObjectId,
+                    ref: "Size",
+                    required: true, // Bắt buộc chọn size
+                },
+            },
+        ],
+        totalPrice: {
+            type: Number,
+            required: true,
+            min: [0, "Tổng giá trị phải lớn hơn hoặc bằng 0"],
+        },
+        voucher: {
+            type: Schema.Types.ObjectId,
+            ref: "Voucher",
+            default: null, // Nếu không có mã giảm giá
+        },
+        shippingAddress: {
+            name: { type: String, required: true },
+            phone: { type: String, required: true },
+            address: { type: String, required: true },
+            city: { type: String, required: true },
+        },
+        paymentMethod: {
+            type: String,
+            enum: ["creditCard", "paypal", "bankTransfer"],
+            required: true,
+        },
         status: {
             type: String,
             enum: ["pending", "shipping", "completed", "cancelled"],
