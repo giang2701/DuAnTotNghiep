@@ -1,17 +1,39 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 
-const cartItemSchema = new Schema({
-    product: { type: Schema.Types.ObjectId, ref: "Product", required: true },
-    size: { type: Number, required: true }, // Lưu kích cỡ đã chọn
-    quantity: { type: Number, required: true }, // Số lượng đã chọn cho kích cỡ đó
-});
-
-// Định nghĩa schema cho giỏ hàng
-const cartSchema = new Schema(
+const cartSchema = new mongoose.Schema(
     {
-        userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
-        products: [cartItemSchema], // Mảng các sản phẩm trong giỏ hàng với kích cỡ và số lượng tương ứng
-        totalPrice: { type: Number, required: true },
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
+        items: [
+            {
+                product: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Product",
+                    required: true,
+                },
+                size: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Size",
+                    required: true,
+                },
+                quantity: {
+                    type: Number,
+                    required: true,
+                    min: 1,
+                },
+                price: {
+                    type: Number,
+                    required: true,
+                },
+            },
+        ],
+        totalPrice: {
+            type: Number,
+            default: 0,
+        },
     },
     { versionKey: false, timestamps: true }
 );
