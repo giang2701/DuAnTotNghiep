@@ -18,6 +18,7 @@ import DetailProduct from "./page/DetailProduct";
 import Hompage from "./page/Hompage";
 import Product_List from "./page/Product_list";
 import Page404 from "./page/Page404";
+
 function App() {
     return (
         <>

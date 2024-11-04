@@ -49,11 +49,10 @@ export const AddToCart = async (req, res, next) => {
         const { userId, productId, size, quantity } = req.body;
         // Kiểm tra dữ liệu đầu vào
         if (!userId || !productId || !size || !quantity) {
-            return res
-                .status(400)
-                .json({ message: "Thiếu thông tin yêu cầu." });
+            return res.status(400).json({ message: "Thiếu thông tin yêu cầu." });
         }
-        // Tìm sản phẩm trong cơ sở dữ liệu để lấy giá theo size
+
+        // Tìm sản phẩm trong cơ sở dữ liệu
         const product = await Product.findById(productId);
         if (!product) {
             return res.status(404).json({ message: "Sản phẩm không tồn tại." });
@@ -65,13 +64,10 @@ export const AddToCart = async (req, res, next) => {
         );
 
         if (!sizeInfo) {
-            return res
-                .status(400)
-                .json({ message: "Size không hợp lệ hoặc không tồn tại." });
+            return res.status(400).json({ message: "Size không hợp lệ hoặc không tồn tại." });
         }
 
         const price = sizeInfo.price; // Lấy giá từ size cụ thể
-        // Tìm giỏ hàng của người dùng
         let cart = await Cart.findOne({ user: userId });
 
         // Nếu chưa có giỏ hàng, tạo mới
@@ -80,9 +76,6 @@ export const AddToCart = async (req, res, next) => {
         }
 
         // Kiểm tra xem sản phẩm có tồn tại trong giỏ hàng với size cụ thể
-        // hàm này giúp so sánh ID user với ID người dùng trong
-        // giỏ hàng và ID sản size  với size của sản phẩm trong giỏ hàng.
-        // nếu khác nhau(không tìm thấy id sản phẩm và size) thì findIndex sẽ trả giá trị là -1 ,giống thì trả về khác  -1
         const existingItemIndex = cart.items.findIndex(
             (item) =>
                 item.product.toString() === productId &&
@@ -102,21 +95,21 @@ export const AddToCart = async (req, res, next) => {
             });
         }
 
+        // Tính tổng giá trị của giỏ hàng
+        cart.totalPrice = cart.items.reduce((total, item) => {
+            return total + item.quantity * item.price;
+        }, 0);
+
         // Lưu giỏ hàng vào cơ sở dữ liệu
         await cart.save();
-        // // Tính tổng giá trị của giỏ hàng
-        // cart.totalPrice = cart.items.reduce((total, item) => {
-        //     return total + item.quantity * item.price;
-        // }, 0);
-        return res
-            .status(200)
-            .json({ message: "Sản phẩm đã được thêm vào giỏ hàng.", cart });
+
+        return res.status(200).json({ message: "Sản phẩm đã được thêm vào giỏ hàng.", cart });
     } catch (error) {
-        return res
-            .status(500)
-            .json({ message: "Lỗi máy chủ. Không thể thêm vào giỏ hàng." });
+        console.error(error); // Ghi lại lỗi để kiểm tra
+        return res.status(500).json({ message: "Lỗi máy chủ. Không thể thêm vào giỏ hàng." });
     }
 };
+
 // Cập nhật giỏ hàng (update cart)
 export const updateCart = async (req, res, next) => {
     try {

@@ -22,3 +22,14 @@ export interface Product {
     updatedAt: string;
     category?: Category;
 }
+
+export type CartItem = {
+    product: Product;
+    quantity: number;
+    size: Size; // thêm thuộc tính kích cỡ
+    userId?: string | number; // Thêm trường userId vào CartItem
+    totalPrice:string
+    productId: string
+
+};
+

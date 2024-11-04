@@ -7,19 +7,25 @@ import ProductProvider from "./context/ProductContext.tsx";
 import CategoryProvider from "./context/CategoryContext.tsx";
 import { AuthProvider } from "./context/AuthContext.tsx";
 import { SizeProvider } from "./context/Size.tsx";
+import { CartProvider } from "./context/cart.tsx";
+import { UserProvider } from "./context/user.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-    <React.StrictMode>
-        <BrowserRouter>
-            <AuthProvider>
-                <SizeProvider>
-                    <ProductProvider>
-                        <CategoryProvider>
-                            <App />
-                        </CategoryProvider>
-                    </ProductProvider>
-                </SizeProvider>
-            </AuthProvider>
-        </BrowserRouter>
-    </React.StrictMode>
+  <React.StrictMode>
+    <BrowserRouter>
+      <AuthProvider>
+        <SizeProvider>
+          <ProductProvider>
+            <CategoryProvider>
+              <CartProvider>
+                <UserProvider>
+                  <App />
+                </UserProvider>
+              </CartProvider>
+            </CategoryProvider>
+          </ProductProvider>
+        </SizeProvider>
+      </AuthProvider>
+    </BrowserRouter>
+  </React.StrictMode>
 );

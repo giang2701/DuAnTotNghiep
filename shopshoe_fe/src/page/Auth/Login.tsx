@@ -7,6 +7,7 @@ import { User } from "../../interface/User";
 import { LoginSchema } from "../../validate/AuthFormSchema";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import useProductCart from "../../hook/useProductCart";
 
 const Login = () => {
   const {
@@ -19,24 +20,36 @@ const Login = () => {
   const nav = useNavigate();
   const { login: contextLogin } = useAuth();
   const [error, setError] = useState<string | null>(null);
+  const { getCartUser } = useProductCart(); // Sử dụng hook
+
   const onSubmitLogin = async (data: User) => {
     try {
       const res = await instance.post(`/auth/login`, {
         email: data.email,
         password: data.password,
       });
+      // Đăng nhập thành công
       contextLogin(res.data.accessToken, res.data.user);
-      toast.success("Đăng nhập thành công");
-      nav("/");
+      
+      // Cập nhật localStorage với thông tin user
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      
+      // Lấy giỏ hàng của người dùng
+      await getCartUser(res.data.user._id); // Gọi hàm để lấy giỏ hàng
+      
+      toast.success('đang nhập thành công')
+      nav("/"); // Điều hướng đến trang chính
     } catch (error: any) {
       if (error.response && error.response.status === 403) {
-        setError("Tài khoản của bạn đã bị khóa .");
+        setError("Tài khoản của bạn đã bị khóa.");
       } else {
-        setError("Login failed.Please check your credentials.");
+        setError("Đăng nhập không thành công. Vui lòng kiểm tra thông tin.");
       }
       toast.error(error.response.data.message);
     }
   };
+
+
   return (
     <>
       <div className="container">
@@ -48,14 +61,12 @@ const Login = () => {
               Nếu bạn đã có tài khoản, hãy đăng nhập để tích lũy điểm thành viên
               và nhận được những ưu đãi tốt hơn!
             </p>
-            <form action="" onSubmit={handleSubmit(onSubmitLogin)}>
+            <form onSubmit={handleSubmit(onSubmitLogin)}>
               <div className="mb-3">
                 <input
                   type="email"
                   className="form-control"
-                  {...register("email", {
-                    required: "Email is required",
-                  })} // <-- Thêm yêu cầu cho `email`
+                  {...register("email", { required: "Email is required" })}
                   placeholder="Email"
                 />
                 {errors.email && (
@@ -64,14 +75,13 @@ const Login = () => {
                   </span>
                 )}
               </div>
-
               <div className="mb-3">
                 <input
                   type="password"
                   className="form-control"
                   {...register("password", {
                     required: "Password is required",
-                  })} // <-- Thêm yêu cầu cho `password`
+                  })}
                   placeholder="Password"
                 />
                 {errors.password && (
