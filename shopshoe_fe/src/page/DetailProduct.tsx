@@ -19,10 +19,9 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import instance from "../api";
 import TymButton from "../component/Btn__tym";
 import { useCart } from "../context/cart";
-import { CartItem, Product } from "../interface/Products";
+import { Product } from "../interface/Products";
 import { Size } from "../interface/Size";
 import { useAuth } from "../context/AuthContext";
-import useProductCart from "../hook/useProductCart";
 import { toast } from "react-toastify";
 
 const DetailProduct = () => {
@@ -33,9 +32,8 @@ const DetailProduct = () => {
   >([]);
   // cart
   // setCart
-  const { cart, setCart } = useCart();
+  const { cart, fetchCart } = useCart();
   const { user } = useAuth(); // Gọi useAuth ở đây
-  const { getCartUser } = useProductCart();
 
   console.log(cart);
   console.log(user);
@@ -54,7 +52,6 @@ const DetailProduct = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const thumbnailRef = useRef<HTMLDivElement | null>(null);
-
   const [currentImageIndex, setCurrentImageIndex] = useState(0); // Theo dõi ảnh hiện tại
   let isDragging = false;
   let startPos = 0;
@@ -271,8 +268,8 @@ const DetailProduct = () => {
       console.log("Sản phẩm đã được thêm vào giỏ hàng");
 
       // Lấy giỏ hàng mới từ API
-      await getCartUser(userId);
-      toast.success("them san pharm thanh cong")
+      fetchCart()
+      toast.success("them san pham thanh cong")
     } catch (error) {
       console.error("Lỗi khi thêm vào giỏ hàng:", error);
     }

@@ -7,8 +7,8 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import instance from "../api";
 import // CategoryContext,
 
-// CategoryContextType,
-"../context/CategoryContext";
+  // CategoryContextType,
+  "../context/CategoryContext";
 import { Category } from "../interface/Category";
 import { Product } from "../interface/Products";
 import { useCart } from "../context/cart";
@@ -30,6 +30,7 @@ export const IconCart = styled(LocalMallOutlinedIcon)({
   },
 });
 
+
 const Header = () => {
   const navigate = useNavigate();
   const [category, setCategory] = useState<Category[]>([]);
@@ -39,7 +40,9 @@ const Header = () => {
   const { cart } = useCart();
   console.log(cart);
   //hiệu ứng cuộn trang
-  
+
+  const { totalItems } = useCart(); // Lấy totalItems từ context
+
   useEffect(() => {
     const handleScroll = () => {
       setIsSticky(window.scrollY > 50);
@@ -88,7 +91,12 @@ const Header = () => {
 
   // console.log(cartItemsCount);
 
-  
+
+  // chuyển hướng sang cartpage
+  const handleCartClick = () => {
+    navigate('/CartPage');
+  };
+
   return (
     <>
       <header className="Box__header container-fluid">
@@ -97,9 +105,8 @@ const Header = () => {
         </div>
         {/* ======HEADER PC============ */}
         <div
-          className={`sub__header d-flex align-items-center justify-content-around ${
-            isSticky ? "sticky" : ""
-          }`}
+          className={`sub__header d-flex align-items-center justify-content-around ${isSticky ? "sticky" : ""
+            }`}
         >
           <div className="logo__sub__header">
             <Link to="/">
@@ -292,10 +299,10 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
             {/* icon trái tim trắng*/}
             <i className="fa-regular fa-heart"></i>
             {/* icon cart */}
-            <Badge badgeContent={cart} color="error" className="cart-icon">
+            <Badge badgeContent={totalItems} color="error" className="cart-icon" onClick={handleCartClick} style={{ fontSize: '2.2rem', cursor: 'pointer' }}>
               {/* <i className="fa-solid fa-cart-shopping"></i> */}
               <ShoppingCartIcon
-               style={{fontSize:'2.2rem'}}
+                style={{ fontSize: '2.2rem' }}
               />
             </Badge>
           </div>
@@ -460,10 +467,10 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
             {/* icon trái tim trắng*/}
             <i className="fa-regular fa-heart"></i>
             {/* icon cart */}
-            <Badge badgeContent={cart} color="error" className="cart-icon">
-              {/* <i className="fa-solid fa-cart-shopping"></i> */}
+            <Badge badgeContent={totalItems} color="error" className="cart-icon">
+              <i className="fa-solid fa-cart-shopping"></i>
               <ShoppingCartIcon
-               style={{fontSize:'1.4rem',marginBottom:'0.6rem'}}
+                style={{ fontSize: "1.4rem", marginBottom: "0.6rem" }}
               />
             </Badge>
           </div>
@@ -523,7 +530,7 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
         {/* check menu bar: khi người dùng ấn vào icon bar ở mobile thì hộp thoại menu bar sẽ được trượt vào sẽ được hiện lên trong web */}
         <div
           className="bars__column__mobile"
-          // style={{ display: "none" }}
+        // style={{ display: "none" }}
         >
           {/* checkbox */}
           <input

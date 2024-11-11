@@ -18,45 +18,52 @@ import DetailProduct from "./page/DetailProduct";
 import Hompage from "./page/Hompage";
 import Product_List from "./page/Product_list";
 import Page404 from "./page/Page404";
-
+import { CartProvider } from "./context/cart";
+import CartPage from "./page/CartPage";
 function App() {
     return (
         <>
-            <Routes>
-                {/* Client */}
-                <Route path="/" element={<LayoutClient />}>
-                    <Route index element={<Hompage />} />
-                    <Route path="/detail/:id" element={<DetailProduct />} />
-                    <Route path="/product_list" element={<Product_List />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                </Route>
-                <Route path="/loginAdmin" element={<LoginAdmin />} />
-                {/*================admin===========================*/}
-                {/* >>San Pham */}
-                <Route path="/admin" element={<LayoutAdmin />}>
-                    <Route index element={<DashBoard />} />
-                    <Route path="/admin/products" element={<DashBoard />} />
-                    <Route path="/admin/add" element={<FormProduct />} />
-                    <Route path="/admin/edit/:id" element={<FormProduct />} />
-                    {/* >>Danh Muc */}
-                    <Route path="/admin/category" element={<ManagerCate />} />
-                    <Route
-                        path="/admin/category-add"
-                        element={<CategoryForm />}
-                    />
-                    <Route
-                        path="/admin/category-edit/:id"
-                        element={<CategoryForm />}
-                    />
-                    {/* >>Size*/}
-                    <Route path="/admin/size" element={<ListSize />} />
-                    <Route path="/admin/size/add" element={<AddSize />} />
-                    {/* >>Usser*/}
-                    <Route path="/admin/user" element={<UserList />} />
-                </Route>
-                <Route path="*" element={<Page404 />} />
-            </Routes>
+            <CartProvider>
+                <Routes>
+                    {/* Client */}
+
+                    <Route path="/" element={<LayoutClient />}>
+                        <Route index element={<Hompage />} />
+                        <Route path="/detail/:id" element={<DetailProduct />} />
+                        <Route path="/product_list" element={<Product_List />} />
+                        <Route path="/CartPage" element={<CartPage />} />
+
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                    </Route>
+                    <Route path="/loginAdmin" element={<LoginAdmin />} />
+                    {/*================admin===========================*/}
+                    {/* >>San Pham */}
+                    <Route path="/admin" element={<LayoutAdmin />}>
+                        <Route index element={<DashBoard />} />
+                        <Route path="/admin/products" element={<DashBoard />} />
+                        <Route path="/admin/add" element={<FormProduct />} />
+                        <Route path="/admin/edit/:id" element={<FormProduct />} />
+                        {/* >>Danh Muc */}
+                        <Route path="/admin/category" element={<ManagerCate />} />
+                        <Route
+                            path="/admin/category-add"
+                            element={<CategoryForm />}
+                        />
+                        <Route
+                            path="/admin/category-edit/:id"
+                            element={<CategoryForm />}
+                        />
+                        {/* >>Size*/}
+                        <Route path="/admin/size" element={<ListSize />} />
+                        <Route path="/admin/size/add" element={<AddSize />} />
+                        {/* >>Usser*/}
+                        <Route path="/admin/user" element={<UserList />} />
+                    </Route>
+                    <Route path="*" element={<Page404 />} />
+                </Routes>
+
+            </CartProvider>
 
             <ToastContainer />
         </>
