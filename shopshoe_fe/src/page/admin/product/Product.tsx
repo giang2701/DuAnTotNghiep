@@ -8,7 +8,7 @@ import {
 import DialogRemove from "../../../component/DialogRemove";
 import Pagination from "@mui/material/Pagination";
 
-const DashBoard = () => {
+const Product = () => {
   const { state, removeProduct, confirm, setConfirm, setIdDelete } = useContext(
     ProductContext
   ) as ProductContextType;
@@ -249,4 +249,4 @@ const DashBoard = () => {
   );
 };
 
-export default DashBoard;
+export default Product;

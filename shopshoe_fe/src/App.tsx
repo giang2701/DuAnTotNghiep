@@ -6,7 +6,7 @@ import LayoutAdmin from "./component/layout/LayoutAdmin";
 import LayoutClient from "./component/layout/LayoutClient";
 import CategoryForm from "./page/admin/category/CategoryForm";
 import ManagerCate from "./page/admin/category/ManagerCate";
-import DashBoard from "./page/admin/product/DashBoard";
+import ProductList from "./page/admin/product/Product";
 import FormProduct from "./page/admin/product/FormProduct";
 import AddSize from "./page/admin/size/AddSize";
 import ListSize from "./page/admin/size/ListSize";
@@ -20,6 +20,7 @@ import Product_List from "./page/Product_list";
 import Page404 from "./page/Page404";
 import { CartProvider } from "./context/cart";
 import CartPage from "./page/CartPage";
+import Dashboard from "./page/admin/dashboard/Dashboard";
 function App() {
     return (
         <>
@@ -40,8 +41,8 @@ function App() {
                     {/*================admin===========================*/}
                     {/* >>San Pham */}
                     <Route path="/admin" element={<LayoutAdmin />}>
-                        <Route index element={<DashBoard />} />
-                        <Route path="/admin/products" element={<DashBoard />} />
+                        <Route index element={<Dashboard />} />
+                        <Route path="/admin/products" element={<ProductList />} />
                         <Route path="/admin/add" element={<FormProduct />} />
                         <Route path="/admin/edit/:id" element={<FormProduct />} />
                         {/* >>Danh Muc */}
