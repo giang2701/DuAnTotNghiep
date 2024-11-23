@@ -15,7 +15,7 @@ const LayoutAdmin = () => {
     return (
         <div
             className="admin-layout"
-            style={{ backgroundColor: "#EEEEEE", height: "980px" }}
+            style={{ backgroundColor: "#EEEEEE", minHeight: "980px" }}
         >
             <NavBar ClickSideBar={toggleSidebar} collapsed={collapsed} />
             {/* <HeaderAdmin /> */}

@@ -1,0 +1,12 @@
+.wrapper {
+  margin-top: 24px;
+  background-color: #fff;
+  margin-right: 16px;
+  padding: 16px;
+  border-radius: 8px;
+
+  .title {
+    font-size: 24px;
+    font-weight: 600;
+  }
+}
