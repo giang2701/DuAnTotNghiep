@@ -43,6 +43,7 @@ const Header = () => {
 
   const { totalItems } = useCart(); // Lấy totalItems từ context
 
+
   useEffect(() => {
     const handleScroll = () => {
       setIsSticky(window.scrollY > 50);

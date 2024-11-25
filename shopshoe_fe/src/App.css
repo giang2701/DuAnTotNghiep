@@ -823,7 +823,7 @@ ul li:hover {
 }
 
 .see__more {
-    width: 150px;
+    width: 152px;
     height: 55px;
     padding: 14px 30px 20px 34px;
     border-top-left-radius: 20px;
@@ -4974,3 +4974,100 @@ label {
 .constant_box_404 {
     margin-top: -30px;
 }
+
+
+
+.checkout {
+    margin-top: 150px;
+  }
+  .btn_checkout {
+    background-color: black;
+    border: 2px solid black;
+    color: white;
+    padding: 19px 120px;
+    /* Padding inside the button */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 0;
+    border-top-left-radius: 20px;
+    border-end-end-radius: 20px;
+    min-width: 100px;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+  }
+  
+  .progress-container {
+    width: 70%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 0;
+    border-top-left-radius: 20px;
+    border-end-end-radius: 20px;
+    margin: 0px auto;
+  }
+  
+  ul.progressbar {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    position: relative;
+  }
+  
+  ul.progressbar li {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    padding: 10px;
+    font-size: 14px;
+    color: #999;
+  }
+  
+  ul.progressbar li::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid #ddd;
+    display: block;
+    margin: 0 auto 10px auto;
+  }
+  
+  ul.progressbar li.active::before {
+    background-color: #000;
+    border-color: #000;
+  }
+  
+  ul.progressbar li::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: #ddd;
+    top: 15px;
+    left: -50%;
+    z-index: -1;
+  }
+  
+  ul.progressbar li:first-child::after {
+    content: none;
+  }
+  
+  ul.progressbar li.active + li::after {
+    background-color: #ddd;
+  }
+  
+  ul.progressbar li.active + li.active::after {
+    background-color: #000;
+  }

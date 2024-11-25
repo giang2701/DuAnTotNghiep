@@ -104,8 +104,8 @@ export const AddToCart = async (req, res, next) => {
         // Kiểm tra xem sản phẩm có tồn tại trong giỏ hàng với size cụ thể
         const existingItemIndex = cart.items.findIndex(
             (item) =>
-            item.product.toString() === productId &&
-            item.size.toString() === size
+                item.product.toString() === productId &&
+                item.size.toString() === size
         );
 
         if (existingItemIndex > -1) {
@@ -165,8 +165,8 @@ export const updateCart = async (req, res, next) => {
 
         const itemIndex = cart.items.findIndex(
             (item) =>
-            item.product.toString() === productId &&
-            item.size.toString() === size
+                item.product.toString() === productId &&
+                item.size.toString() === size
         );
 
         if (itemIndex > -1) {
@@ -272,4 +272,19 @@ export const removeCart = async (req, res, next) => {
                 message: "Lỗi máy chủ. Không thể xóa sản phẩm."
             });
     }
+
+
 };
+
+export const deleteCart = async (req, res, next) => {
+    try {
+        const cart = await Cart.findByIdAndDelete(req.params.id);
+        if (!cart) throw new ApiError(404, "Cart Not Found");
+        res.status(StatusCodes.OK).json({
+            message: "Delete Cart Done",
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+

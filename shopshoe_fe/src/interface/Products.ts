@@ -28,8 +28,8 @@ export type CartItem = {
     quantity: number;
     size: Size; // thêm thuộc tính kích cỡ
     userId?: string | number; // Thêm trường userId vào CartItem
-    totalPrice:string
+    totalPrice: string
     productId: string
-
+    price: number
 };
 

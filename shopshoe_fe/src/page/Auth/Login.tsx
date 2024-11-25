@@ -30,13 +30,13 @@ const Login = () => {
       });
       // Đăng nhập thành công
       contextLogin(res.data.accessToken, res.data.user);
-      
+
       // Cập nhật localStorage với thông tin user
       localStorage.setItem("user", JSON.stringify(res.data.user));
-      
+
       // Lấy giỏ hàng của người dùng
-      await getCartUser(res.data.user._id); // Gọi hàm để lấy giỏ hàng
-      
+      if (res.data.user.role !== "admin") { await getCartUser(res.data.user._id); }
+
       toast.success('đang nhập thành công')
       nav("/"); // Điều hướng đến trang chính
     } catch (error: any) {

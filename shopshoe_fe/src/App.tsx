@@ -20,6 +20,9 @@ import Product_List from "./page/Product_list";
 import Page404 from "./page/Page404";
 import { CartProvider } from "./context/cart";
 import CartPage from "./page/CartPage";
+import Checkout from "./page/Cart/Order";
+import CheckoutNow from "./page/Cart/OrderNow";
+import PaymentSuccessPage from "./page/Cart/PaymentSuccess";
 function App() {
     return (
         <>
@@ -35,6 +38,9 @@ function App() {
 
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
+                        <Route path="/checkOut" element={<Checkout />} />
+                        <Route path="/checkOutNow" element={<CheckoutNow />} />
+                        <Route path="/paymentSuccess" element={<PaymentSuccessPage />} />
                     </Route>
                     <Route path="/loginAdmin" element={<LoginAdmin />} />
                     {/*================admin===========================*/}

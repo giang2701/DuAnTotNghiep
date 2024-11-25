@@ -14,6 +14,6 @@ router.use("/auth", authRouter);
 router.use("/size", sizeRouter);
 router.use("/user", userRouter);
 router.use("/cart", RouterCart);
-router.use("/order", RouterOrder);
+router.use("/orders", RouterOrder);
 
 export default router;

@@ -8,9 +8,10 @@ interface CartContextType {
   setCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number, size: string,) => void;
-  getTotalPrice: () => string | number;
+  getTotalPrice: () => string | number | never[];
   fetchCart: () => void;
-  totalItems: number | string;
+  totalItems: number | string | never[];
+  clearCart: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -29,7 +30,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [user, setUser] = useState<{ _id: string } | undefined>(undefined);
-  const [IDCart, setIDCart] = useState<{ _id: string } | undefined>(undefined);
+  const [IDCart, setIDCart] = useState<{ _id: string } | undefined | "">(undefined);
 
 
   useEffect(() => {
@@ -43,10 +44,12 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const fetchCart = async () => {
     if (user) {
       try {
-        const response = await axios.get(`http://localhost:8000/api/cart/user/${user._id}`);
+        const response = await axios.get(
+          `http://localhost:8000/api/cart/user/${user._id}`
+        );
         const userCart = response.data.cart;
         setIDCart(userCart._id);
-        setCart(userCart.items || "");
+        setCart(userCart.items || []);
       } catch (error) {
         console.error("Lỗi khi lấy giỏ hàng từ MongoDB:", error);
         setCart([]);
@@ -104,21 +107,52 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   };
 
   const getTotalPrice = () => {
-    const total = cart ? cart.reduce((acc, item) => acc + item.product.price * item.quantity, 0) : "";
+    if (!cart || !Array.isArray(cart)) return 0;
+
+    const total = cart.reduce((acc, item) => {
+      const price = item.price || item.product.price; // Sử dụng giá theo size nếu có
+      return acc + price * item.quantity;
+    }, 0);
+
     return total;
   };
-
-
   // hàm tính số lượng hiển thị lên icon
-  const totalItems = cart ? cart.reduce((acc, item, index, self) => {
-    if (self.findIndex((i) => i.product._id === item.product._id && i.size === item.size) === index) {
-      return acc + 1;
+  const totalItems = Array.isArray(cart)
+    ? cart.reduce((acc, item, index) => {
+      if (
+        cart.findIndex(
+          (i) =>
+            i.product._id === item.product._id &&
+            i.size === item.size
+        ) === index
+      ) {
+        return acc + 1;
+      }
+      return acc;
+    }, 0)
+    : 0;
+
+
+
+
+
+  const clearCart = async () => {
+    try {
+      const response = await axios.delete(`http://localhost:8000/api/cart/all/${IDCart}`);
+      if (response.status === 200) {
+        setCart([]);
+        localStorage.removeItem("cartItems");
+      } else {
+        alert("")
+      }
+    } catch (error) {
+
     }
-    return acc;
-  }, 0) : "";
+
+  };
 
   return (
-    <CartContext.Provider value={{ cart, setCart, removeFromCart, updateQuantity, getTotalPrice, totalItems, fetchCart }}>
+    <CartContext.Provider value={{ cart, setCart, removeFromCart, updateQuantity, getTotalPrice, totalItems, fetchCart, clearCart }}>
       {loading ? <div>Loading...</div> : children}
     </CartContext.Provider>
   );

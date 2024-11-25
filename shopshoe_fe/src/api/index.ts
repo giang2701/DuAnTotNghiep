@@ -3,8 +3,7 @@ const instance = axios.create({
   baseURL: "http://localhost:8000/api",
   headers: {
     "Content-Type": "application/json",
-  },
-  timeout: 3000,
+  }
 });
 instance.interceptors.request.use(
   (config) => {

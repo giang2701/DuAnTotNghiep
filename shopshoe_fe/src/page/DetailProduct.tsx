@@ -41,7 +41,8 @@ const DetailProduct = () => {
   // console.log(user);
   const navigate = useNavigate(); // Sử dụng hook để điều hướng
 
-  const [selectedSize, setSelectedSize] = useState<string | null>(null); // ẩn hiện khi hết sotck có trong size
+  const [selectedSize, setSelectedSize] = useState<Size | null | string>(null); // ẩn hiện khi hết sotck có trong size
+  // const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
   const [price, setPrice] = useState<number | null>(null); //xét giá mặc định cho sản phẩm
   const [quantity, setQuantity] = useState<number>(1); //so luong cua san pham theo size
   const [stockLimit, setStockLimit] = useState<number>(0); //để đảm bảo rằng số lượng mua không vượt quá số tồn kho của kích thước được chọn
@@ -273,6 +274,22 @@ const DetailProduct = () => {
     } catch (error) {
       console.error("Lỗi khi thêm vào giỏ hàng:", error);
     }
+  };
+
+  // xử lý chức năng mua sản phẩm ngay
+
+
+  const buyProductsNow = (product: Product) => {
+    // Chuẩn bị dữ liệu sản phẩm
+
+    const productData = {
+      id: product._id,
+      price: price,
+      size: selectedSize,
+      quantity: quantity,
+    };
+    // Chuyển hướng kèm dữ liệu sản phẩm
+    navigate('/checkOutNow', { state: { productData } });
   };
   return (
     <div className="container">
@@ -554,6 +571,9 @@ const DetailProduct = () => {
             <button
               className="btn btn-outline btn_buy"
               disabled={quantity === 0 || selectedSize === null}
+              onClick={() => {
+                buyProductsNow(product)
+              }}
             >
               Mua Ngay
             </button>
