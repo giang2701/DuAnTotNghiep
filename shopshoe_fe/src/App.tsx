@@ -28,6 +28,9 @@ import CreateVoucher from "./page/admin/voucher/CreateVoucher";
 import OrderManagement from "./page/admin/Order management/OrderManagement";
 import HistoryOrders from "./page/HistoryOrders";
 import Product_List1 from "./page/Product_list1";
+import Aboutus from "./page/Aboutus.tsx";
+
+
 function App() {
   return (
     <>
@@ -48,6 +51,7 @@ function App() {
             <Route path="/checkOutNow" element={<CheckoutNow />} />
             <Route path="/paymentSuccess" element={<PaymentSuccessPage />} />
             <Route path="/historyOrder" element={<HistoryOrders />} />
+            <Route path="/aboutus" element={<Aboutus/>}/>
           </Route>
           <Route path="/loginAdmin" element={<LoginAdmin />} />
           {/*================admin===========================*/}

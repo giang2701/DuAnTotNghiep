@@ -276,7 +276,9 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
             <p onClick={() => handleGenderSelection('Nam')}>Nam</p>
             <p onClick={() => handleGenderSelection('Nữ')}>Nữ</p>
             <p>Blog</p>
-            <p>Về Chúng Tôi</p>
+            <Link to="/aboutus" className="nav-link">
+              <p>Về Chúng Tôi</p>
+            </Link>
           </div>
           <div className="action_sub__header">
             {/* icon search */}
@@ -803,6 +805,11 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
               ))}
               <p>Blog</p>
               <p>Contact</p>
+              <p>
+                <Link to="/aboutus" className="link__home nav-link">
+                  VỀ CHÚNG TÔI
+                </Link>
+              </p>
             </div>
             {/* action__account */}
             <div className="action__account">

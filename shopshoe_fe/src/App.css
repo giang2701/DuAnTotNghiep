@@ -5214,3 +5214,89 @@ ul.progressbar li.active + li::after {
 ul.progressbar li.active + li.active::after {
   background-color: #000;
 }
+/* ------------------------------------------------------------------------ */
+                                /* Aboutus */
+/* ------------------------------------------------------------------------ */
+
+
+/* Container chính */
+.aboutus-container {
+  margin-top: 160px;
+  width: 100%;
+}
+
+/* Breadcrumbs cố định ở góc trái */
+.breadcrumbs-container {
+  position: fixed;
+  top: 10px;
+  /* left: 10px; */
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.8);
+  /* padding: 8px 16px; */
+}
+
+/* Hình ảnh trong gallery */
+.aboutus-gallery {
+  display: flex;
+  flex-direction: column; /* Ảnh xếp dọc */
+  gap: 16px; /* Khoảng cách giữa các ảnh */
+  align-items: center; /* Căn giữa ảnh trong container */
+}
+
+/* Ảnh */
+.aboutus-gallery img {
+  width: 100%;
+  max-width: 1200px; /* Đảm bảo ảnh không quá lớn trên màn hình lớn */
+  height: auto; /* Giữ tỉ lệ ảnh */
+}
+
+/* Responsive Mobile */
+@media (max-width: 768px) {
+  .aboutus-gallery {
+    gap: 8px; /* Giảm khoảng cách giữa ảnh trên mobile */
+  }
+
+  .aboutus-container {
+    padding-bottom: 80px; /* Đảm bảo nội dung không đè footer */
+  }
+}
+
+/* Đảm bảo nút "Xem thêm" không đè footer */
+.mt-5 {
+  margin-bottom: 60px; /* Thêm khoảng cách giữa nút và footer */
+}
+
+/* Nút "Xem thêm" */
+
+
+
+
+.aboutus-container .see__more {
+  margin-top: 10px; /* Khoảng cách trên phù hợp cho mobile */
+  margin-bottom: 20px; /* Đảm bảo không đè footer */
+}
+
+/* Mobile-specific styling */
+@media (max-width: 768px) {
+  .aboutus-container .see__more {
+    margin-top: -150px; /* Giảm thêm khoảng cách cho mobile */
+    margin-bottom: 15px; /* Khoảng cách phía dưới hợp lý hơn */
+  }
+}
+
+/* Desktop-specific styling */
+@media (min-width: 769px) {
+  .aboutus-container .see__more {
+    margin-top: 30px; /* Khoảng cách thoải mái trên màn hình lớn */
+    margin-bottom: 60px; /* Tránh footer trên desktop */
+  }
+}
+
+
+.trending-title {
+text-align: center;
+font-size: 2.5rem;
+font-weight: 700;
+color: #ff6f61;
+margin-bottom: 20px;
+}
