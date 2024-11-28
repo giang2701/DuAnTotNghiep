@@ -351,7 +351,7 @@ const FormProduct = () => {
                                             {sizes.map((size) => (
                                                 <option
                                                     key={size._id}
-                                                    value={size._id}
+                                                    value={size._id ?? ""} // add a default value of an empty string if size._id is null or undefined
                                                     className="form-control"
                                                 >
                                                     {size.nameSize}

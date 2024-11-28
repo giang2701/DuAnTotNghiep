@@ -1,0 +1,89 @@
+import React, { createContext, useContext, useEffect, useState } from "react";
+import instance from "../api";
+import { Voucher } from "../interface/Voucher";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+type VoucherContextType = {
+    voucher: Voucher[] | null;
+    setVoucher: (voucher: Voucher[]) => void;
+    Delete: (_id: string) => void;
+    handleVoucher: (voucher: Voucher) => void;
+    toggleActiveStatus: (voucherId: string, isActive: boolean) => void;
+};
+export const contextVoucher = createContext<VoucherContextType | undefined>(
+    undefined
+);
+export const useVoucher = (): VoucherContextType => {
+    const voucher = useContext(contextVoucher);
+    if (!voucher) {
+        throw new Error("voucher must be used within a userProvider");
+    }
+    return voucher;
+};
+export const VoucherProvider = ({
+    children,
+}: {
+    children: React.ReactNode;
+}) => {
+    const [voucher, setVoucher] = useState<Voucher[]>([]);
+    const nav = useNavigate();
+    const GetAllVoucher = async () => {
+        const { data } = await instance.get("/voucher");
+        setVoucher(data.data);
+    };
+    useEffect(() => {
+        GetAllVoucher();
+    }, []);
+    const Delete = async (_id: string) => {
+        try {
+            if (window.confirm("Ban chac chan muon xoa?")) {
+                await instance.delete(`/voucher/${_id}`);
+                toast.success("Xoa thanh cong", {
+                    autoClose: 2000, // Tự động đóng sau 3 giây
+                });
+            }
+
+            GetAllVoucher();
+        } catch (error) {
+            toast.error("Không thể xóa");
+        }
+    };
+    const handleVoucher = async (voucher: Voucher) => {
+        // console.log("voucher log", voucher);
+        await instance.post("/voucher", voucher);
+        toast.success("Them thanh cong", {
+            autoClose: 2000, // Tự động đóng sau 3 giây
+        });
+        nav("/admin/voucher");
+        GetAllVoucher();
+    };
+    // update
+    const toggleActiveStatus = async (voucherId: string, isActive: boolean) => {
+        console.log("voucherId", voucherId);
+        console.log("isActive", isActive);
+
+        try {
+            // Gọi API để cập nhật trạng thái
+            await instance.put(`/voucher/${voucherId}`, { isActive });
+            toast.success("Voucher status updated successfully!", {
+                autoClose: 2000, // Tự động đóng sau 3 giây
+            });
+            GetAllVoucher();
+        } catch (error) {
+            toast.error("Failed to update voucher status!");
+        }
+    };
+    return (
+        <contextVoucher.Provider
+            value={{
+                voucher,
+                setVoucher,
+                Delete,
+                handleVoucher,
+                toggleActiveStatus,
+            }}
+        >
+            {children}
+        </contextVoucher.Provider>
+    );
+};

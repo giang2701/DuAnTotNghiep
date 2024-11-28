@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { SizeContext, SizeContextType } from "../../../context/Size";
 import { Link } from "react-router-dom";
+import { Size } from "../../../interface/Size";
 
 const ListSize = () => {
     const { stateSize, DeleteSize } = useContext(

@@ -22,18 +22,16 @@ const Hompage = (props: Props) => {
     useEffect(() => {
         (async () => {
             const { data } = await instance.get("/products");
-            console.log(data);
+            // console.log(data);
             // lọc sản phẩm theo id danh mục nam
             const filteredProducts = data.data.filter(
-                (product: Product) =>
-                    product.category?._id === "66d41eb4e952b9505a3a20a2"
+                (product: Product) => product.category?.title === "Nam"
             );
             // lọc sản phẩm theo id danh mục nữ
             const filteredProducts2 = data.data.filter(
-                (product: Product) =>
-                    product.category?._id === "66d41ea9e952b9505a3a2034"
+                (product: Product) => product.category?.title === "Nữ"
             );
-            console.log(filteredProducts);
+            // console.log(filteredProducts);
             setProductsCate(filteredProducts);
             setProductsCate2(filteredProducts2);
         })();
@@ -136,7 +134,6 @@ const Hompage = (props: Props) => {
                             className="d-block w-100"
                             alt="..."
                         />
-                        <img src="../" alt="" />
                         <div className="carousel-caption slide-up">
                             <p className="introduction">
                                 Discover the Latest Trends in Footwear

@@ -11,7 +11,6 @@ const LayoutAdmin = () => {
     if (!user || user.role !== "admin") {
         return <h1>Bạn không có quyền vào trang này!</h1>;
     }
-
     return (
         <div
             className="admin-layout"

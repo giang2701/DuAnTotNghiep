@@ -43,6 +43,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         localStorage.removeItem("user");
         setUser(null);
         nav("/login");
+        window.location.reload();
     };
     return (
         <AuthContext.Provider

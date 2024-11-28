@@ -22,7 +22,6 @@ const CartPage = () => {
         [key: string]: number;
     }>({});
 
-
     const formatPrice = (price: number): string => {
         if (typeof price !== "number" || isNaN(price)) {
             return "Invalid Price";
@@ -92,15 +91,25 @@ const CartPage = () => {
 
     if (cart.length === 0) {
         return (
-            <div className="cart-page">Giỏ hàng của bạn hiện tại trống.</div>
+            <div
+                className="cart-page"
+                style={{
+                    width: "100%",
+                    paddingLeft: "500px",
+                    paddingTop: "50px",
+                    paddingBottom: "50px",
+                }}
+            >
+                <img
+                    src="https://salanest.com/img/empty-cart.webp"
+                    alt=""
+                    width={"400px"}
+                />
+            </div>
         );
     }
 
     const totalPrice = getTotalPrice();
-
-
-
-
 
     // Hàm xử lý thay đổi số lượng sản phẩm
     const handleQuantityChange = (
@@ -131,16 +140,20 @@ const CartPage = () => {
 
     // Hàm xử lý dữ liệu khi chuyển đến trang thanh toán
     const handleCheckout = async () => {
-        const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+        const totalItems = cart.reduce(
+            (total, item) => total + item.quantity,
+            0
+        );
         if (totalItems === 0) {
             toast.error("Số lượng sản phẩm trong giỏ không hợp lệ.");
             return;
         }
         if (!isCartValid()) {
-            toast.error("Đặt hàng thất bại. Vui lòng kiểm tra giỏ hàng của bạn.");
+            toast.error(
+                "Đặt hàng thất bại. Vui lòng kiểm tra giỏ hàng của bạn."
+            );
             return;
         }
-
     };
 
     return (
@@ -150,7 +163,7 @@ const CartPage = () => {
             </h2>
             <div className="cart-content">
                 <div className="cart-table">
-                    <div className="cart-table-header">
+                    <div className="cart-table-header ">
                         <div>Tên Sản Phẩm</div>
                         <div>Số Lượng</div>
                         <div>Tổng Tiền</div>
@@ -158,73 +171,175 @@ const CartPage = () => {
                     </div>
                     {cart
                         ? cart.map((item: any) => {
-                            const key = `${item.product._id}-${item.size}`;
-                            const sizeData = sizes[item.size]; // Lấy dữ liệu size từ state
+                              const key = `${item.product._id}-${item.size}`;
+                              const sizeData = sizes[item.size]; // Lấy dữ liệu size từ state
 
-                            return (
-                                <div key={key} className="cart-item">
-                                    <div className="cart-item-info">
-                                        <img
-                                            src={item.product.images}
-                                            alt={item.product.title}
-                                            className="product-image"
-                                        />
-                                        <div className="cart-item-details">
-                                            <p>{item.product.title}</p>
-                                            <p>
-                                                Size:{" "}
-                                                {sizeData
-                                                    ? sizeData.nameSize
-                                                    : "Đang tải..."}
-                                            </p>
-                                            {/* Hiển thị tên size */}
-                                        </div>
-                                    </div>
-                                    <div className="cart-item-quantity">
-                                        <button
-                                            onClick={() =>
-                                                handleQuantityChange(
-                                                    item.product
-                                                        ._id as string,
-                                                    item.size as string,
-                                                    false
-                                                )
-                                            }
-                                        >
-                                            -
-                                        </button>
-                                        <span>{tempQuantities[key]}</span>
-                                        <button
-                                            onClick={() =>
-                                                handleQuantityChange(
-                                                    item.product._id,
-                                                    item.size,
-                                                    true
-                                                )
-                                            }
-                                        >
-                                            +
-                                        </button>
-                                    </div>
-                                    <div className="cart-item-total">
-                                        {formatPrice(item.price * tempQuantities[key])}
-                                    </div>
-                                    <div>
-                                        <button
-                                            onClick={() =>
-                                                removeFromCart(
-                                                    item.product._id
-                                                )
-                                            }
-                                            className="remove-item"
-                                        >
-                                            🗑️
-                                        </button>
-                                    </div>
-                                </div>
-                            );
-                        })
+                              return (
+                                  <div key={key} className="cart-item">
+                                      <div className="cart-item-info">
+                                          <img
+                                              src={item.product.images}
+                                              alt={item.product.title}
+                                              className="product-image"
+                                          />
+                                          <div className="cart-item-details">
+                                              <p>{item.product.title}</p>
+                                              <p>
+                                                  Size:{" "}
+                                                  {sizeData
+                                                      ? sizeData.nameSize
+                                                      : "Đang tải..."}
+                                              </p>
+                                              {/* Hiển thị tên size */}
+                                          </div>
+                                      </div>
+                                      <div className="cart-item-quantity">
+                                          <button
+                                              onClick={() =>
+                                                  handleQuantityChange(
+                                                      item.product
+                                                          ._id as string,
+                                                      item.size as string,
+                                                      false
+                                                  )
+                                              }
+                                          >
+                                              -
+                                          </button>
+                                          <span>{tempQuantities[key]}</span>
+                                          <button
+                                              onClick={() =>
+                                                  handleQuantityChange(
+                                                      item.product._id,
+                                                      item.size,
+                                                      true
+                                                  )
+                                              }
+                                          >
+                                              +
+                                          </button>
+                                      </div>
+                                      <div className="cart-item-total">
+                                          {formatPrice(
+                                              item.price * tempQuantities[key]
+                                          )}
+                                      </div>
+                                      <div>
+                                          <button
+                                              onClick={() =>
+                                                  removeFromCart(
+                                                      item.product._id
+                                                  )
+                                              }
+                                              className="remove-item"
+                                          >
+                                              🗑️
+                                          </button>
+                                      </div>
+                                  </div>
+                              );
+                          })
                         : ""}
+                </div>
+                <div className="cart-table-mobile">
+                    <table className="table ">
+                        <thead>
+                            <tr>
+                                <th className="w-50">Tên Sản Phẩm</th>
+                                <th>Số Lượng</th>
+                                <th>Tổng Tiền</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {cart ? (
+                                cart.map((item: any) => {
+                                    const key = `${item.product._id}-${item.size}`;
+                                    const sizeData = sizes[item.size]; // Lấy dữ liệu size từ state
+                                    return (
+                                        <tr key={key}>
+                                            <td className="d-flex align-items-center ">
+                                                <img
+                                                    src={item.product.images}
+                                                    alt={item.product.title}
+                                                    width={"50px"}
+                                                    className="me-2"
+                                                />
+                                                <div
+                                                    style={{
+                                                        fontSize: "7px",
+                                                    }}
+                                                >
+                                                    <p className="w-75">
+                                                        {item.product.title}
+                                                    </p>
+                                                    <p>
+                                                        Size:{" "}
+                                                        {sizeData
+                                                            ? sizeData.nameSize
+                                                            : "Đang tải..."}
+                                                    </p>
+                                                    {/* Hiển thị tên size */}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button
+                                                    onClick={() =>
+                                                        handleQuantityChange(
+                                                            item.product
+                                                                ._id as string,
+                                                            item.size as string,
+                                                            false
+                                                        )
+                                                    }
+                                                    className="w-25 border-0 rounded-3 me-2"
+                                                >
+                                                    -
+                                                </button>
+                                                <span>
+                                                    {tempQuantities[key]}
+                                                </span>
+                                                <button
+                                                    onClick={() =>
+                                                        handleQuantityChange(
+                                                            item.product._id,
+                                                            item.size,
+                                                            true
+                                                        )
+                                                    }
+                                                    className="w-25 border-0 rounded-3 ms-2   "
+                                                >
+                                                    +
+                                                </button>
+                                            </td>
+                                            <td
+                                                className="text-danger"
+                                                style={{ fontWeight: "600" }}
+                                            >
+                                                {formatPrice(
+                                                    item.price *
+                                                        tempQuantities[key]
+                                                )}
+                                            </td>
+                                            <td>
+                                                <p className="ms-2">🗑️</p>
+                                            </td>
+                                        </tr>
+                                    );
+                                })
+                            ) : (
+                                <>
+                                    <div>
+                                        <img
+                                            src="https://salanest.com/img/empty-cart.webp"
+                                            alt=""
+                                            width={"200px"}
+                                        />
+                                    </div>
+                                </>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
                 <div className="cart-summary">
                     <h3>Tổng tiền giỏ hàng</h3>
@@ -232,7 +347,14 @@ const CartPage = () => {
                     <p>Tổng tiền hàng:{formatPrice(Number(totalPrice))}</p>
                     <p>Thành tiền: {formatPrice(Number(totalPrice))}</p>
                     <p>Tạm tính:{formatPrice(Number(totalPrice))}</p>
-                    <Link to={"/checkOut"} onClick={handleCheckout} state={{ cart, totalPrice }} className="checkout-button nav-link text-center">Đặt hàng</Link>
+                    <Link
+                        to={"/checkOut"}
+                        onClick={handleCheckout}
+                        state={{ cart, totalPrice }}
+                        className="checkout-button nav-link text-center"
+                    >
+                        Đặt hàng
+                    </Link>
                 </div>
             </div>
         </div>

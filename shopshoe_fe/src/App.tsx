@@ -23,6 +23,8 @@ import CartPage from "./page/CartPage";
 import Checkout from "./page/Cart/Order";
 import CheckoutNow from "./page/Cart/OrderNow";
 import PaymentSuccessPage from "./page/Cart/PaymentSuccess";
+import Voucher from "./page/admin/voucher/Voucher";
+import CreateVoucher from "./page/admin/voucher/CreateVoucher";
 function App() {
     return (
         <>
@@ -33,14 +35,20 @@ function App() {
                     <Route path="/" element={<LayoutClient />}>
                         <Route index element={<Hompage />} />
                         <Route path="/detail/:id" element={<DetailProduct />} />
-                        <Route path="/product_list" element={<Product_List />} />
+                        <Route
+                            path="/product_list"
+                            element={<Product_List />}
+                        />
                         <Route path="/CartPage" element={<CartPage />} />
 
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="/checkOut" element={<Checkout />} />
                         <Route path="/checkOutNow" element={<CheckoutNow />} />
-                        <Route path="/paymentSuccess" element={<PaymentSuccessPage />} />
+                        <Route
+                            path="/paymentSuccess"
+                            element={<PaymentSuccessPage />}
+                        />
                     </Route>
                     <Route path="/loginAdmin" element={<LoginAdmin />} />
                     {/*================admin===========================*/}
@@ -49,9 +57,15 @@ function App() {
                         <Route index element={<DashBoard />} />
                         <Route path="/admin/products" element={<DashBoard />} />
                         <Route path="/admin/add" element={<FormProduct />} />
-                        <Route path="/admin/edit/:id" element={<FormProduct />} />
+                        <Route
+                            path="/admin/edit/:id"
+                            element={<FormProduct />}
+                        />
                         {/* >>Danh Muc */}
-                        <Route path="/admin/category" element={<ManagerCate />} />
+                        <Route
+                            path="/admin/category"
+                            element={<ManagerCate />}
+                        />
                         <Route
                             path="/admin/category-add"
                             element={<CategoryForm />}
@@ -62,13 +76,19 @@ function App() {
                         />
                         {/* >>Size*/}
                         <Route path="/admin/size" element={<ListSize />} />
+
                         <Route path="/admin/size/add" element={<AddSize />} />
                         {/* >>Usser*/}
                         <Route path="/admin/user" element={<UserList />} />
+                        {/* >>Voucher*/}
+                        <Route path="/admin/voucher" element={<Voucher />} />
+                        <Route
+                            path="/admin/voucherAdd"
+                            element={<CreateVoucher />}
+                        />
                     </Route>
                     <Route path="*" element={<Page404 />} />
                 </Routes>
-
             </CartProvider>
 
             <ToastContainer />
