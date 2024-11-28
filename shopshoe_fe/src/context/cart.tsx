@@ -40,9 +40,49 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     );
 
     useEffect(() => {
+        // Hàm xử lý khi có sự thay đổi trong localStorage
+        const handleStorageChange = () => {
+            const userFromLocalStorage = localStorage.getItem("user");
+            if (userFromLocalStorage) {
+                setUser(JSON.parse(userFromLocalStorage));  // Cập nhật lại state user
+            } else {
+                setLoading(false);  // Nếu không có user, có thể đánh dấu đã tải xong
+            }
+        };
+
+        // Lấy thông tin user từ localStorage khi component mount
         const userFromLocalStorage = localStorage.getItem("user");
         if (userFromLocalStorage) setUser(JSON.parse(userFromLocalStorage));
         else setLoading(false);
+
+        // Lắng nghe sự kiện thay đổi trong localStorage
+        window.addEventListener("storage", handleStorageChange);
+
+        // Thêm một lắng nghe sự thay đổi trong localStorage của tab hiện tại
+        const handleLocalStorageChange = () => {
+            const userFromLocalStorage = localStorage.getItem("user");
+            if (userFromLocalStorage) {
+                setUser(JSON.parse(userFromLocalStorage)); // Cập nhật lại state user ngay khi thay đổi
+            } else {
+                setLoading(false);  // Nếu không có user, đánh dấu là không có người dùng
+            }
+        };
+
+        // Lắng nghe sự thay đổi trong localStorage của tab hiện tại (khi localStorage thay đổi trong cùng một tab)
+        window.localStorage.setItem = new Proxy(window.localStorage.setItem, {
+            apply(target, thisArg, args) {
+                const result = target.apply(thisArg, args);
+                if (args[0] === "user") handleLocalStorageChange(); // Nếu key là "user", gọi hàm cập nhật state
+                return result;
+            }
+        });
+
+        // Cleanup event listener khi component unmount
+        return () => {
+            window.removeEventListener("storage", handleStorageChange);
+            // Gỡ bỏ proxy khi không cần thiết nữa
+            window.localStorage.setItem = window.localStorage.__proto__.setItem;
+        };
     }, []);
 
     // lấy danh dách giỏ hàng giựa id của người dùng
@@ -137,17 +177,17 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     // hàm tính số lượng hiển thị lên icon
     const totalItems = Array.isArray(cart)
         ? cart.reduce((acc, item, index) => {
-              if (
-                  cart.findIndex(
-                      (i) =>
-                          i.product._id === item.product._id &&
-                          i.size === item.size
-                  ) === index
-              ) {
-                  return acc + 1;
-              }
-              return acc;
-          }, 0)
+            if (
+                cart.findIndex(
+                    (i) =>
+                        i.product._id === item.product._id &&
+                        i.size === item.size
+                ) === index
+            ) {
+                return acc + 1;
+            }
+            return acc;
+        }, 0)
         : 0;
     const clearCart = async () => {
         try {
@@ -160,7 +200,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
             } else {
                 alert("");
             }
-        } catch (error) {}
+        } catch (error) { }
     };
 
     return (

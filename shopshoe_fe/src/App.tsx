@@ -27,6 +27,7 @@ import Voucher from "./page/admin/voucher/Voucher";
 import CreateVoucher from "./page/admin/voucher/CreateVoucher";
 import OrderManagement from "./page/admin/Order management/OrderManagement";
 import HistoryOrders from "./page/HistoryOrders";
+import Product_List1 from "./page/Product_list1";
 function App() {
   return (
     <>
@@ -38,6 +39,7 @@ function App() {
             <Route index element={<Hompage />} />
             <Route path="/detail/:id" element={<DetailProduct />} />
             <Route path="/product_list" element={<Product_List />} />
+            <Route path="/product_list1" element={<Product_List1 />} />
             <Route path="/CartPage" element={<CartPage />} />
 
             <Route path="/login" element={<Login />} />

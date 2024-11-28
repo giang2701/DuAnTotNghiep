@@ -7,8 +7,8 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import instance from "../api";
 import // CategoryContext,
 
-// CategoryContextType,
-"../context/CategoryContext";
+  // CategoryContextType,
+  "../context/CategoryContext";
 import { Category } from "../interface/Category";
 import { Product } from "../interface/Products";
 import { useCart } from "../context/cart";
@@ -73,6 +73,12 @@ const Header = () => {
   }, []);
   //-----------------
 
+
+  // Chuyển tới trang danh sách sản phẩm với giới tính đã chọn
+  const handleGenderSelection = (gender: string) => {
+    navigate(`/product_list1?gender=${gender}`);
+  };
+
   // Đổ danh mục ngoại trừ danh mục mặc định
   useEffect(() => {
     (async () => {
@@ -122,9 +128,8 @@ const Header = () => {
         </div>
         {/* ======HEADER PC============ */}
         <div
-          className={`sub__header d-flex align-items-center justify-content-around ${
-            isSticky ? "sticky" : ""
-          }`}
+          className={`sub__header d-flex align-items-center justify-content-around ${isSticky ? "sticky" : ""
+            }`}
         >
           <div className="logo__sub__header">
             <Link to="/">
@@ -268,9 +273,8 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
             </Link>
           </div>
           <div className="menu__sub__header">
-            {category.map((cate, index) => (
-              <p key={index}>{cate.title}</p>
-            ))}
+            <p onClick={() => handleGenderSelection('Nam')}>Nam</p>
+            <p onClick={() => handleGenderSelection('Nữ')}>Nữ</p>
             <p>Blog</p>
             <p>Về Chúng Tôi</p>
           </div>
@@ -631,7 +635,7 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
         {/* check menu bar: khi người dùng ấn vào icon bar ở mobile thì hộp thoại menu bar sẽ được trượt vào sẽ được hiện lên trong web */}
         <div
           className="bars__column__mobile"
-          // style={{ display: "none" }}
+        // style={{ display: "none" }}
         >
           {/* checkbox */}
           <input

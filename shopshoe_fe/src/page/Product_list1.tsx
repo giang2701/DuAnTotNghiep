@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { ProductContext, ProductContextType } from "../context/ProductContext";
 import TymButton from "../component/Btn__tym";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
     CategoryContext,
     CategoryContextType,
 } from "../context/CategoryContext";
 
-export default function Product_List() {
+export default function Product_List1() {
     const { state } = useContext(ProductContext) as ProductContextType;
     const { state1 } = useContext(CategoryContext) as CategoryContextType;
     const [gender, setGender] = useState("None");
@@ -25,12 +25,54 @@ export default function Product_List() {
         indexOfFirstProduct,
         indexOfLastProduct
     );
-    const uniqueBrands = Array.from(
-        new Set(state.products.map((product) => product.brand))
-    );
+    const [Gendertrue, setIsGendertrue] = useState(false);
 
-    // const [Categories, setCategories] = useState(state1.categories);
-    // console.log(state1.category);
+    const location = useLocation();
+
+
+    //tạo hàm lọc
+    const applyFilters = useCallback(() => {
+        const filtered = state.products.filter((product) => {
+            const category = state1.category.find(
+                (cat) => cat._id === product.category?._id
+            );
+
+            // Lọc theo giới tính
+            const matchesGender =
+                gender === "None" || (category && category.title === gender);
+
+            // Lọc theo nhãn hiệu, chỉ khi nhãn hiệu được chọn
+            const matchesBrand =
+                selectedBrands.length === 0 ||
+                (product && selectedBrands.includes(product.brand));
+
+            // Lọc theo giá, chỉ khi giá nằm trong phạm vi đã chọn
+            const matchesPrice =
+                product.price >= priceRange[0] && product.price <= priceRange[1];
+
+            return matchesGender && matchesPrice && matchesBrand;
+        });
+
+        setFilteredProducts(filtered);
+        setCurrentPage(1); // Reset trang khi thay đổi bộ lọc
+    }, [gender, selectedBrands, priceRange, state.products, state1.category]);
+
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        const genderParam = searchParams.get("gender");
+
+        // Cập nhật gender từ URL
+        if (genderParam) {
+            setIsGendertrue(true);
+            setGender(genderParam);
+        } else {
+            setGender("None"); // Giá trị mặc định nếu không có tham số giới tính
+        }
+
+        // Áp dụng lại bộ lọc sau khi giới tính thay đổi
+        applyFilters();
+    }, [location.search, applyFilters]);
 
     useEffect(() => {
         setGender("None");
@@ -38,11 +80,11 @@ export default function Product_List() {
         setFilteredProducts(state.products);
     }, [state.products]);
 
-    const updateGender = (e: any) => {
-        setGender(e.target.value);
-    };
 
-    // thêm vào mãng thương hiệu để lọc
+    const uniqueBrands = Array.from(
+        new Set(state.products.map((product) => product.brand))
+    );
+    // Thêm vào mãng thương hiệu để lọc
     const updateBrandSelection = (brand: string) => {
         setSelectedBrands((prevBrands) => {
             if (prevBrands.includes(brand)) {
@@ -52,7 +94,6 @@ export default function Product_List() {
             }
         });
     };
-
     const updatePriceRange = (e: any, type: "min" | "max") => {
         const value = parseInt(e.target.value);
         if (type === "min") {
@@ -62,28 +103,12 @@ export default function Product_List() {
         }
     };
 
-    // console.log(filteredProducts);
 
-    const applyFilters = () => {
-        const filtered = state.products.filter((product) => {
-            const category = state1.category.find(
-                (cat) => cat._id === product.category?._id
-            );
-            const matchesBrand =
-                selectedBrands.length === 0 ||
-                (product && selectedBrands.includes(product.brand));
-            const matchesGender =
-                gender === "None" || (category && category.title === gender);
-            const matchesPrice =
-                product.price >= priceRange[0] &&
-                product.price <= priceRange[1];
-            // console.log(matchesBrand);
-
-            return matchesGender && matchesPrice && matchesBrand;
-        });
-        setFilteredProducts(filtered);
-        setCurrentPage(1);
+    const updateGender = (e: any) => {
+        setGender(e.target.value);
     };
+
+
 
     const formatCurrency = (price: number): string => {
         return new Intl.NumberFormat("vi-VN", {
@@ -121,6 +146,7 @@ export default function Product_List() {
                     <aside className="shop-sidebar">
                         <div className="shop-sidebar__header">Bộ Lọc</div>
                         <ul className="shop-sidebar__filters">
+                            {/* Thương hiệu */}
                             <li
                                 className="shop-sidebar__filter"
                                 onClick={() => setIsBrandOpen((prev) => !prev)}
@@ -158,18 +184,22 @@ export default function Product_List() {
                                     ))}
                                 </div>
                             )}
-                            <li
-                                className="shop-sidebar__filter"
-                                onClick={() => setIsGenderOpen((prev) => !prev)}
-                            >
-                                Giới Tính
-                                {isGenderOpen ? (
-                                    <div className="button_icon2">-</div>
-                                ) : (
-                                    <div className="button_icon2">+</div>
-                                )}
-                            </li>
-                            {isGenderOpen && (
+
+                            {/* Giới tính */}
+                            {!Gendertrue && (
+                                <li
+                                    className="shop-sidebar__filter"
+                                    onClick={() => setIsGenderOpen((prev) => !prev)}
+                                >
+                                    Giới Tính
+                                    {isGenderOpen ? (
+                                        <div className="button_icon2">-</div>
+                                    ) : (
+                                        <div className="button_icon2">+</div>
+                                    )}
+                                </li>
+                            )}
+                            {isGenderOpen && !Gendertrue && (
                                 <div className="shop-sidebar__sub-list">
                                     <label className="shop-sidebar__sub-item">
                                         <input
@@ -194,6 +224,7 @@ export default function Product_List() {
                                 </div>
                             )}
 
+                            {/* Mức giá */}
                             <li
                                 className="shop-sidebar__filter"
                                 onClick={() =>
@@ -231,19 +262,19 @@ export default function Product_List() {
                             <button
                                 className="shop-sidebar__reset-button"
                                 onClick={() => {
-                                    setGender("None");
                                     setPriceRange([0, 10000000]);
+                                    setSelectedBrands([]);
                                     setFilteredProducts(state.products);
                                 }}
                             >
                                 Bỏ lọc
                             </button>
-                            <button
+                            {/* <button
                                 className="shop-sidebar__filter-button"
-                                onClick={applyFilters}
+                                onClick={handleFilterClick}
                             >
                                 Lọc
-                            </button>
+                            </button> */}
                         </div>
                     </aside>
 
@@ -269,7 +300,6 @@ export default function Product_List() {
                                                     <img
                                                         src={`${item.images}`}
                                                         alt=""
-                                                        className="img-fluid"
                                                     />
                                                 </div>
                                                 <div className="product-name">
