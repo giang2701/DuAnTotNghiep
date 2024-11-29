@@ -35,6 +35,7 @@ const Header = () => {
   const navigate = useNavigate();
   const [category, setCategory] = useState<Category[]>([]);
   const [searchInput, setSearchInput] = useState("");
+  const [showSearch, setShowSearch] = useState(false); // Trạng thái hiển thị của search-container
   const [products, setProducts] = useState<Product[]>([]);
   const [isSticky, setIsSticky] = useState(false); //hiệu ứng cuộn trang
   // const { cart } = useCart();
@@ -46,11 +47,26 @@ const Header = () => {
   const user = userString ? JSON.parse(userString) : null;
   const [hiddenUser, setHiddenUser] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
-
   useEffect(() => {
-    const handleClickOutside = (event: any) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+
+      // Kiểm tra nếu click ngoài vùng menu user
+      if (menuRef.current && !menuRef.current.contains(target)) {
         setHiddenUser(false);
+      }
+
+      // Kiểm tra nếu click ngoài vùng search-container
+      const searchBox = document.querySelector(".search-container");
+      const searchInputField = document.querySelector(".search input");
+
+      if (
+        searchBox &&
+        searchInputField &&
+        !searchBox.contains(target) &&
+        !searchInputField.contains(target)
+      ) {
+        setShowSearch(false);
       }
     };
 
@@ -275,7 +291,7 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
           <div className="menu__sub__header">
             <p onClick={() => handleGenderSelection('Nam')}>Nam</p>
             <p onClick={() => handleGenderSelection('Nữ')}>Nữ</p>
-            <p>Blog</p>
+            {/* <p>Blog</p> */}
             <Link to="/aboutus" className="nav-link">
               <p>Về Chúng Tôi</p>
             </Link>
@@ -289,11 +305,14 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
                     type="text"
                     placeholder="Tìm kiếm..."
                     value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
+                    onChange={(e) => {
+                      setSearchInput(e.target.value);
+                      setShowSearch(true); // Hiển thị search-container khi gõ chữ
+                    }}
                   />
                   <i className="fa-solid fa-magnifying-glass"></i>
                 </div>
-                {searchInput && (
+                {showSearch && searchInput && (
                   <div className="search-container">
                     {filteredProducts.length > 0 ? (
                       filteredProducts.map((item, index) => (
@@ -803,7 +822,7 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
               {category.map((cate, index) => (
                 <p key={index}>{cate.title}</p>
               ))}
-              <p>Blog</p>
+              {/* <p>Blog</p> */}
               <p>Contact</p>
               <p>
                 <Link to="/aboutus" className="link__home nav-link">

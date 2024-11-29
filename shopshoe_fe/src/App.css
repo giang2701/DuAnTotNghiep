@@ -123,6 +123,7 @@ html {
     padding-left: 40px;
     width: 100%;
     font-size: 1.4rem;
+    color: #000;
 }
 
 .search i {
@@ -1189,14 +1190,9 @@ ul li:hover {
 }
 
 /* Breadcrumbs cố định ở góc trái */
-.breadcrumbs-container {
-    position: fixed;
-    top: 10px;
-    /* left: 10px; */
-    z-index: 1000;
-    background-color: rgba(255, 255, 255, 0.8);
-    /* padding: 8px 16px; */
-}
+.breadcrumbs-wrapper {
+    position: relative; /* Đảm bảo không bị ảnh hưởng */
+  }
 
 /* Hình ảnh trong gallery */
 .aboutus-gallery {
@@ -2971,6 +2967,7 @@ label {
         padding-left: 40px;
         width: 100%;
         font-size: 1.2rem;
+        color: #000;
     }
 
     .search i {
@@ -2979,7 +2976,7 @@ label {
         top: 50%;
         transform: translateY(-50%);
         font-size: 1.5rem;
-        color: gray;
+        color: #000;
     }
 
     .search-item img {

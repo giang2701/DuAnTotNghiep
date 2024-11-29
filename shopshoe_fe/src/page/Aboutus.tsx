@@ -1,7 +1,5 @@
 import { Breadcrumbs, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-// import banneraboutus from "../../public/images/banneraboutus.png";
 import imageaboutus from "../../public/images/imageaboutus.png";
 import image1 from "../../public/images/image1.png";
 import image2 from "../../public/images/image2.png";
@@ -16,74 +14,53 @@ import aboutusbanner from "../../public/images/aboutusbanner.png";
 type Props = {};
 
 const Aboutus = (props: Props) => {
-    const images = [
-        // banneraboutus,
-        aboutusbanner,
-        aboutusnike,
-        aboutusadidas,
-        aboutuspuma,
-        imageaboutus,
-        image1,
-        image2,
-        image3,
-        image4,
-        image5,
-        // "https://pubcdn.ivymoda.com/files/news/2023/01/30/96990ec5a3cafbe4441949dc6d5a11d4.jpg",
-        // "https://pubcdn.ivymoda.com/files/news/2023/01/30/e8d1e3e0f3d4364156a9152fbb8480c9.jpg",
-        // "https://pubcdn.ivymoda.com/files/news/2023/01/30/ddf0ce2eb0964fb6914ed482971250e0.jpg",
-        // "https://authentic-shoes.com/wp-content/uploads/2023/05/thiet_ke_khong_ten_bfe370c1c3be471193a16ab90dc0dd8e_2048x2048.png",
-    ];
+  const images = [
+    aboutusbanner,
+    aboutusnike,
+    aboutusadidas,
+    aboutuspuma,
+    imageaboutus,
+    image1,
+    image2,
+    image3,
+    image4,
+    image5,
+  ];
 
-    return (
-        <div className="container">
-            <motion.div
-                className="aboutus-container pt-5"
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 1 }}
-                transition={{ duration: 0.5 }}
-            >
-                {/* Breadcrumbs */}
-                <Breadcrumbs
-                    aria-label="breadcrumb"
-                    className="breadcrumbs-container"
-                >
-                    <Link className="nav-link" color="inherit" to="/">
-                        Trang chủ
-                    </Link>
-                    <Typography color="text.primary">Về chúng tôi</Typography>
-                </Breadcrumbs>
+  return (
+    <div className="container">
+      <div className="aboutus-container pt-5">
+        {/* Breadcrumbs */}
+        <div className="breadcrumbs-wrapper">
+    <Breadcrumbs aria-label="breadcrumb" className="breadcrumbs-container">
+      <Link className="nav-link" color="inherit" to="/">
+        Trang chủ
+      </Link>
+      <Typography color="text.primary">Về chúng tôi</Typography>
+    </Breadcrumbs>
+  </div>
 
-                {/* Section: Giới thiệu */}
+        {/* Section: Giới thiệu */}
+        <section className="aboutus-gallery pt-5">
+          <h1 className="trending-title">Trending</h1>
 
-                <section className="aboutus-gallery pt-5">
-                    <motion.h1
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="trending-title"
-                    >
-                        Trending
-                    </motion.h1>
+          {images.map((src, index) => (
+            <img key={index} src={src} className="aboutus-img" />
+          ))}
+        </section>
 
-                    {images.map((src, index) => (
-                        <motion.img
-                            key={index}
-                            src={src}
-                            className="aboutus-img"
-                            whileHover={{ scale: 1.05 }}
-                            transition={{ type: "spring", stiffness: 300 }}
-                        />
-                    ))}
-                </section>
-                <div className="aboutus-ending text-center pt-5">
-                    <Typography variant="h6" gutterBottom>
-                        Cảm ơn bạn đã đồng hành cùng chúng tôi! Zokong luôn sẵn
-                        sàng mang đến những đôi giày chất lượng nhất!!!
-                    </Typography>
-                </div>
-            </motion.div>
+        <div className="aboutus-ending text-center pt-5">
+          <Typography variant="h6" gutterBottom>
+            Cảm ơn bạn đã đồng hành cùng chúng tôi! Zokong luôn sẵn
+            sàng mang đến những đôi giày chất lượng nhất!!!
+          </Typography>
         </div>
-    );
+
+        {/* CTA */}
+        
+      </div>
+    </div>
+  );
 };
 
 export default Aboutus;
