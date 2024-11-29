@@ -21,6 +21,8 @@ import { toast } from "react-toastify";
 // import { CartItem } from "../../interface/Products";
 import { useCart } from "../../context/cart";
 import instance from "../../api";
+import { Voucher } from "../../interface/Voucher";
+import moment from "moment";
 
 interface Province {
     code: string;
@@ -70,6 +72,48 @@ const CheckoutNow = () => {
     const [discountAmount, setDiscountAmount] = useState(0); // Số tiền giảm
     const [finalTotal, setFinalTotal] = useState(totalPriceNow); // Tổng tiền cuối cùng
     const [message, setMessage] = useState(""); // Thông báo lỗi/success
+    // get all voucher
+    const [vouchers, setVouchers] = useState<Voucher[]>([]);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const { data } = await instance.get("/voucher");
+                // Lọc các voucher chỉ có isActive = true
+                const activeVouchers = filterActiveVouchers(data.data);
+                setVouchers(activeVouchers);
+            } catch (error) {
+                console.error("Failed to fetch vouchers", error);
+            }
+        })();
+    }, []);
+
+    // Hàm lọc voucher chỉ lấy các voucher isActive = true
+    const filterActiveVouchers = (vouchers: Voucher[]) => {
+        return vouchers.filter((voucher) => voucher.isActive);
+    };
+
+    // Hàm xử lý sự kiện khi người dùng click vào voucher
+    const handleVoucherClick = (voucher: Voucher) => {
+        if (moment(voucher.expiryDate).isBefore(moment())) {
+            return; // Không cho chọn voucher nếu hết hạn
+        }
+        // Xử lý khi voucher được chọn
+        console.log("Voucher selected:", voucher);
+    };
+    const handleCopyVoucher = (code: string) => {
+        navigator.clipboard
+            .writeText(code)
+            .then(() => {
+                toast.success("Voucher code copied to clipboard!", {
+                    autoClose: 2000, // Tự động đóng sau 3 giây
+                });
+            })
+            .catch((err) => {
+                alert("Failed to copy voucher code: " + err);
+            });
+    };
+    const [hiddenVoucher, setHiddenVoucher] = useState(false);
     // Xử lý nhập mã giảm giá
     const handleApplyCoupon = async () => {
         try {
@@ -250,8 +294,6 @@ const CheckoutNow = () => {
                 const { _id, totalPrice, paymentMethod } =
                     response.data.newOrder;
                 toast.success("Đơn hàng sẽ được thanh toán khi giao hàng!");
-                clearCart(); // Xóa giỏ hàng
-                localStorage.removeItem("cart");
                 navigate("/paymentSuccess", {
                     state: {
                         _id,
@@ -1048,37 +1090,19 @@ const CheckoutNow = () => {
                                     </svg>
                                     Voucher
                                 </Typography>
-                                <div className="coupon-section">
-                                    <input
-                                        type="text"
-                                        value={couponCode}
-                                        placeholder="Nhập mã giảm giá"
-                                        onChange={(e) =>
-                                            setCouponCode(e.target.value)
-                                        }
-                                        style={{
-                                            width: "250px",
-                                            height: "30px",
-                                            border: "1px solid #ccc",
-                                            outline: "none",
-                                            // borderRadius: "10px",
-                                            paddingLeft: "10px",
-                                        }}
-                                    />
-                                    <button
-                                        onClick={handleApplyCoupon}
-                                        style={{
-                                            height: "30px",
-                                            width: "80px",
-                                            border: "1px solid #ccc",
-                                        }}
-                                    >
-                                        Áp dụng
-                                    </button>{" "}
-                                    <div className="discount-message text-danger">
-                                        {message && <p>{message}</p>}
-                                    </div>
-                                </div>
+                                <p
+                                    onClick={() => setHiddenVoucher(true)}
+                                    style={{
+                                        cursor: "pointer",
+                                        marginTop: "10px",
+                                        fontSize: "14px",
+                                        color: "blue",
+                                        fontWeight: "500",
+                                        textDecoration: "underline",
+                                    }}
+                                >
+                                    Xem voucher
+                                </p>
                             </Box>
                         </Box>
                         <Box
@@ -1126,6 +1150,215 @@ const CheckoutNow = () => {
                         </Box>
                     </Grid>
                 </Grid>
+            </div>
+            {/* Overlay */}
+            <div
+                className={`overlayVoucher ${hiddenVoucher ? "show" : ""}`}
+                style={{
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    zIndex: 999,
+                }}
+                onClick={() => setHiddenVoucher(false)}
+            ></div>
+            <div
+                className={`box__voucher  ${
+                    hiddenVoucher ? "show" : ""
+                } bg-white`}
+            >
+                <div
+                    className="coupon-section d-flex align-items-center"
+                    style={{
+                        backgroundColor: "#f8f8f8",
+                        position: "relative",
+                        padding: "10px",
+                    }}
+                >
+                    <p
+                        style={{
+                            fontSize: "14px",
+                            color: "#000",
+                            marginTop: "8px",
+                            marginRight: "10px",
+                        }}
+                    >
+                        Chọn Mã Voucher
+                    </p>
+                    <input
+                        type="text"
+                        value={couponCode}
+                        placeholder="Nhập mã giảm giá"
+                        onChange={(e) => setCouponCode(e.target.value)}
+                        style={{
+                            height: "30px",
+                            width: "200px",
+                            border: "1px solid #ccc",
+                            outline: "none",
+                            // borderRadius: "10px",
+                            paddingLeft: "10px",
+                            marginRight: "5px",
+                        }}
+                    />
+                    <button
+                        onClick={handleApplyCoupon}
+                        style={{
+                            height: "30px",
+                            width: "80px",
+                            border: "1px solid #ccc",
+                        }}
+                    >
+                        Áp dụng
+                    </button>
+                    <div
+                        className="discount-message text-danger"
+                        style={{
+                            position: "absolute",
+                            left: "130px",
+                            top: "45px",
+                            backgroundColor: "#fff7f7",
+                            fontSize: "10px",
+                            fontWeight: "bold",
+                            width: "200px",
+                            paddingLeft: "10px",
+                            paddingTop: "10px",
+                            // border: "1px solid red",
+                        }}
+                    >
+                        {message && <p>{message}</p>}
+                    </div>
+                </div>
+                <div
+                    style={{
+                        maxHeight: "400px", // Giới hạn chiều cao của container
+                        overflowY: "auto", // Cho phép cuộn dọc nếu nội dung vượt quá chiều cao
+                        border: "1px solid #ddd", // Thêm viền để dễ nhìn
+                        padding: "10px", // Thêm khoảng cách bên trong
+                        scrollbarWidth: "thin", // Thêm thanh cuối dự nguyên (neu báo cáo)
+                    }}
+                >
+                    {vouchers.map((voucher) => {
+                        // Kiểm tra nếu voucher đã hết hạn
+                        const isExpired = moment(voucher.expiryDate).isBefore(
+                            moment()
+                        );
+
+                        return (
+                            <div
+                                key={voucher._id}
+                                style={{
+                                    opacity: isExpired ? 0.5 : 1, // Làm mờ voucher hết hạn
+                                    cursor: isExpired
+                                        ? "not-allowed"
+                                        : "pointer", // Không cho chọn voucher hết hạn
+                                    display: "block", // Đảm bảo voucher vẫn được hiển thị nếu là active
+                                    padding: "10px",
+                                    marginBottom: "10px", // Khoảng cách giữa các voucher
+                                    border: "1px solid #ccc", // Thêm viền cho mỗi voucher
+                                    borderRadius: "5px", // Bo góc cho các voucher
+                                }}
+                                onClick={() => handleVoucherClick(voucher)}
+                            >
+                                {/* <h4>{voucher.code}</h4>
+                                <p>{`Hết hạn: ${moment(
+                                    voucher.expiryDate
+                                ).format("DD/MM/YYYY")}`}</p>
+                                {isExpired && (
+                                    <span style={{ color: "red" }}>
+                                        Hết hạn
+                                    </span>
+                                )} */}
+                                <div
+                                    className="modal_voucher_admin d-flex border border-black"
+                                    style={{
+                                        height: "150px",
+                                        width: "100%",
+                                    }}
+                                >
+                                    <div
+                                        className="voucher_first w-25"
+                                        style={{
+                                            backgroundColor: "#ed4d2d",
+                                        }}
+                                    >
+                                        <div className="Group_circle">
+                                            <div className="circle"></div>
+                                            <div className="circle"></div>
+                                            <div className="circle"></div>
+                                            <div className="circle"></div>
+                                            <div className="circle"></div>
+                                            <div className="circle"></div>
+                                            <div className="circle"></div>
+                                            <div className="circle"></div>
+                                            <div className="circle"></div>
+                                            <div className="circle"></div>
+                                            <div className="circle"></div>
+                                            <div className="circle"></div>
+                                            <div className="circle"></div>
+                                        </div>
+                                        <p>Voucher</p>
+                                        <i
+                                            className="fa-solid fa-ticket"
+                                            style={{
+                                                color: "#ed4d2d",
+                                                fontSize: "20px",
+                                                width: "50px",
+                                                height: "50px",
+                                                backgroundColor: "yellow",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                borderRadius: "50%",
+                                            }}
+                                        ></i>
+                                    </div>
+                                    <div className="voucher_end bg-white w-75 pt-5 ps-4">
+                                        <p
+                                            style={{
+                                                fontSize: "16px",
+                                                textTransform: "capitalize",
+                                                fontWeight: "bold",
+                                            }}
+                                        >
+                                            {voucher.name}
+                                        </p>
+                                        <p
+                                            style={{
+                                                cursor: "pointer",
+                                            }}
+                                            onClick={() =>
+                                                handleCopyVoucher(voucher.code)
+                                            }
+                                        >
+                                            <strong>Mã:</strong>
+                                            {voucher.code}
+                                            {/* Nút Copy Voucher */}
+                                            <i className="fa-regular fa-copy text-dark ms-2"></i>
+                                        </p>
+                                        <p
+                                            style={{
+                                                fontWeight: "bold",
+                                            }}
+                                        >
+                                            <i className="fa-regular fa-clock me-2"></i>
+                                            <span>
+                                                Ngày hết hạn:{" "}
+                                                {
+                                                    new Date(voucher.expiryDate)
+                                                        .toISOString()
+                                                        .split("T")[0]
+                                                }
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
             </div>
         </>
     );

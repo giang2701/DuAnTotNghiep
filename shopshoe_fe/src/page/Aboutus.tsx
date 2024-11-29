@@ -16,89 +16,83 @@ import aboutusbanner from "../../public/images/aboutusbanner.png";
 type Props = {};
 
 const Aboutus = (props: Props) => {
-  const images = [
-    // banneraboutus,
-    aboutusbanner,
-    aboutusnike,
-    aboutusadidas,
-    aboutuspuma,
-    imageaboutus,
-    image1,
-    image2,
-    image3,
-    image4,
-    image5,
-    // "https://pubcdn.ivymoda.com/files/news/2023/01/30/96990ec5a3cafbe4441949dc6d5a11d4.jpg",
-    // "https://pubcdn.ivymoda.com/files/news/2023/01/30/e8d1e3e0f3d4364156a9152fbb8480c9.jpg",
-    // "https://pubcdn.ivymoda.com/files/news/2023/01/30/ddf0ce2eb0964fb6914ed482971250e0.jpg",
-    // "https://authentic-shoes.com/wp-content/uploads/2023/05/thiet_ke_khong_ten_bfe370c1c3be471193a16ab90dc0dd8e_2048x2048.png",
-  ];
+    const images = [
+        // banneraboutus,
+        aboutusbanner,
+        aboutusnike,
+        aboutusadidas,
+        aboutuspuma,
+        imageaboutus,
+        image1,
+        image2,
+        image3,
+        image4,
+        image5,
+        // "https://pubcdn.ivymoda.com/files/news/2023/01/30/96990ec5a3cafbe4441949dc6d5a11d4.jpg",
+        // "https://pubcdn.ivymoda.com/files/news/2023/01/30/e8d1e3e0f3d4364156a9152fbb8480c9.jpg",
+        // "https://pubcdn.ivymoda.com/files/news/2023/01/30/ddf0ce2eb0964fb6914ed482971250e0.jpg",
+        // "https://authentic-shoes.com/wp-content/uploads/2023/05/thiet_ke_khong_ten_bfe370c1c3be471193a16ab90dc0dd8e_2048x2048.png",
+    ];
 
-  return (
-    <div className="container">
-      <motion.div
-        className="aboutus-container pt-5"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        {/* Breadcrumbs */}
-        <Breadcrumbs aria-label="breadcrumb" className="breadcrumbs-container">
-          <Link className="nav-link" color="inherit" to="/">
-            Trang chủ
-          </Link>
-          <Typography color="text.primary">Về chúng tôi</Typography>
-        </Breadcrumbs>
+    return (
+        <div className="container">
+            <motion.div
+                className="aboutus-container pt-5"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 1 }}
+                transition={{ duration: 0.5 }}
+            >
+                {/* Breadcrumbs */}
+                <Breadcrumbs
+                    aria-label="breadcrumb"
+                    className="breadcrumbs-container"
+                >
+                    <Link className="nav-link" color="inherit" to="/">
+                        Trang chủ
+                    </Link>
+                    <Typography color="text.primary">Về chúng tôi</Typography>
+                </Breadcrumbs>
 
-        {/* Section: Giới thiệu */}
+                {/* Section: Giới thiệu */}
 
-        <section className="aboutus-gallery pt-5">
-          <motion.h1
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="trending-title"
-          >
-            Trending
-          </motion.h1>
+                <section className="aboutus-gallery pt-5">
+                    <motion.h1
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="trending-title"
+                    >
+                        Trending
+                    </motion.h1>
 
-          {images.map((src, index) => (
-            <motion.img
-              key={index}
-              src={src}
-              className="aboutus-img"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            />
-          ))}
-        </section>
-        <div className="aboutus-ending text-center pt-5">
-          <Typography variant="h6" gutterBottom>
-            Cảm ơn bạn đã đồng hành cùng chúng tôi! Zokong luôn sẵn
-            sàng mang đến những đôi giày chất lượng nhất!!!
-          </Typography>
+                    {images.map((src, index) => (
+                        <motion.img
+                            key={index}
+                            src={src}
+                            className="aboutus-img"
+                            whileHover={{ scale: 1.05 }}
+                            transition={{ type: "spring", stiffness: 300 }}
+                        />
+                    ))}
+                </section>
+                <div className="aboutus-ending text-center pt-5">
+                    <Typography variant="h6" gutterBottom>
+                        Cảm ơn bạn đã đồng hành cùng chúng tôi! Zokong luôn sẵn
+                        sàng mang đến những đôi giày chất lượng nhất!!!
+                    </Typography>
+                </div>
+            </motion.div>
         </div>
-
-        {/* CTA */}
-        <div className="mt-5 text-center pt-5">
-          <Link to="/product_list" className="nav-link">
-            <div className="see__more">Xem thêm..</div>
-          </Link>
-        </div>
-
-     
-      </motion.div>
-    </div>
-  );
+    );
 };
 
 export default Aboutus;
 // contact
 {
-  /* Section: Đánh giá khách hàng */
+    /* Section: Đánh giá khách hàng */
 }
 {
-  /* <section className="customer-reviews mt-5">
+    /* <section className="customer-reviews mt-5">
           <h3 className="text-secondary text-center">Đánh giá từ khách hàng</h3>
           <div className="row text-center mt-4">
           
@@ -164,10 +158,10 @@ export default Aboutus;
 }
 
 {
-  /* Section: Liên hệ */
+    /* Section: Liên hệ */
 }
 {
-  /* <section className="contact-section mt-5">
+    /* <section className="contact-section mt-5">
           <div className="row">
             <div className="col-md-6">
               <h3 className="text-secondary">Liên hệ với chúng tôi</h3>
