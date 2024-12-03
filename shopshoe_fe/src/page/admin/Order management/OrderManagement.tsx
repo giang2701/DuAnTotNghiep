@@ -15,6 +15,13 @@ const OrderManagement = () => {
     (async () => {
       try {
         const { data } = await instance.get("/orders");
+        // Sắp xếp các đơn hàng theo thời gian tạo (updatedAt hoặc createdAt)
+        const sortedOrders = data.sort(
+          (a: Order, b: Order) =>
+            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        );
+
+        setOrders(sortedOrders);
         setOrders(data);
         console.log(data);
         console.log(data);
