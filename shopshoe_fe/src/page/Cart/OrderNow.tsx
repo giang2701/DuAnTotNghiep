@@ -202,7 +202,17 @@ const CheckoutNow = () => {
                 );
         }
     }, [selectedDistrict]);
-
+    // Hàm ánh xạ mã thành tên
+    // tỉnh
+    const getProvinceName = (code: string) => {
+        const province = provinces.find((p) => p.code === code);
+        return province ? province.name : "Unknown";
+    };
+    // xã phường
+    const getDistrictName = (code: string) => {
+        const district = districts.find((d) => d.code === code);
+        return district ? district.name : "Unknown";
+    };
     useEffect(() => {
         const pendingOrderId = localStorage.getItem("pendingOrderId");
         if (pendingOrderId) {
@@ -258,14 +268,12 @@ const CheckoutNow = () => {
                     phone: phone,
                     address: address,
                     ward: selectedWard,
-                    district: selectedDistrict,
-                    city: selectedProvince,
+                    district: getDistrictName(selectedDistrict),
+                    city: getProvinceName(selectedProvince),
                 },
                 paymentMethod: selectedValue.toUpperCase(),
                 status: "PENDING",
             };
-            console.log(orderData);
-
             let response;
             // Xử lý theo phương thức thanh toán
             if (selectedValue === "MOMO") {
