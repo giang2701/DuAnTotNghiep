@@ -34,6 +34,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const login = (token: string, user: User) => {
         localStorage.setItem("accessToken", token);
         localStorage.setItem("user", JSON.stringify(user));
+        localStorage.removeItem("favorites")
         setUser(user);
         nav(user.role === "admin" ? "/admin" : "/");
     };
@@ -41,6 +42,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const logout = () => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("user");
+        localStorage.removeItem("favorites")
         setUser(null);
         nav("/login");
         window.location.reload();

@@ -7,6 +7,7 @@ import userRouter from "./userRouter.js";
 import RouterCart from "./cart.js";
 import RouterOrder from "./order.js";
 import RouterVoucher from "./Voucher.js";
+import RouterHeart from "./heart.js";
 
 const router = Router();
 router.use("/products", productRouter);
@@ -17,5 +18,6 @@ router.use("/user", userRouter);
 router.use("/cart", RouterCart);
 router.use("/orders", RouterOrder);
 router.use("/voucher", RouterVoucher);
+router.use("/heart", RouterHeart);
 
 export default router;

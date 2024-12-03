@@ -1,22 +1,24 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import instance from "../api";
-import TymButton from "../component/Btn__tym";
+// import TymButton from "../component/Btn__tym";
 import { ProductContext, ProductContextType } from "../context/ProductContext";
 import { Product } from "../interface/Products";
+import { toast } from "react-toastify";
+import ProductItem from "./ProductItem";
 
-type Props = {};
 
-const Hompage = (props: Props) => {
+
+const Hompage = () => {
     const { state } = useContext(ProductContext) as ProductContextType;
-    const formatPrice = (price: number): string => {
-        return new Intl.NumberFormat("vi-VN", {
-            style: "currency",
-            currency: "VND",
-        })
-            .format(price)
-            .replace("₫", "đ");
-    };
+    // const formatPrice = (price: number): string => {
+    //     return new Intl.NumberFormat("vi-VN", {
+    //         style: "currency",
+    //         currency: "VND",
+    //     })
+    //         .format(price)
+    //         .replace("₫", "đ");
+    // };
     const [productCate, setProductsCate] = useState<Product[]>([]);
     const [productCate2, setProductsCate2] = useState<Product[]>([]);
     useEffect(() => {
@@ -41,6 +43,71 @@ const Hompage = (props: Props) => {
     const showCategory = (category: string) => {
         setActiveCategory(category);
     };
+
+
+    const userArray = localStorage.getItem("user")
+    const user = userArray ? JSON.parse(userArray) : null
+
+    const [favorites, setFavorites] = useState<Product[]>(() => {
+        try {
+            const storedFavorites = localStorage.getItem("favorites");
+            return storedFavorites ? JSON.parse(storedFavorites) : []; // Đảm bảo luôn là mảng
+        } catch (error) {
+            console.error("Error parsing favorites from localStorage:", error);
+            return []; // Trả về mảng trống khi có lỗi
+        }
+    });
+
+    const toggleFavorite = async (item: Product) => {
+
+        const isAlreadyFavorite = favorites.some((fav) => fav._id === item._id);
+        console.log(isAlreadyFavorite)
+
+        if (!user) {
+            const isAlreadyFavorite = favorites.some((fav) => fav._id === item._id);
+            // Xử lý khi không có user (chưa đăng nhập)
+            const updatedFavorites = isAlreadyFavorite
+                ? favorites.filter((fav) => fav._id !== item._id)
+                : [...favorites, item];
+
+            setFavorites(updatedFavorites);
+            localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+        } else {
+            // Xử lý khi đã đăng nhập
+            try {
+                if (isAlreadyFavorite) {
+                    // Nếu đã thích, xóa khỏi server và localStorage
+                    await instance.delete(`/heart/${user._id}/${item._id}`);
+                    toast.success("Bỏ thích thành công")
+                    const updatedFavorites = favorites.filter(
+                        (fav) => fav._id !== item._id
+                    );
+                    setFavorites(updatedFavorites);
+                    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+                } else {
+                    // Nếu chưa thích, thêm vào server và localStorage
+                    const heart = {
+                        userId: user._id,
+                        productId: item._id,
+                    };
+                    await instance.post("/heart", heart);
+                    toast.success("Thích sản phẩm thành công")
+                    const updatedFavorites = [...favorites, item];
+                    setFavorites(updatedFavorites);
+                    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+                }
+            } catch (error) {
+                console.error("Error toggling favorite:", error);
+            }
+        }
+    };
+
+    // Kiểm tra xem sản phẩm có trong danh sách yêu thích không
+    const isFavorite = (item: Product) => {
+        // Kiểm tra `favorites` là mảng hợp lệ
+        return Array.isArray(favorites) && favorites.some((fav) => fav._id === item._id);
+    };
+
     return (
         <>
             {" "}
@@ -257,51 +324,19 @@ const Hompage = (props: Props) => {
                 <div className="category-content">
                     <div
                         id="women"
-                        className={`category-section ${
-                            activeCategory === "women" ? "active" : ""
-                        }`}
+                        className={`category-section ${activeCategory === "women" ? "active" : ""
+                            }`}
                     >
                         <div className="container">
                             <div className="scroll container">
                                 <div className="product__slip">
                                     {productCate2.slice(0, 8).map((item) => (
-                                        <div className="product" key={item._id}>
-                                            <div className="product-img">
-                                                <img
-                                                    src={`${item.images}`}
-                                                    alt=""
-                                                    className="img-fluid"
-                                                />
-                                            </div>
-                                            <div className="product-name">
-                                                <Link
-                                                    to={`/detail/${item._id}`}
-                                                    style={{
-                                                        color: "#57585a",
-                                                        fontSize: "14px",
-                                                        fontWeight: "400",
-                                                        marginBottom: "10px",
-                                                        textTransform:
-                                                            "capitalize",
-                                                        textDecoration: "none",
-                                                        margin: "20px 0px",
-                                                        lineHeight: "2.2rem",
-                                                        display: "-webkit-box",
-                                                        WebkitBoxOrient:
-                                                            "vertical",
-                                                        WebkitLineClamp: "1",
-                                                        overflow: "hidden",
-                                                    }}
-                                                >
-                                                    {item.title}
-                                                </Link>
-
-                                                <p>{formatPrice(item.price)}</p>
-                                            </div>
-                                            <div className="btn__tym">
-                                                <TymButton />
-                                            </div>
-                                        </div>
+                                        <ProductItem
+                                            key={item._id}
+                                            product={item}
+                                            toggleFavorite={toggleFavorite}
+                                            isFavorite={isFavorite(item)}
+                                        />
                                     ))}
                                 </div>
                             </div>
@@ -310,54 +345,19 @@ const Hompage = (props: Props) => {
                     {/* men */}
                     <div
                         id="men"
-                        className={`category-section ${
-                            activeCategory === "men" ? "active" : ""
-                        }`}
+                        className={`category-section ${activeCategory === "men" ? "active" : ""
+                            }`}
                     >
                         <div className="container">
                             <div className="scroll">
                                 <div className="product__slip">
                                     {productCate.slice(0, 8).map((item) => (
-                                        <div
-                                            className="product "
+                                        <ProductItem
                                             key={item._id}
-                                        >
-                                            <div className="product-img">
-                                                <img
-                                                    src={`${item.images}`}
-                                                    alt=""
-                                                    className="img-fluid"
-                                                />
-                                            </div>
-                                            <div className="product-name">
-                                                <Link
-                                                    to={`/detail/${item._id}`}
-                                                    style={{
-                                                        color: "#57585a",
-                                                        fontSize: "14px",
-                                                        fontWeight: "400",
-                                                        marginBottom: "10px",
-                                                        textTransform:
-                                                            "capitalize",
-                                                        textDecoration: "none",
-                                                        margin: "20px 0px",
-                                                        lineHeight: "2.2rem",
-                                                        display: "-webkit-box",
-                                                        WebkitBoxOrient:
-                                                            "vertical",
-                                                        WebkitLineClamp: "1",
-                                                        overflow: "hidden",
-                                                    }}
-                                                >
-                                                    {item.title}
-                                                </Link>
-
-                                                <p>{formatPrice(item.price)}</p>
-                                            </div>
-                                            <div className="btn__tym">
-                                                <TymButton />
-                                            </div>
-                                        </div>
+                                            product={item}
+                                            toggleFavorite={toggleFavorite}
+                                            isFavorite={isFavorite(item)}
+                                        />
                                     ))}
                                 </div>
                             </div>
@@ -372,41 +372,13 @@ const Hompage = (props: Props) => {
             <div className="container-fluid box__gallery">
                 <div className="Container__product__gallery ">
                     {state.products.slice(0, 10).map((item) => (
-                        <div className="product__gallery" key={item._id}>
-                            <div className="product__gallery__img ">
-                                <img
-                                    src={`${item.images}`}
-                                    alt=""
-                                    className="img-fluid"
-                                />
-                            </div>
-                            <div className="product__gallery__name">
-                                <Link
-                                    to={`/detail/${item._id}`}
-                                    style={{
-                                        color: "#57585a",
-                                        fontSize: "14px",
-                                        fontWeight: "400",
-                                        marginBottom: "10px",
-                                        textTransform: "capitalize",
-                                        textDecoration: "none",
-                                        margin: "20px 0px",
-                                        lineHeight: "2.2rem",
-                                        display: "-webkit-box",
-                                        WebkitBoxOrient: "vertical",
-                                        WebkitLineClamp: "1",
-                                        overflow: "hidden",
-                                    }}
-                                >
-                                    {item.title}
-                                </Link>
-
-                                <p>{formatPrice(item.price)}</p>
-                            </div>
-                            <div className="btn__tym">
-                                <TymButton />
-                            </div>
-                        </div>
+                        <ProductItem
+                            key={item._id}
+                            product={item}
+                            toggleFavorite={toggleFavorite}
+                            isFavorite={isFavorite(item)}
+                        // isFavorites2={favorites2}
+                        />
                     ))}
                 </div>
                 <Link to="/product_list" className="nav-link">

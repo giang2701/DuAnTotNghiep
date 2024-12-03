@@ -29,6 +29,7 @@ import OrderManagement from "./page/admin/Order management/OrderManagement";
 import HistoryOrders from "./page/HistoryOrders";
 import Product_List1 from "./page/Product_list1";
 import Aboutus from "./page/Aboutus.tsx";
+import ProductsLiked from "./page/ProductLike.tsx";
 
 
 function App() {
@@ -51,7 +52,8 @@ function App() {
             <Route path="/checkOutNow" element={<CheckoutNow />} />
             <Route path="/paymentSuccess" element={<PaymentSuccessPage />} />
             <Route path="/historyOrder" element={<HistoryOrders />} />
-            <Route path="/aboutus" element={<Aboutus/>}/>
+            <Route path="/aboutus" element={<Aboutus />} />
+            <Route path="/productLike" element={<ProductsLiked />} />
           </Route>
           <Route path="/loginAdmin" element={<LoginAdmin />} />
           {/*================admin===========================*/}

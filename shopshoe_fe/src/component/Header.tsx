@@ -410,7 +410,9 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
             )}
 
             {/* icon trái tim trắng*/}
-            <i className="fa-regular fa-heart"></i>
+            <Link to={"/productLike"}>
+              <i className="fa-regular fa-heart" style={{ color: "gray" }}></i>
+            </Link>
             {/* icon cart */}
             <Badge
               badgeContent={totalItems}

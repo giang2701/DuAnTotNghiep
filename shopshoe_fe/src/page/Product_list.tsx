@@ -303,9 +303,9 @@ export default function Product_List() {
                                                         )}
                                                     </p>
                                                 </div>
-                                                <div className="btn__tym">
+                                                {/* <div className="btn__tym">
                                                     <TymButton />
-                                                </div>
+                                                </div> */}
                                             </div>
                                         ))
                                     ) : (
