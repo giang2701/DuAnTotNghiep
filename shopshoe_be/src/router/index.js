@@ -9,10 +9,12 @@ import RouterOrder from "./order.js";
 import RouterVoucher from "./Voucher.js";
 import RouterHeart from "./heart.js";
 import statisticsRouter from "./statisticsRouter.js";
+import RouterBrand from "./Brand.js";
 
 const router = Router();
 router.use("/products", productRouter);
 router.use("/categorys", categoryRouter);
+router.use("/brand", RouterBrand);
 router.use("/auth", authRouter);
 router.use("/size", sizeRouter);
 router.use("/user", userRouter);

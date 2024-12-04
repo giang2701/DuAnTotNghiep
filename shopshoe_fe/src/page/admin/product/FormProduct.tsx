@@ -11,11 +11,13 @@ import {
 import { Category } from "../../../interface/Category";
 import { Product } from "../../../interface/Products";
 import { Size } from "../../../interface/Size";
+import { Brand } from "../../../interface/Brand";
 
 const FormProduct = () => {
     const { id } = useParams();
     const { handleProduct } = useContext(ProductContext) as ProductContextType;
     const [categories, setCategories] = useState<Category[]>([]);
+    const [brand, setBrand] = useState<Brand[]>([]);
     const [sizes, setSizes] = useState<Size[]>([]);
     const [formattedPrice, setFormattedPrice] = useState<string>("");
     const [description, setDescription] = useState("");
@@ -136,6 +138,13 @@ const FormProduct = () => {
             setCategories(data.data);
         })();
     }, []);
+    // đổ dữ liệu khi brand vào form
+    useEffect(() => {
+        (async () => {
+            const { data } = await instance.get(`/brand`);
+            setBrand(data.data);
+        })();
+    }, []);
     // đổ dữ liệu khi cate vào form
     useEffect(() => {
         (async () => {
@@ -192,12 +201,20 @@ const FormProduct = () => {
                             {/* Brand */}
                             <div className="form-group mb-2">
                                 <label className="form-label">Brand</label>
-                                <input
-                                    {...register("brand", { required: true })}
-                                    className={`form-control ${
-                                        errors.brand ? "is-invalid" : ""
-                                    }`}
-                                />
+                                <select
+                                    {...register("brand")}
+                                    className="form-control "
+                                >
+                                    <option selected>-- Select Brand --</option>
+                                    {brand.map((brand) => (
+                                        <option
+                                            key={brand._id}
+                                            value={brand._id}
+                                        >
+                                            {brand.title}
+                                        </option>
+                                    ))}
+                                </select>
                                 {errors.brand && (
                                     <div className="invalid-feedback">
                                         Brand is required

@@ -86,9 +86,9 @@ export const removeProductById = async (req, res, next) => {
 
 export const getProductById = async (req, res, next) => {
     try {
-        const data = await Products.findById(req.params.id).populate(
-            "category"
-        );
+        const data = await Products.findById(req.params.id)
+            .populate("category")
+            .populate("brand");
         // console.log(data);
         if (data) {
             return res.status(200).json({
@@ -125,7 +125,9 @@ export const getProductByIdSize = async (req, res, next) => {
 };
 export const getAllProducts = async (req, res, next) => {
     try {
-        const data = await Products.find().populate("category");
+        const data = await Products.find()
+            .populate("category")
+            .populate("brand");
         if (data) {
             return res.status(200).json({
                 message: "Lay san pham thanh cong!",

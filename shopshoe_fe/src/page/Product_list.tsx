@@ -28,10 +28,6 @@ export default function Product_List() {
     const uniqueBrands = Array.from(
         new Set(state.products.map((product) => product.brand))
     );
-
-    // const [Categories, setCategories] = useState(state1.categories);
-    // console.log(state1.category);
-
     useEffect(() => {
         setGender("None");
         setPriceRange([0, 10000000]);
@@ -71,7 +67,7 @@ export default function Product_List() {
             );
             const matchesBrand =
                 selectedBrands.length === 0 ||
-                (product && selectedBrands.includes(product.brand));
+                (product && selectedBrands.includes(product.brand.title));
             const matchesGender =
                 gender === "None" || (category && category.title === gender);
             const matchesPrice =
@@ -334,7 +330,7 @@ export default function Product_List() {
                                 ...Array(
                                     Math.ceil(
                                         filteredProducts.length /
-                                        productsPerPage
+                                            productsPerPage
                                     )
                                 ).keys(),
                             ].map((number) => (
@@ -365,7 +361,7 @@ export default function Product_List() {
                                     setCurrentPage(
                                         Math.ceil(
                                             filteredProducts.length /
-                                            productsPerPage
+                                                productsPerPage
                                         )
                                     )
                                 }
@@ -373,7 +369,7 @@ export default function Product_List() {
                                     currentPage ===
                                     Math.ceil(
                                         filteredProducts.length /
-                                        productsPerPage
+                                            productsPerPage
                                     )
                                 }
                             >

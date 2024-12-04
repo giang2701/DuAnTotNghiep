@@ -8,8 +8,8 @@ const productSchema = new mongoose.Schema(
             unique: true,
         },
         brand: {
-            type: String,
-            required: true,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Brand",
         },
         price: {
             type: Number,

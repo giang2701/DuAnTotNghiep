@@ -428,7 +428,7 @@ const DetailProduct = () => {
                         <span className=" b-1 fs-3 ">Thương Hiệu:</span>
 
                         <span className="p-1 mt-0 me-4 fs-3">
-                            {product.brand}
+                            {product.brand?.title}
                         </span>
                         <Box sx={{ marginTop: "-12px" }}>
                             <Rating

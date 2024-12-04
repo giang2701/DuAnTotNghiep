@@ -309,6 +309,14 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
                 Size
               </Link>
               <Link
+                to="/admin/brand"
+                style={{
+                  textDecoration: "none",
+                }}
+              >
+                Thương Hiệu
+              </Link>
+              <Link
                 to="/admin/voucher"
                 style={{
                   textDecoration: "none",

@@ -10,6 +10,7 @@ import { SizeProvider } from "./context/Size.tsx";
 import { CartProvider } from "./context/cart.tsx";
 import { UserProvider } from "./context/user.tsx";
 import { VoucherProvider } from "./context/Voucher.tsx";
+import BrandProvider from "./context/Brand.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
@@ -21,7 +22,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                             <CartProvider>
                                 <UserProvider>
                                     <VoucherProvider>
-                                        <App />
+                                        <BrandProvider>
+                                            <App />
+                                        </BrandProvider>
                                     </VoucherProvider>
                                 </UserProvider>
                             </CartProvider>
