@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ProductContext, ProductContextType } from "../context/ProductContext";
-import TymButton from "../component/Btn__tym";
 import { Link } from "react-router-dom";
 import {
     CategoryContext,
     CategoryContextType,
 } from "../context/CategoryContext";
+import axios from "axios";
 
 export default function Product_List() {
     const { state } = useContext(ProductContext) as ProductContextType;
@@ -18,6 +18,7 @@ export default function Product_List() {
     const [isPriceRangeOpen, setIsPriceRangeOpen] = useState(false);
     const [filteredProducts, setFilteredProducts] = useState(state.products);
     const [currentPage, setCurrentPage] = useState(1);
+    const [brands, setBrands] = useState<string[]>([]);
     const productsPerPage = 16;
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -25,9 +26,23 @@ export default function Product_List() {
         indexOfFirstProduct,
         indexOfLastProduct
     );
-    const uniqueBrands = Array.from(
-        new Set(state.products.map((product) => product.brand))
-    );
+
+
+    useEffect(() => {
+        // Fetch brands using axios when component is mounted
+        axios
+            .get("http://localhost:8000/api/Brand") // Update with your API endpoint
+            .then((response) => {
+                setBrands(response.data.data); // Assuming the response contains a list of brands
+                console.log(response.data);
+
+            })
+            .catch((error) => {
+                console.error("Error fetching brands:", error);
+            });
+    }, []);
+
+
     useEffect(() => {
         setGender("None");
         setPriceRange([0, 10000000]);
@@ -40,11 +55,11 @@ export default function Product_List() {
 
     // thêm vào mãng thương hiệu để lọc
     const updateBrandSelection = (brand: string) => {
-        setSelectedBrands((prevBrands) => {
-            if (prevBrands.includes(brand)) {
-                return prevBrands.filter((b) => b !== brand);
+        setSelectedBrands((brands) => {
+            if (brands.includes(brand)) {
+                return brands.filter((b) => b !== brand);
             } else {
-                return [...prevBrands, brand];
+                return [...brands, brand];
             }
         });
     };
@@ -130,26 +145,17 @@ export default function Product_List() {
                             </li>
                             {isBrandOpen && (
                                 <div className="shop-sidebar__sub-list">
-                                    {uniqueBrands.map((brand) => (
-                                        <label
-                                            className="shop-sidebar__sub-item"
-                                            key={brand}
-                                        >
+                                    {brands.map((brand: any) => (
+                                        <label className="shop-sidebar__sub-item" key={brand._id}>
                                             <input
                                                 className="input1"
                                                 type="checkbox"
-                                                name={brand}
-                                                value={brand}
-                                                checked={selectedBrands.includes(
-                                                    brand
-                                                )}
-                                                onChange={() =>
-                                                    updateBrandSelection(brand)
-                                                }
+                                                name={brand.title}
+                                                value={brand.title}
+                                                checked={selectedBrands.includes(brand.title)}
+                                                onChange={() => updateBrandSelection(brand.title)}
                                             />
-                                            <div className="text_item">
-                                                {brand}
-                                            </div>
+                                            <div className="text_item">{brand.title}</div>
                                         </label>
                                     ))}
                                 </div>
@@ -330,7 +336,7 @@ export default function Product_List() {
                                 ...Array(
                                     Math.ceil(
                                         filteredProducts.length /
-                                            productsPerPage
+                                        productsPerPage
                                     )
                                 ).keys(),
                             ].map((number) => (
@@ -361,7 +367,7 @@ export default function Product_List() {
                                     setCurrentPage(
                                         Math.ceil(
                                             filteredProducts.length /
-                                                productsPerPage
+                                            productsPerPage
                                         )
                                     )
                                 }
@@ -369,7 +375,7 @@ export default function Product_List() {
                                     currentPage ===
                                     Math.ceil(
                                         filteredProducts.length /
-                                            productsPerPage
+                                        productsPerPage
                                     )
                                 }
                             >
