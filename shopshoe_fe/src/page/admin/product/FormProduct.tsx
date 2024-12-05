@@ -122,6 +122,7 @@ const FormProduct = () => {
                         ...existingData,
                         sizeStock: updatedSizeStock, // Cập nhật sizeStock với dữ liệu mới
                         category: existingData.category?._id || "",
+                        brand: existingData.brand?._id || "",
                     });
                     setValue("description", existingData.description);
                     setDescription(existingData.description);
