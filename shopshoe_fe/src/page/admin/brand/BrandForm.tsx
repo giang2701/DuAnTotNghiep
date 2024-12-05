@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import instance from "../../../api";
 import { BrandContext, BrandContextType } from "../../../context/Brand";
 import { Brand } from "../../../interface/Brand";
+import { joiResolver } from "@hookform/resolvers/joi";
+import { BrandSchema } from "../../../validate/Brand";
 
 const BrandForm = () => {
     const { id } = useParams();
@@ -13,7 +15,7 @@ const BrandForm = () => {
         register,
         reset,
         formState: { errors },
-    } = useForm<Brand>({});
+    } = useForm<Brand>();
 
     useEffect(() => {
         if (id) {

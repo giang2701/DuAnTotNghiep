@@ -4,7 +4,7 @@ import categoryReducer from "../reducers/CategoryReducer";
 import instance from "../api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
+import Swal from "sweetalert2";
 export type CategoryContextType = {
     state1: { category: Category[] };
     dispatch: React.Dispatch<any>;
@@ -23,12 +23,49 @@ const CategoryProvider = ({ children }: { children: React.ReactNode }) => {
         })();
     }, []);
     const removeCategory = async (_id: string | undefined) => {
+        // try {
+        //     await instance.delete(`/categorys/${_id}`);
+        //     dispatch({ type: "REMOVE_CATEGORY", payload: _id });
+        //     toast.success("Xóa thành công");
+        // } catch (error) {
+        //     toast.error("Xóa thất bại");
+        // }
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "custom-confirm-button",
+                cancelButton: "custom-cancel-button",
+            },
+            buttonsStyling: false,
+        });
+
         try {
-            await instance.delete(`/categorys/${_id}`);
-            dispatch({ type: "REMOVE_CATEGORY", payload: _id });
-            toast.success("Xóa thành công");
+            const result = await swalWithBootstrapButtons.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel!",
+                reverseButtons: true,
+            });
+
+            if (result.isConfirmed) {
+                await instance.delete(`/categorys/${_id}`);
+                dispatch({ type: "REMOVE_CATEGORY", payload: _id });
+                swalWithBootstrapButtons.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success",
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                swalWithBootstrapButtons.fire({
+                    title: "Cancelled",
+                    text: "Your file is safe :)",
+                    icon: "error",
+                });
+            }
         } catch (error) {
-            toast.error("Xóa thất bại");
+            toast.error("Không thể xóa");
         }
     };
     const handleCategory = async (category: Category) => {

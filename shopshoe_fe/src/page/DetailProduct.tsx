@@ -23,7 +23,7 @@ import { Product } from "../interface/Products";
 import { Size } from "../interface/Size";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
-
+import Swal from "sweetalert2";
 const DetailProduct = () => {
     const { id } = useParams();
     const [product, setProduct] = useState<Product | null>(null); //đổ sản phẩm chi tiết
@@ -49,6 +49,7 @@ const DetailProduct = () => {
     const [price, setPrice] = useState<number | null>(null); //xét giá mặc định cho sản phẩm
     const [quantity, setQuantity] = useState<number>(1); //so luong cua san pham theo size
     const [stockLimit, setStockLimit] = useState<number>(0); //để đảm bảo rằng số lượng mua không vượt quá số tồn kho của kích thước được chọn
+
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const imageRef = useRef<HTMLImageElement | null>(null);
     const [value, setValue] = useState<number | null>(null);
@@ -259,7 +260,7 @@ const DetailProduct = () => {
 
         if (!user || !user._id) {
             navigate("/login");
-            toast.error("đang nhập để đặt hàng");
+            toast.error("Đăng nhập để đặt hàng");
             return;
         }
 
@@ -277,7 +278,12 @@ const DetailProduct = () => {
             // console.log("Sản phẩm đã được thêm vào giỏ hàng");
             // Lấy giỏ hàng mới từ API
             fetchCart();
-            toast.success("Thêm Sản Phẩm Thành Công");
+            // toast.success("Thêm Sản Phẩm Thành Công");
+            Swal.fire({
+                title: "Good job!",
+                text: "Thêm Sản Phẩm Thành Công!",
+                icon: "success",
+            });
         } catch (error) {
             console.error("Lỗi khi thêm vào giỏ hàng:", error);
         }
@@ -533,6 +539,23 @@ const DetailProduct = () => {
                             </button>
                         )} */}
                     </div>
+                    {stockLimit > 0 ? (
+                        <>
+                            <p
+                                className="mt-4"
+                                style={{
+                                    fontSize: "13px",
+                                    color: "#f7422d",
+                                    fontWeight: "600",
+                                }}
+                            >
+                                Số lượng còn lại trong kho: {stockLimit}
+                            </p>
+                        </>
+                    ) : (
+                        <></>
+                    )}
+
                     {/* quality */}
                     <div style={{ margin: "20px 0px 10px" }}>
                         <button

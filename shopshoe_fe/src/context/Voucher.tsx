@@ -3,6 +3,7 @@ import instance from "../api";
 import { Voucher } from "../interface/Voucher";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 type VoucherContextType = {
     voucher: Voucher[] | null;
     setVoucher: (voucher: Voucher[]) => void;
@@ -35,19 +36,46 @@ export const VoucherProvider = ({
         GetAllVoucher();
     }, []);
     const Delete = async (_id: string) => {
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "custom-confirm-button",
+                cancelButton: "custom-cancel-button",
+            },
+            buttonsStyling: false,
+        });
+
         try {
-            if (window.confirm("Ban chac chan muon xoa?")) {
+            const result = await swalWithBootstrapButtons.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel!",
+                reverseButtons: true,
+            });
+
+            if (result.isConfirmed) {
                 await instance.delete(`/voucher/${_id}`);
-                toast.success("Xoa thanh cong", {
-                    autoClose: 2000, // Tự động đóng sau 3 giây
+                swalWithBootstrapButtons.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success",
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                swalWithBootstrapButtons.fire({
+                    title: "Cancelled",
+                    text: "Your file is safe :)",
+                    icon: "error",
                 });
             }
 
-            GetAllVoucher();
+            await GetAllVoucher();
         } catch (error) {
             toast.error("Không thể xóa");
         }
     };
+
     const handleVoucher = async (voucher: Voucher) => {
         // console.log("voucher log", voucher);
         await instance.post("/voucher", voucher);

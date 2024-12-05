@@ -1,11 +1,8 @@
-import React from "react";
 import { useForm } from "react-hook-form";
-import { Voucher } from "../../../interface/Voucher";
 import { useVoucher } from "../../../context/Voucher";
+import { Voucher } from "../../../interface/Voucher";
 
-type Props = {};
-
-const CreateVoucher = (props: Props) => {
+const CreateVoucher = () => {
     const { handleVoucher } = useVoucher();
     const {
         register,
@@ -36,6 +33,9 @@ const CreateVoucher = (props: Props) => {
                             className="form-control"
                             {...register("name")}
                         />
+                        {errors.name && (
+                            <p className="text-danger">{errors.name.message}</p>
+                        )}
                     </div>
                     <div className="mb-3">
                         <label htmlFor="code" className="form-label">
@@ -48,17 +48,9 @@ const CreateVoucher = (props: Props) => {
                             {...register("code")}
                             style={{ textTransform: "uppercase" }}
                         />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="discount" className="form-label">
-                            Discount Voucher(giảm theo% hoặc tiền)
-                        </label>
-                        <input
-                            type="number"
-                            id="discount"
-                            className="form-control"
-                            {...register("discount")}
-                        />
+                        {errors.code && (
+                            <p className="text-danger">{errors.code.message}</p>
+                        )}
                     </div>
                     <div className="mb-3">
                         <label htmlFor="type" className="form-label">
@@ -77,8 +69,30 @@ const CreateVoucher = (props: Props) => {
                                 <option value="percent">Giảm theo %</option>
                                 <option value="fixed">Giảm theo tiền</option>
                             </select>
+                            {errors.type && (
+                                <p className="text-danger">
+                                    {errors.type.message}
+                                </p>
+                            )}
                         </div>
                     </div>
+                    <div className="mb-3">
+                        <label htmlFor="discount" className="form-label">
+                            Discount Voucher(giảm theo% hoặc tiền)
+                        </label>
+                        <input
+                            type="number"
+                            id="discount"
+                            className="form-control"
+                            {...register("discount")}
+                        />
+                        {errors.discount && (
+                            <p className="text-danger">
+                                {errors.discount.message}
+                            </p>
+                        )}
+                    </div>
+
                     <div className="mb-3">
                         <label htmlFor="expiryDate" className="form-label">
                             Expiry Date
@@ -89,6 +103,11 @@ const CreateVoucher = (props: Props) => {
                             className="form-control"
                             {...register("expiryDate")}
                         />
+                        {/* {errors.expiryDate && (
+                            <p className="text-danger">
+                                {errors.expiryDate.message}
+                            </p>
+                        )} */}
                     </div>
                     <button type="submit" className="btn btn-primary">
                         Save

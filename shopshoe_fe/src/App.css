@@ -1771,7 +1771,7 @@ ul li:hover {
 .shop-banner {
     position: relative;
     height: 400px;
-    padding-left: 50px;
+    padding-left: 0px;
     border-radius: 10px;
     overflow: hidden;
 }
@@ -2905,7 +2905,36 @@ label {
     padding: 16px;
     border-radius: 8px;
 }
+.custom-confirm-button {
+    background-color: #28a745 !important; /* Màu xanh lá */
+    color: #fff !important;
+    border: 1px solid transparent !important;
+    padding: 7px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 10px;
+}
 
+.custom-cancel-button {
+    background-color: #dc3545 !important; /* Màu đỏ */
+    color: #fff !important;
+    border: 1px solid transparent !important;
+    padding: 7px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.custom-confirm-button:hover {
+    background-color: #218838 !important; /* Xanh lá đậm hơn khi hover */
+}
+
+.custom-cancel-button:hover {
+    background-color: #c82333 !important; /* Đỏ đậm hơn khi hover */
+}
 /* --Mobile & content__layoutAdminablet */
 @media (max-widbox_table_productsh: 1024px) {
 }
@@ -3620,7 +3649,7 @@ label {
     .shop-banner {
         position: relative;
         height: 400px;
-        padding-left: 50px;
+        padding-left: 0px;
         border-radius: 10px;
         overflow: hidden;
     }
@@ -4346,7 +4375,9 @@ label {
         position: static;
         height: 1200px;
     }
-
+    .title__products__GALLERY p {
+        margin-bottom: 18rem;
+    }
     .sub__display__products {
         background-color: rgb(246, 246, 246);
         width: 95vw;
@@ -4565,10 +4596,10 @@ label {
         margin-left: 0px;
     }
 
-    /* GALLERY */
+    /* GALLERY
     .box__gallery {
         height: 2450px;
-    }
+    } */
 
     .Container__product__gallery {
         display: flex;
@@ -4577,7 +4608,9 @@ label {
         margin-bottom: 20px;
         max-width: 1520px;
     }
-
+    .Container__product__gallery .product {
+        margin-bottom: 20px;
+    }
     .Container__product__gallery {
         margin-left: 20px;
     }
@@ -4626,7 +4659,7 @@ label {
         font-size: 1.6rem;
         line-height: 24px;
         position: relative;
-        top: 150px;
+        top: -0px;
         left: 32%;
         transition: all 0.4s ease-in-out;
     }
@@ -5014,9 +5047,10 @@ label {
     .shop-banner {
         position: relative;
         height: 250px;
-        padding-left: 20px;
+        padding-left: 0px;
         border-radius: 8px;
         overflow: hidden;
+        display: none;
     }
 
     .shop-banner__image {
@@ -5204,7 +5238,23 @@ label {
         cursor: not-allowed;
         opacity: 0.5;
     }
+    .button_icon {
+        margin-left: 240px;
+        font-size: 18px;
+        color: #333;
+    }
 
+    .button_icon2 {
+        margin-left: 265px;
+        font-size: 18px;
+        color: #333;
+    }
+
+    .button_icon3 {
+        margin-left: 269px;
+        font-size: 18px;
+        color: #333;
+    }
     /* stasitics thống kê */
     .chart-container {
         width: 600%;

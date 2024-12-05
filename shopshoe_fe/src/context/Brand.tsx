@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import instance from "../api";
 import { Brand } from "../interface/Brand";
 import { toast } from "react-toastify";
-import { get } from "react-hook-form";
+import Swal from "sweetalert2";
 
 export type BrandContextType = {
     brand: Brand[];
@@ -25,16 +25,53 @@ const BrandProvider = ({ children }: { children: React.ReactNode }) => {
         getAllBrand();
     }, []);
     const removeBrand = async (_id: string | undefined) => {
+        // try {
+        //     if (window.confirm("Ban chac chan muon xoa?")) {
+        //         await instance.delete(`/brand/${_id}`);
+        //         toast.success("Xoa thanh cong", {
+        //             autoClose: 2000, // Tự động đóng sau 3 giây
+        //         });
+        //     }
+        //     getAllBrand();
+        // } catch (error) {
+        //     toast.error("Xóa thất bại");
+        // }
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "custom-confirm-button",
+                cancelButton: "custom-cancel-button",
+            },
+            buttonsStyling: false,
+        });
+
         try {
-            if (window.confirm("Ban chac chan muon xoa?")) {
+            const result = await swalWithBootstrapButtons.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel!",
+                reverseButtons: true,
+            });
+
+            if (result.isConfirmed) {
                 await instance.delete(`/brand/${_id}`);
-                toast.success("Xoa thanh cong", {
-                    autoClose: 2000, // Tự động đóng sau 3 giây
+                swalWithBootstrapButtons.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success",
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                swalWithBootstrapButtons.fire({
+                    title: "Cancelled",
+                    text: "Your file is safe :)",
+                    icon: "error",
                 });
             }
-            getAllBrand();
+            await getAllBrand();
         } catch (error) {
-            toast.error("Xóa thất bại");
+            toast.error("Không thể xóa");
         }
     };
     const handleBrand = async (brand: Brand) => {

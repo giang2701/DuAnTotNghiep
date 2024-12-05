@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { CartItem } from "../interface/Products";
 import axios from "axios";
+import Loading from "../component/Loading";
 
 interface CartContextType {
     cart: CartItem[];
@@ -216,7 +217,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
                 clearCart,
             }}
         >
-            {loading ? <div>Loading...</div> : children}
+            {loading ? <Loading /> : children}
         </CartContext.Provider>
     );
 };

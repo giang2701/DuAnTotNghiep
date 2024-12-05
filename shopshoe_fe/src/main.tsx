@@ -11,27 +11,30 @@ import { CartProvider } from "./context/cart.tsx";
 import { UserProvider } from "./context/user.tsx";
 import { VoucherProvider } from "./context/Voucher.tsx";
 import BrandProvider from "./context/Brand.tsx";
+import { LoadingProvider } from "./context/Loading.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
         <BrowserRouter>
-            <AuthProvider>
-                <SizeProvider>
-                    <ProductProvider>
-                        <CategoryProvider>
-                            <CartProvider>
-                                <UserProvider>
-                                    <VoucherProvider>
-                                        <BrandProvider>
-                                            <App />
-                                        </BrandProvider>
-                                    </VoucherProvider>
-                                </UserProvider>
-                            </CartProvider>
-                        </CategoryProvider>
-                    </ProductProvider>
-                </SizeProvider>
-            </AuthProvider>
+            <LoadingProvider>
+                <AuthProvider>
+                    <SizeProvider>
+                        <ProductProvider>
+                            <CategoryProvider>
+                                <CartProvider>
+                                    <UserProvider>
+                                        <VoucherProvider>
+                                            <BrandProvider>
+                                                <App />
+                                            </BrandProvider>
+                                        </VoucherProvider>
+                                    </UserProvider>
+                                </CartProvider>
+                            </CategoryProvider>
+                        </ProductProvider>
+                    </SizeProvider>
+                </AuthProvider>
+            </LoadingProvider>
         </BrowserRouter>
     </React.StrictMode>
 );

@@ -4,6 +4,10 @@ import { Link } from "react-router-dom";
 type Props = {};
 
 const Page404 = (props: Props) => {
+    const user = localStorage.getItem("user");
+    const role = user ? JSON.parse(user).role : "";
+    console.log(role);
+
     return (
         <>
             <div
@@ -17,9 +21,19 @@ const Page404 = (props: Props) => {
                 <div className="constant_box_404 ">
                     <h3 className="h2">Looks like you're lost</h3>
                     <p>Sorry, the page you are looking for does not exist.</p>
-                    <Link to="/" className="link_404">
-                        Go to Home
-                    </Link>
+                    {role === "admin" ? (
+                        <>
+                            <Link to="/admin" className="link_404">
+                                Go to Home
+                            </Link>
+                        </>
+                    ) : (
+                        <>
+                            <Link to="/" className="link_404">
+                                Go to Home
+                            </Link>
+                        </>
+                    )}
                 </div>
             </div>
         </>

@@ -25,11 +25,16 @@ const ProductProvider = ({ children }: { children: React.ReactNode }) => {
     const [idDelete, setIdDelete] = useState<string | null>(null);
     const [confirm, setConfirm] = useState(false);
     const nav = useNavigate();
-    useEffect(() => {
-        (async () => {
+    const getAllProducts = async () => {
+        try {
             const { data } = await instance.get(`/products`);
             dispatch({ type: "GET_PRODUCTS", payload: data.data });
-        })();
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    useEffect(() => {
+        getAllProducts();
     }, []);
 
     const removeProduct = async () => {

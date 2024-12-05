@@ -34,6 +34,7 @@ import Dashboard from "./page/admin/dashboard/Dashboard.tsx";
 import ProductList from "./page/admin/product/ProductList.tsx";
 import Brand from "./page/admin/brand/Brand.tsx";
 import BrandForm from "./page/admin/brand/BrandForm.tsx";
+import Loading from "./component/Loading.tsx";
 
 function App() {
     return (
@@ -41,7 +42,6 @@ function App() {
             <CartProvider>
                 <Routes>
                     {/* Client */}
-
                     <Route path="/" element={<LayoutClient />}>
                         <Route index element={<Hompage />} />
                         <Route path="/detail/:id" element={<DetailProduct />} />
@@ -74,6 +74,7 @@ function App() {
                         />
                     </Route>
                     <Route path="/loginAdmin" element={<LoginAdmin />} />
+                    <Route path="/loading" element={<Loading />} />
                     {/*================admin===========================*/}
                     {/* >>San Pham */}
                     <Route path="/admin" element={<LayoutAdmin />}>
@@ -131,7 +132,6 @@ function App() {
                     <Route path="*" element={<Page404 />} />
                 </Routes>
             </CartProvider>
-
             <ToastContainer />
         </>
     );

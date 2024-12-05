@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import NavBar from "../admin/NavBarAdmin";
+import Authorization403 from "../Authorzation403";
 const LayoutAdmin = () => {
     const { user } = useAuth();
     const [collapsed, setCollapsed] = useState(false);
@@ -9,7 +10,7 @@ const LayoutAdmin = () => {
         setCollapsed(!collapsed);
     };
     if (!user || user.role !== "admin") {
-        return <h1>Bạn không có quyền vào trang này!</h1>;
+        return <Authorization403 />;
     }
     return (
         <div
