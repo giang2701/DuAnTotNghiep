@@ -162,8 +162,19 @@ const CartPage = () => {
           </div>
           {cart
             ? cart.map((item: any) => {
+                const sizeProducts = item.product.sizeStock;
+
                 const key = `${item.product._id}-${item.size}`;
                 const sizeData = sizes[item.size]; // Lấy dữ liệu size từ state
+                const IdSize = sizeData?._id;
+
+                // Lọc sản phẩm theo IdSize
+                const stockBySize = sizeProducts.filter(
+                  (size: any) => size.size === IdSize
+                );
+                // Lấy giá trị stock từ sản phẩm đã lọc
+                const stockValue =
+                  stockBySize.length > 0 ? stockBySize[0].stock : 0; // Nếu không có sản phẩm nào thì trả về 0
 
                 return (
                   <div key={key} className="cart-item">
@@ -177,6 +188,9 @@ const CartPage = () => {
                         <p>{item.product.title}</p>
                         <p>
                           Size: {sizeData ? sizeData.nameSize : "Đang tải..."}
+                        </p>
+                        <p className="text-danger">
+                          Số lượng còn lại {stockValue}
                         </p>
                         {/* Hiển thị tên size */}
                       </div>

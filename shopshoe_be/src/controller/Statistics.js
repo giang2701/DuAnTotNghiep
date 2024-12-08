@@ -7,27 +7,30 @@ import moment from "moment";
 
 // thống kê top sản phẩm bán chạy nhất
 export const productBestSellingStats = async (req, res, next) => {
-  const { limit: _limit } = req.query;
-
+  const { start, end, limit: _limit } = req.query;
   const limit = _limit ?? 10;
 
   try {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
     const topProducts = await Order.aggregate([
-      { $match: { paymentStatus: "Completed", status: "Completed" } },
-
+      {
+        $match: {
+          paymentStatus: "Completed",
+          status: "Completed",
+          createdAt: { $gte: startDate, $lte: endDate },
+        },
+      },
       { $unwind: "$products" },
-
       {
         $group: {
           _id: "$products.product",
           totalQuantity: { $sum: "$products.quantity" },
         },
       },
-
       { $sort: { totalQuantity: -1 } },
-
       { $limit: limit },
-
       {
         $lookup: {
           from: "products",
@@ -36,7 +39,6 @@ export const productBestSellingStats = async (req, res, next) => {
           as: "productDetails",
         },
       },
-
       {
         $project: {
           _id: 1,
@@ -44,7 +46,6 @@ export const productBestSellingStats = async (req, res, next) => {
           name: { $arrayElemAt: ["$productDetails.title", 0] },
         },
       },
-
       {
         $match: {
           name: { $ne: null, $exists: true, $nin: ["", " "] },
@@ -57,7 +58,6 @@ export const productBestSellingStats = async (req, res, next) => {
     next(error);
   }
 };
-
 // so sánh doanh thu tháng trước so với hiện tại
 export const revenueStats = async (req, res, next) => {
   const now = moment();
@@ -76,42 +76,34 @@ export const revenueStats = async (req, res, next) => {
   try {
     const revenueData = await Order.aggregate([
       { $match: { paymentStatus: "Completed", status: "Completed" } },
-
       {
         $match: {
           createdAt: { $gte: startOfLastMonth, $lt: now.toDate() },
         },
       },
-
       {
         $group: {
           _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
           totalRevenue: { $sum: "$totalPrice" },
         },
       },
-
       { $sort: { _id: 1 } },
     ]);
-
     const daysInLastMonth = [];
     const daysInThisMonth = [];
-
     const daysInPreviousMonth = moment(startOfLastMonth).daysInMonth();
     for (let i = 1; i <= daysInPreviousMonth; i++) {
       const day = moment(startOfLastMonth).date(i).format("YYYY-MM-DD");
       daysInLastMonth.push({ _id: day, totalRevenue: 0 });
     }
-
     const daysInCurrentMonth = now.daysInMonth();
     for (let i = 1; i <= daysInCurrentMonth; i++) {
       const day = moment(startOfThisMonth).date(i).format("YYYY-MM-DD");
       daysInThisMonth.push({ _id: day, totalRevenue: 0 });
     }
-
     revenueData.forEach((item) => {
       const date = item._id;
       const revenue = item.totalRevenue;
-
       if (
         moment(date).isBetween(startOfLastMonth, endOfLastMonth, null, "[]")
       ) {
@@ -120,7 +112,6 @@ export const revenueStats = async (req, res, next) => {
           day.totalRevenue = revenue;
         }
       }
-
       if (moment(date).isBetween(startOfThisMonth, now, null, "[]")) {
         const day = daysInThisMonth.find((d) => d._id === date);
         if (day) {
@@ -128,7 +119,6 @@ export const revenueStats = async (req, res, next) => {
         }
       }
     });
-
     res.json({
       lastMonth: daysInLastMonth,
       currentMonth: daysInThisMonth,
@@ -137,7 +127,6 @@ export const revenueStats = async (req, res, next) => {
     next(error);
   }
 };
-
 // thống kê thông tin chung
 export const generalStatistics = async (req, res, next) => {
   const now = moment();

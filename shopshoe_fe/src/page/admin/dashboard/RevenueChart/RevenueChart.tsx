@@ -132,7 +132,7 @@ const RevenueByMonth = () => {
         </Grid>
 
         {/* Nút Lọc */}
-        <Grid item xs={2}>
+        <Grid item xs={2} sx={{ display: "none" }}>
           <Button
             variant="contained"
             color="primary"

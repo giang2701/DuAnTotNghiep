@@ -32,13 +32,16 @@ const Aboutus = (props: Props) => {
       <div className="aboutus-container pt-5">
         {/* Breadcrumbs */}
         <div className="breadcrumbs-wrapper">
-    <Breadcrumbs aria-label="breadcrumb" className="breadcrumbs-container">
-      <Link className="nav-link" color="inherit" to="/">
-        Trang chủ
-      </Link>
-      <Typography color="text.primary">Về chúng tôi</Typography>
-    </Breadcrumbs>
-  </div>
+          <Breadcrumbs
+            aria-label="breadcrumb"
+            className="breadcrumbs-container"
+          >
+            <Link className="nav-link" color="inherit" to="/">
+              Trang chủ
+            </Link>
+            <Typography color="text.primary">Về chúng tôi</Typography>
+          </Breadcrumbs>
+        </div>
 
         {/* Section: Giới thiệu */}
         <section className="aboutus-gallery pt-5">
@@ -51,13 +54,12 @@ const Aboutus = (props: Props) => {
 
         <div className="aboutus-ending text-center pt-5">
           <Typography variant="h6" gutterBottom>
-            Cảm ơn bạn đã đồng hành cùng chúng tôi! Zokong luôn sẵn
-            sàng mang đến những đôi giày chất lượng nhất!!!
+            Cảm ơn bạn đã đồng hành cùng chúng tôi! Zokong luôn sẵn sàng mang
+            đến những đôi giày chất lượng nhất!!!
           </Typography>
         </div>
 
         {/* CTA */}
-        
       </div>
     </div>
   );
@@ -66,10 +68,10 @@ const Aboutus = (props: Props) => {
 export default Aboutus;
 // contact
 {
-    /* Section: Đánh giá khách hàng */
+  /* Section: Đánh giá khách hàng */
 }
 {
-    /* <section className="customer-reviews mt-5">
+  /* <section className="customer-reviews mt-5">
           <h3 className="text-secondary text-center">Đánh giá từ khách hàng</h3>
           <div className="row text-center mt-4">
           
@@ -135,10 +137,10 @@ export default Aboutus;
 }
 
 {
-    /* Section: Liên hệ */
+  /* Section: Liên hệ */
 }
 {
-    /* <section className="contact-section mt-5">
+  /* <section className="contact-section mt-5">
           <div className="row">
             <div className="col-md-6">
               <h3 className="text-secondary">Liên hệ với chúng tôi</h3>
