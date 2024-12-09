@@ -6,6 +6,10 @@ import {
     CategoryContextType,
 } from "../context/CategoryContext";
 import axios from "axios";
+import ProductItem from "./ProductItem";
+import { Product } from "../interface/Products";
+import instance from "../api";
+import { toast } from "react-toastify";
 
 export default function Product_List() {
     const { state } = useContext(ProductContext) as ProductContextType;
@@ -96,13 +100,76 @@ export default function Product_List() {
         setCurrentPage(1);
     };
 
-    const formatCurrency = (price: number): string => {
-        return new Intl.NumberFormat("vi-VN", {
-            style: "currency",
-            currency: "VND",
-        })
-            .format(price)
-            .replace("₫", "đ");
+    // const formatCurrency = (price: number): string => {
+    //     return new Intl.NumberFormat("vi-VN", {
+    //         style: "currency",
+    //         currency: "VND",
+    //     })
+    //         .format(price)
+    //         .replace("₫", "đ");
+    // };
+
+    const userArray = localStorage.getItem("user")
+    const user = userArray ? JSON.parse(userArray) : null
+
+    const [favorites, setFavorites] = useState<Product[]>(() => {
+        try {
+            const storedFavorites = localStorage.getItem("favorites");
+            return storedFavorites ? JSON.parse(storedFavorites) : []; // Đảm bảo luôn là mảng
+        } catch (error) {
+            console.error("Error parsing favorites from localStorage:", error);
+            return []; // Trả về mảng trống khi có lỗi
+        }
+    });
+
+
+    const toggleFavorite = async (item: Product) => {
+
+        const isAlreadyFavorite = favorites.some((fav) => fav._id === item._id);
+        console.log(isAlreadyFavorite)
+
+        if (!user) {
+            const isAlreadyFavorite = favorites.some((fav) => fav._id === item._id);
+            // Xử lý khi không có user (chưa đăng nhập)
+            const updatedFavorites = isAlreadyFavorite
+                ? favorites.filter((fav) => fav._id !== item._id)
+                : [...favorites, item];
+
+            setFavorites(updatedFavorites);
+            localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+        } else {
+            // Xử lý khi đã đăng nhập
+            try {
+                if (isAlreadyFavorite) {
+                    // Nếu đã thích, xóa khỏi server và localStorage
+                    await instance.delete(`/heart/${user._id}/${item._id}`);
+                    toast.success("Bỏ thích thành công")
+                    const updatedFavorites = favorites.filter(
+                        (fav) => fav._id !== item._id
+                    );
+                    setFavorites(updatedFavorites);
+                    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+                } else {
+                    // Nếu chưa thích, thêm vào server và localStorage
+                    const heart = {
+                        userId: user._id,
+                        productId: item._id,
+                    };
+                    await instance.post("/heart", heart);
+                    toast.success("Thích sản phẩm thành công")
+                    const updatedFavorites = [...favorites, item];
+                    setFavorites(updatedFavorites);
+                    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+                }
+            } catch (error) {
+                console.error("Error toggling favorite:", error);
+            }
+        }
+    };
+
+    const isFavorite = (item: Product) => {
+        // Kiểm tra `favorites` là mảng hợp lệ
+        return Array.isArray(favorites) && favorites.some((fav) => fav._id === item._id);
     };
 
     return (
@@ -263,52 +330,12 @@ export default function Product_List() {
                                 <div className="Container__product filter">
                                     {currentProducts.length > 0 ? (
                                         currentProducts.map((item) => (
-                                            <div
-                                                className="product"
+                                            <ProductItem
                                                 key={item._id}
-                                            >
-                                                <div className="product-img">
-                                                    <img
-                                                        src={`${item.images}`}
-                                                        alt=""
-                                                        className="img-fluid"
-                                                    />
-                                                </div>
-                                                <div className="product-name">
-                                                    <Link
-                                                        to={`/detail/${item._id}`}
-                                                        style={{
-                                                            color: "#57585a",
-                                                            fontSize: "16px",
-                                                            lineHeight: "18px",
-                                                            fontWeight: "600",
-                                                            marginBottom:
-                                                                "10px",
-                                                            display: "block",
-                                                            textTransform:
-                                                                "capitalize",
-                                                            textDecoration:
-                                                                "none",
-                                                            margin: "20px 0px",
-                                                            WebkitBoxOrient:
-                                                                "vertical",
-                                                            WebkitLineClamp:
-                                                                "1",
-                                                            overflow: "hidden",
-                                                        }}
-                                                    >
-                                                        {item.title}
-                                                    </Link>
-                                                    <p>
-                                                        {formatCurrency(
-                                                            item.price
-                                                        )}
-                                                    </p>
-                                                </div>
-                                                {/* <div className="btn__tym">
-                                                    <TymButton />
-                                                </div> */}
-                                            </div>
+                                                product={item}
+                                                toggleFavorite={toggleFavorite}
+                                                isFavorite={isFavorite(item)}
+                                            />
                                         ))
                                     ) : (
                                         <h3>

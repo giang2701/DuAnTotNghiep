@@ -17,13 +17,14 @@ import { useEffect, useRef, useState } from "react";
 
 import { Link, useNavigate, useParams } from "react-router-dom";
 import instance from "../api";
-import TymButton from "../component/Btn__tym";
 import { useCart } from "../context/cart";
 import { Product } from "../interface/Products";
 import { Size } from "../interface/Size";
-import { useAuth } from "../context/AuthContext";
+// import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import ProductItem from "./ProductItem";
+import TymButton from "../component/Btn__tym";
 const DetailProduct = () => {
     const { id } = useParams();
     const [product, setProduct] = useState<Product | null>(null); //đổ sản phẩm chi tiết
@@ -33,7 +34,7 @@ const DetailProduct = () => {
     // cart
     // setCart
     const { cart, fetchCart } = useCart();
-    const { user } = useAuth(); // Gọi useAuth ở đây
+    // const { user } = useAuth(); // Gọi useAuth ở đây
 
     // console.log(cart);
     // console.log(user);
@@ -303,6 +304,71 @@ const DetailProduct = () => {
         // Chuyển hướng kèm dữ liệu sản phẩm
         navigate("/checkOutNow", { state: { productData } });
     };
+
+
+
+    // const userArray = localStorage.getItem("user")
+    // const user = userArray ? JSON.parse(userArray) : null
+
+    // const [favorites, setFavorites] = useState<Product[]>(() => {
+    //     try {
+    //         const storedFavorites = localStorage.getItem("favorites");
+    //         return storedFavorites ? JSON.parse(storedFavorites) : []; // Đảm bảo luôn là mảng
+    //     } catch (error) {
+    //         console.error("Error parsing favorites from localStorage:", error);
+    //         return []; // Trả về mảng trống khi có lỗi
+    //     }
+    // });
+
+
+    // const toggleFavorite = async (item: Product) => {
+
+    //     const isAlreadyFavorite = favorites.some((fav) => fav._id === item._id);
+    //     console.log(isAlreadyFavorite)
+
+    //     if (!user) {
+    //         const isAlreadyFavorite = favorites.some((fav) => fav._id === item._id);
+    //         // Xử lý khi không có user (chưa đăng nhập)
+    //         const updatedFavorites = isAlreadyFavorite
+    //             ? favorites.filter((fav) => fav._id !== item._id)
+    //             : [...favorites, item];
+
+    //         setFavorites(updatedFavorites);
+    //         localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+    //     } else {
+    //         // Xử lý khi đã đăng nhập
+    //         try {
+    //             if (isAlreadyFavorite) {
+    //                 // Nếu đã thích, xóa khỏi server và localStorage
+    //                 await instance.delete(`/heart/${user._id}/${item._id}`);
+    //                 toast.success("Bỏ thích thành công")
+    //                 const updatedFavorites = favorites.filter(
+    //                     (fav) => fav._id !== item._id
+    //                 );
+    //                 setFavorites(updatedFavorites);
+    //                 localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+    //             } else {
+    //                 // Nếu chưa thích, thêm vào server và localStorage
+    //                 const heart = {
+    //                     userId: user._id,
+    //                     productId: item._id,
+    //                 };
+    //                 await instance.post("/heart", heart);
+    //                 toast.success("Thích sản phẩm thành công")
+    //                 const updatedFavorites = [...favorites, item];
+    //                 setFavorites(updatedFavorites);
+    //                 localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+    //             }
+    //         } catch (error) {
+    //             console.error("Error toggling favorite:", error);
+    //         }
+    //     }
+    // };
+
+    // const isFavorite = (item: Product) => {
+    //     // Kiểm tra `favorites` là mảng hợp lệ
+    //     return Array.isArray(favorites) && favorites.some((fav) => fav._id === item._id);
+    // };
     return (
         <div className="container">
             <div className="row row__detail">
@@ -504,7 +570,7 @@ const DetailProduct = () => {
                                         width: "50px",
                                         border:
                                             selectedSize &&
-                                            selectedSize.id === size.id
+                                                selectedSize.id === size.id
                                                 ? "2px solid gray"
                                                 : "2px solid #f6f6f6",
                                         backgroundColor: "#EEEEEE",

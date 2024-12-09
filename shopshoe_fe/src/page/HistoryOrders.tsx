@@ -158,33 +158,29 @@ const HistoryOrders = () => {
             Tất cả
           </p>
           <p
-            className={`status-link ${
-              selectedStatus === "Pending" ? "active" : ""
-            }`}
+            className={`status-link ${selectedStatus === "Pending" ? "active" : ""
+              }`}
             onClick={() => handleFilter("Pending")}
           >
             Đang xử lý
           </p>
           <p
-            className={`status-link ${
-              selectedStatus === "Shipping" ? "active" : ""
-            }`}
+            className={`status-link ${selectedStatus === "Shipping" ? "active" : ""
+              }`}
             onClick={() => handleFilter("Shipping")}
           >
             Đang vận chuyển
           </p>
           <p
-            className={`status-link ${
-              selectedStatus === "Completed" ? "active" : ""
-            }`}
+            className={`status-link ${selectedStatus === "Completed" ? "active" : ""
+              }`}
             onClick={() => handleFilter("Completed")}
           >
             Hoàn thành
           </p>
           <p
-            className={`status-link  linkAHistory ${
-              selectedStatus === "Cancelled" ? "active" : ""
-            }`}
+            className={`status-link  linkAHistory ${selectedStatus === "Cancelled" ? "active" : ""
+              }`}
             onClick={() => handleFilter("Cancelled")}
           >
             Đã hủy
