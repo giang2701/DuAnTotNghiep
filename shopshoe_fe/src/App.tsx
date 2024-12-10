@@ -37,6 +37,8 @@ import BrandForm from "./page/admin/brand/BrandForm.tsx";
 import Loading from "./component/Loading.tsx";
 import Contact from "./page/Contact.tsx";
 import TrashCan from "./page/admin/product/TrashCan.tsx";
+import About from "./page/About.tsx";
+
 
 function App() {
     return (
@@ -70,6 +72,8 @@ function App() {
                             element={<HistoryOrders />}
                         />
                         <Route path="/aboutus" element={<Aboutus />} />
+                        <Route path="/about" element={<About />} />
+
                         <Route
                             path="/productLike"
                             element={<ProductsLiked />}
