@@ -362,9 +362,9 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
                             </Link>
                         </li>
                         <li>
-                            <Link to="/setting">
+                            <Link to="/admin/trashCan">
                                 <i className="fas fa-cog icon"></i>
-                                <span className="menu-text">Settings</span>
+                                <span className="menu-text">Kho Lưu Trữ</span>
                             </Link>
                         </li>
                     </ul>

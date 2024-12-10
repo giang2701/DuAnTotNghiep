@@ -3,7 +3,6 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { Product } from "../interface/Products";
 import { Link } from "react-router-dom";
 
-
 const formatPrice = (price: number): string => {
     return new Intl.NumberFormat("vi-VN", {
         style: "currency",
@@ -22,7 +21,7 @@ const ProductItem = ({
     isFavorite: boolean;
 }) => {
     return (
-        <div className="product" key={product._id} >
+        <div className="product" key={product._id}>
             <div className="product-img">
                 <img
                     src={`${product.images}`}
@@ -53,7 +52,10 @@ const ProductItem = ({
                 <p>{formatPrice(product.price)}</p>
             </div>
             {/* Nút yêu thích */}
-            <IconButton sx={{ marginLeft: 14 }} onClick={() => toggleFavorite(product)}>
+            <IconButton
+                sx={{ marginLeft: 14 }}
+                onClick={() => toggleFavorite(product)}
+            >
                 {isFavorite ? (
                     <AiFillHeart color="red" size={30} />
                 ) : (

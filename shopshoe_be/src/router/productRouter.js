@@ -6,6 +6,7 @@ import {
     getProductByIdSize,
     removeProductById,
     updateProductById,
+    updateProductsStatus,
 } from "../controller/products.js";
 import { validBodyRequest } from "../middlewares/validBodyRequest.js";
 import productSchema from "../validSchema/productSchema.js";
@@ -34,5 +35,6 @@ productRouter.put(
     updateProductById
 );
 productRouter.delete("/:id", removeProductById);
+productRouter.put("/status/:id", updateProductsStatus);
 
 export default productRouter;

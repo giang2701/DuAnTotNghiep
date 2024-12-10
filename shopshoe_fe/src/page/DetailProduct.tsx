@@ -110,7 +110,11 @@ const DetailProduct = () => {
         const fetchRelatedProducts = async () => {
             if (product) {
                 const response = await instance.get("/products");
-                const products = response.data.data;
+                // Lọc sản phẩm chỉ lấy những sản phẩm có isActive là true
+                const activeProducts = response.data.data.filter(
+                    (product: Product) => product.isActive
+                );
+                const products = activeProducts;
                 const relatedProducts = products.filter(
                     (p: Product) =>
                         p.category?._id === product.category?._id &&
@@ -305,8 +309,6 @@ const DetailProduct = () => {
         navigate("/checkOutNow", { state: { productData } });
     };
 
-
-
     // const userArray = localStorage.getItem("user")
     // const user = userArray ? JSON.parse(userArray) : null
 
@@ -319,7 +321,6 @@ const DetailProduct = () => {
     //         return []; // Trả về mảng trống khi có lỗi
     //     }
     // });
-
 
     // const toggleFavorite = async (item: Product) => {
 
@@ -570,7 +571,7 @@ const DetailProduct = () => {
                                         width: "50px",
                                         border:
                                             selectedSize &&
-                                                selectedSize.id === size.id
+                                            selectedSize.id === size.id
                                                 ? "2px solid gray"
                                                 : "2px solid #f6f6f6",
                                         backgroundColor: "#EEEEEE",

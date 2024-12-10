@@ -32,16 +32,26 @@ export default function DialogRemove({
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">Xóa Sản Phẩm</DialogTitle>
+                <DialogTitle id="alert-dialog-title " sx={{ fontSize: "15px" }}>
+                    Xóa Sản Phẩm
+                </DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        Bạn có chắc chắn muốn xóa sản phẩm này không? Việc xóa
-                        sản phẩm này sẽ không thể khôi phục lại được.
+                    <DialogContentText
+                        id="alert-dialog-description"
+                        sx={{ fontSize: "15px" }}
+                    >
+                        Bạn có chắc chắn muốn xóa sản phẩm này không?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Hủy Bỏ</Button>
-                    <Button onClick={handleAgree} autoFocus>
+                    <Button onClick={handleClose} sx={{ fontSize: "12px" }}>
+                        Hủy Bỏ
+                    </Button>
+                    <Button
+                        onClick={handleAgree}
+                        autoFocus
+                        sx={{ fontSize: "12px" }}
+                    >
                         Xóa
                     </Button>
                 </DialogActions>
