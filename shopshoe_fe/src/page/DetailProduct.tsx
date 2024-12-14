@@ -27,6 +27,19 @@ import ProductItem from "./ProductItem";
 import TymButton from "../component/Btn__tym";
 const DetailProduct = () => {
     const { id } = useParams();
+    const userArray = localStorage.getItem("user");
+    const user = userArray ? JSON.parse(userArray) : null;
+    const [favorites, setFavorites] = useState<Product[]>([]);
+    useEffect(() => {
+        try {
+            const storedFavorites = localStorage.getItem("favorites");
+            if (storedFavorites) {
+                setFavorites(JSON.parse(storedFavorites));
+            }
+        } catch (error) {
+            console.error("Error parsing favorites from localStorage:", error);
+        }
+    }, []);
     const [product, setProduct] = useState<Product | null>(null); //đổ sản phẩm chi tiết
     const [sizeNames, setSizeNames] = useState<
         { id: string; name: number; price: number; stock: number }[]
@@ -185,13 +198,6 @@ const DetailProduct = () => {
             return prev;
         });
     };
-
-    // const handleClearSize = () => {
-    //     setSelectedSize(null);
-    //     setPrice(product?.price || 0); // Đặt lại giá về mặc định
-    //     setQuantity(1);
-    //     setStockLimit(0);
-    // };
     const formatPrice = (price: number): string => {
         return new Intl.NumberFormat("vi-VN", {
             style: "currency",
@@ -309,67 +315,63 @@ const DetailProduct = () => {
         navigate("/checkOutNow", { state: { productData } });
     };
 
-    // const userArray = localStorage.getItem("user")
-    // const user = userArray ? JSON.parse(userArray) : null
+    const toggleFavorite = async (item: Product) => {
+        const isAlreadyFavorite = favorites.some((fav) => fav._id === item._id);
+        console.log(isAlreadyFavorite);
 
-    // const [favorites, setFavorites] = useState<Product[]>(() => {
-    //     try {
-    //         const storedFavorites = localStorage.getItem("favorites");
-    //         return storedFavorites ? JSON.parse(storedFavorites) : []; // Đảm bảo luôn là mảng
-    //     } catch (error) {
-    //         console.error("Error parsing favorites from localStorage:", error);
-    //         return []; // Trả về mảng trống khi có lỗi
-    //     }
-    // });
+        if (!user) {
+            const isAlreadyFavorite = favorites.some(
+                (fav) => fav._id === item._id
+            );
+            // Xử lý khi không có user (chưa đăng nhập)
+            const updatedFavorites = isAlreadyFavorite
+                ? favorites.filter((fav) => fav._id !== item._id)
+                : [...favorites, item];
 
-    // const toggleFavorite = async (item: Product) => {
-
-    //     const isAlreadyFavorite = favorites.some((fav) => fav._id === item._id);
-    //     console.log(isAlreadyFavorite)
-
-    //     if (!user) {
-    //         const isAlreadyFavorite = favorites.some((fav) => fav._id === item._id);
-    //         // Xử lý khi không có user (chưa đăng nhập)
-    //         const updatedFavorites = isAlreadyFavorite
-    //             ? favorites.filter((fav) => fav._id !== item._id)
-    //             : [...favorites, item];
-
-    //         setFavorites(updatedFavorites);
-    //         localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-    //     } else {
-    //         // Xử lý khi đã đăng nhập
-    //         try {
-    //             if (isAlreadyFavorite) {
-    //                 // Nếu đã thích, xóa khỏi server và localStorage
-    //                 await instance.delete(`/heart/${user._id}/${item._id}`);
-    //                 toast.success("Bỏ thích thành công")
-    //                 const updatedFavorites = favorites.filter(
-    //                     (fav) => fav._id !== item._id
-    //                 );
-    //                 setFavorites(updatedFavorites);
-    //                 localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-    //             } else {
-    //                 // Nếu chưa thích, thêm vào server và localStorage
-    //                 const heart = {
-    //                     userId: user._id,
-    //                     productId: item._id,
-    //                 };
-    //                 await instance.post("/heart", heart);
-    //                 toast.success("Thích sản phẩm thành công")
-    //                 const updatedFavorites = [...favorites, item];
-    //                 setFavorites(updatedFavorites);
-    //                 localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-    //             }
-    //         } catch (error) {
-    //             console.error("Error toggling favorite:", error);
-    //         }
-    //     }
-    // };
-
-    // const isFavorite = (item: Product) => {
-    //     // Kiểm tra `favorites` là mảng hợp lệ
-    //     return Array.isArray(favorites) && favorites.some((fav) => fav._id === item._id);
-    // };
+            setFavorites(updatedFavorites);
+            localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+        } else {
+            // Xử lý khi đã đăng nhập
+            try {
+                if (isAlreadyFavorite) {
+                    // Nếu đã thích, xóa khỏi server và localStorage
+                    await instance.delete(`/heart/${user._id}/${item._id}`);
+                    toast.success("Bỏ thích thành công");
+                    const updatedFavorites = favorites.filter(
+                        (fav) => fav._id !== item._id
+                    );
+                    setFavorites(updatedFavorites);
+                    localStorage.setItem(
+                        "favorites",
+                        JSON.stringify(updatedFavorites)
+                    );
+                } else {
+                    // Nếu chưa thích, thêm vào server và localStorage
+                    const heart = {
+                        userId: user._id,
+                        productId: item._id,
+                    };
+                    await instance.post("/heart", heart);
+                    toast.success("Thích sản phẩm thành công");
+                    const updatedFavorites = [...favorites, item];
+                    setFavorites(updatedFavorites);
+                    localStorage.setItem(
+                        "favorites",
+                        JSON.stringify(updatedFavorites)
+                    );
+                }
+            } catch (error) {
+                console.error("Error toggling favorite:", error);
+            }
+        }
+    };
+    const isFavorite = (item: Product) => {
+        // Kiểm tra `favorites` là mảng hợp lệ
+        return (
+            Array.isArray(favorites) &&
+            favorites.some((fav) => fav._id === item._id)
+        );
+    };
     return (
         <div className="container">
             <div className="row row__detail">
@@ -720,41 +722,12 @@ const DetailProduct = () => {
                     <div className="scroll">
                         <div className="product__slip">
                             {relatedProducts.slice(0, 6).map((item) => (
-                                <div className="product " key={item._id}>
-                                    <div className="product-img">
-                                        <img
-                                            src={`${item.images}`}
-                                            alt=""
-                                            className="img-fluid"
-                                        />
-                                    </div>
-                                    <div className="product-name">
-                                        <Link
-                                            to={`/detail/${item._id}`}
-                                            style={{
-                                                color: "#57585a",
-                                                fontSize: "14px",
-                                                fontWeight: "400",
-                                                marginBottom: "10px",
-                                                textTransform: "capitalize",
-                                                textDecoration: "none",
-                                                margin: "20px 0px",
-                                                lineHeight: "2.2rem",
-                                                display: "-webkit-box",
-                                                WebkitBoxOrient: "vertical",
-                                                WebkitLineClamp: "1",
-                                                overflow: "hidden",
-                                            }}
-                                        >
-                                            {item.title}
-                                        </Link>
-
-                                        <p>{formatPrice(item.price)}</p>
-                                    </div>
-                                    <div className="btn__tym">
-                                        <TymButton />
-                                    </div>
-                                </div>
+                                <ProductItem
+                                    key={item._id}
+                                    product={item}
+                                    toggleFavorite={toggleFavorite}
+                                    isFavorite={isFavorite(item)}
+                                />
                             ))}
                         </div>
                     </div>

@@ -585,9 +585,9 @@ export const getOrderDetail = async (req, res, next) => {
     try {
         const orderId = req.params.id; // Lấy orderId từ params
 
-        const order = await Order.findById(orderId).populate(
-            "products.product"
-        ); // Tìm đơn hàng theo ID và populate thông tin sản phẩm
+        const order = await Order.findById(orderId)
+            .populate("products.product")
+            .populate("products.size"); // Tìm đơn hàng theo ID và populate thông tin sản phẩm
         if (!order) {
             return res.status(404).json({ message: "Đơn hàng không tồn tại." });
         }
@@ -658,9 +658,9 @@ export const updateOrderStatus = async (req, res, next) => {
             .json({ message: "Lỗi máy chủ. Không thể cập nhật trạng thái." });
     }
 };
+// lấy theo id user
 export const getOrderDetailById = async (req, res, next) => {
     try {
-        console.log("thanh lam");
         const userId = req.params.id; // Lấy user từ params
         console.log(userId);
         const order = await Order.find({ userId: userId })

@@ -51,7 +51,6 @@ const ProductsLiked = () => {
             setFavorites(updatedFavorites);
             localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
         }
-
     };
 
     const formatPrice = (price: number): string => {
@@ -80,7 +79,8 @@ const ProductsLiked = () => {
                 </Box>
             );
         }
-    } else if (!Array.isArray(favorites) || favorites.length === 0) { // Kiểm tra nếu favorites không phải là mảng hoặc là mảng rỗng
+    } else if (!Array.isArray(favorites) || favorites.length === 0) {
+        // Kiểm tra nếu favorites không phải là mảng hoặc là mảng rỗng
         return (
             <Box
                 sx={{
@@ -109,19 +109,25 @@ const ProductsLiked = () => {
                 Sản phẩm yêu thích
             </Typography>
             <Grid container spacing={3}>
-
-                {user ? <>
-                    {favorites2.map(item => {
-                        return (
-                            (
-                                <Grid item xs={12} sm={6} md={4} key={item.product._id}>
+                {user ? (
+                    <>
+                        {favorites2.map((item) => {
+                            return (
+                                <Grid
+                                    item
+                                    xs={12}
+                                    sm={6}
+                                    md={4}
+                                    key={item?.product?._id}
+                                >
                                     <Paper
                                         sx={{
                                             backgroundColor: "#f2f2f2",
                                             padding: "20px",
                                             position: "relative",
                                             borderRadius: 5,
-                                            transition: "background-color 0.3s, color 0.3s",
+                                            transition:
+                                                "background-color 0.3s, color 0.3s",
                                             "&:hover": {
                                                 backgroundColor: "#000",
                                                 color: "#fff",
@@ -147,14 +153,18 @@ const ProductsLiked = () => {
                                             sx={{ borderRadius: 3 }}
                                             bgcolor="#f0f0f0"
                                             p={0.5}
+                                        ></Box>
+                                        <Box
+                                            py={3}
+                                            borderRadius={4}
+                                            bgcolor={"white"}
                                         >
-
-                                        </Box>
-                                        <Box py={3} borderRadius={4} bgcolor={"white"}>
-                                            <Link to={`/detail/${item.product._id}`}>
+                                            <Link
+                                                to={`/detail/${item?.product?._id}`}
+                                            >
                                                 <img
-                                                    src={item.product.images}
-                                                    alt={item.product.title}
+                                                    src={item?.product?.images}
+                                                    alt={item?.product?.title}
                                                     style={{
                                                         width: "100%",
                                                         height: "auto",
@@ -170,15 +180,18 @@ const ProductsLiked = () => {
                                             alignItems="center"
                                             mt={2}
                                         >
-                                            <Typography variant="h6" fontWeight={600}>
+                                            <Typography
+                                                variant="h6"
+                                                fontWeight={600}
+                                            >
                                                 <Link
-                                                    to={`/product/${item.product._id}`}
+                                                    to={`/product/${item?.product?._id}`}
                                                     style={{
                                                         textDecoration: "none",
                                                         color: "inherit",
                                                     }}
                                                 >
-                                                    {item.product.title}
+                                                    {item?.product?.title}
                                                 </Link>
                                             </Typography>
                                             <Box>
@@ -187,12 +200,13 @@ const ProductsLiked = () => {
                                                         color: "black",
                                                         textDecoration: "none",
                                                         fontWeight: 600,
-                                                        backgroundColor: "white",
+                                                        backgroundColor:
+                                                            "white",
                                                         padding: "8px 16px",
                                                         borderRadius: 5,
                                                         border: "1px solid #ccc",
                                                     }}
-                                                    to={`/detail/${item.product._id}`}
+                                                    to={`/detail/${item?.product?._id}`}
                                                 >
                                                     Xem
                                                 </Link>
@@ -209,141 +223,162 @@ const ProductsLiked = () => {
                                                 color={"#525252"}
                                                 fontWeight={600}
                                             >
-                                                {formatPrice(item.product.price)}
+                                                {formatPrice(
+                                                    item?.product?.price
+                                                )}
                                             </Typography>
                                             <IconButton
                                                 sx={{ marginLeft: 10 }}
-                                                onClick={() => toggleFavorite(item.product)}
+                                                onClick={() =>
+                                                    toggleFavorite(item.product)
+                                                }
                                             >
-                                                <AiFillHeart color="red" size={30} />
+                                                <AiFillHeart
+                                                    color="red"
+                                                    size={30}
+                                                />
                                             </IconButton>
                                         </Box>
                                     </Paper>
                                 </Grid>
-                            )
-                        )
-                    })}
-                </> : <> {favorites.map((item: Product) => (
-                    <Grid item xs={12} sm={6} md={4} key={item._id}>
-                        <Paper
-                            sx={{
-                                backgroundColor: "#f2f2f2",
-                                padding: "20px",
-                                position: "relative",
-                                borderRadius: 5,
-                                transition: "background-color 0.3s, color 0.3s",
-                                "&:hover": {
-                                    backgroundColor: "#000",
-                                    color: "#fff",
-                                    "& .MuiTypography-root": {
-                                        color: "#fff",
-                                    },
-                                    "& .MuiSvgIcon-root": {
-                                        color: "#fff",
-                                    },
-                                    "& a": {
-                                        color: "#fff",
-                                    },
-                                },
-                            }}
-                            elevation={0}
-                        >
-                            <Box
-                                display="flex"
-                                alignItems="center"
-                                position="absolute"
-                                top={10}
-                                left={10}
-                                sx={{ borderRadius: 3 }}
-                                bgcolor="#f0f0f0"
-                                p={0.5}
-                            >
-                                <StarIcon
-                                    fontSize="small"
-                                    style={{ color: "#FFD700" }}
-                                />
-                                <Typography
-                                    variant="body2"
-                                    fontWeight={600}
-                                    paddingRight={0.8}
-                                    ml={0.5}
+                            );
+                        })}
+                    </>
+                ) : (
+                    <>
+                        {" "}
+                        {favorites.map((item: Product) => (
+                            <Grid item xs={12} sm={6} md={4} key={item._id}>
+                                <Paper
+                                    sx={{
+                                        backgroundColor: "#f2f2f2",
+                                        padding: "20px",
+                                        position: "relative",
+                                        borderRadius: 5,
+                                        transition:
+                                            "background-color 0.3s, color 0.3s",
+                                        "&:hover": {
+                                            backgroundColor: "#000",
+                                            color: "#fff",
+                                            "& .MuiTypography-root": {
+                                                color: "#fff",
+                                            },
+                                            "& .MuiSvgIcon-root": {
+                                                color: "#fff",
+                                            },
+                                            "& a": {
+                                                color: "#fff",
+                                            },
+                                        },
+                                    }}
+                                    elevation={0}
                                 >
-                                    4.5
-                                </Typography>
-                            </Box>
-                            <Box py={3} borderRadius={4} bgcolor={"white"}>
-                                <Link to={`/detail/${item._id}`}>
-                                    <img
-                                        src={item.images}
-                                        alt={item.title}
-                                        style={{
-                                            width: "100%",
-                                            height: "auto",
-                                            maxHeight: "400px",
-                                            objectFit: "cover",
-                                        }}
-                                    />
-                                </Link>
-                            </Box>
-                            <Box
-                                display="flex"
-                                justifyContent="space-between"
-                                alignItems="center"
-                                mt={2}
-                            >
-                                <Typography variant="h6" fontWeight={600}>
-                                    <Link
-                                        to={`/product/${item._id}`}
-                                        style={{
-                                            textDecoration: "none",
-                                            color: "inherit",
-                                        }}
+                                    <Box
+                                        display="flex"
+                                        alignItems="center"
+                                        position="absolute"
+                                        top={10}
+                                        left={10}
+                                        sx={{ borderRadius: 3 }}
+                                        bgcolor="#f0f0f0"
+                                        p={0.5}
                                     >
-                                        {item.title}
-                                    </Link>
-                                </Typography>
-                                <Box>
-                                    <Link
-                                        style={{
-                                            color: "black",
-                                            textDecoration: "none",
-                                            fontWeight: 600,
-                                            backgroundColor: "white",
-                                            padding: "8px 16px",
-                                            borderRadius: 5,
-                                            border: "1px solid #ccc",
-                                        }}
-                                        to={`/detail/${item._id}`}
+                                        <StarIcon
+                                            fontSize="small"
+                                            style={{ color: "#FFD700" }}
+                                        />
+                                        <Typography
+                                            variant="body2"
+                                            fontWeight={600}
+                                            paddingRight={0.8}
+                                            ml={0.5}
+                                        >
+                                            4.5
+                                        </Typography>
+                                    </Box>
+                                    <Box
+                                        py={3}
+                                        borderRadius={4}
+                                        bgcolor={"white"}
                                     >
-                                        Xem
-                                    </Link>
-                                </Box>
-                            </Box>
-                            <Box
-                                display="flex"
-                                justifyContent="space-between"
-                                alignItems="center"
-                                mt={1}
-                            >
-                                <Typography
-                                    variant="body2"
-                                    color={"#525252"}
-                                    fontWeight={600}
-                                >
-                                    {formatPrice(item.price)}
-                                </Typography>
-                                <IconButton
-                                    sx={{ marginLeft: 10 }}
-                                    onClick={() => toggleFavorite(item)}
-                                >
-                                    <AiFillHeart color="red" size={30} />
-                                </IconButton>
-                            </Box>
-                        </Paper>
-                    </Grid>
-                ))}
-                </>}
-
+                                        <Link to={`/detail/${item._id}`}>
+                                            <img
+                                                src={item.images}
+                                                alt={item.title}
+                                                style={{
+                                                    width: "100%",
+                                                    height: "auto",
+                                                    maxHeight: "400px",
+                                                    objectFit: "cover",
+                                                }}
+                                            />
+                                        </Link>
+                                    </Box>
+                                    <Box
+                                        display="flex"
+                                        justifyContent="space-between"
+                                        alignItems="center"
+                                        mt={2}
+                                    >
+                                        <Typography
+                                            variant="h6"
+                                            fontWeight={600}
+                                        >
+                                            <Link
+                                                to={`/product/${item._id}`}
+                                                style={{
+                                                    textDecoration: "none",
+                                                    color: "inherit",
+                                                }}
+                                            >
+                                                {item.title}
+                                            </Link>
+                                        </Typography>
+                                        <Box>
+                                            <Link
+                                                style={{
+                                                    color: "black",
+                                                    textDecoration: "none",
+                                                    fontWeight: 600,
+                                                    backgroundColor: "white",
+                                                    padding: "8px 16px",
+                                                    borderRadius: 5,
+                                                    border: "1px solid #ccc",
+                                                }}
+                                                to={`/detail/${item._id}`}
+                                            >
+                                                Xem
+                                            </Link>
+                                        </Box>
+                                    </Box>
+                                    <Box
+                                        display="flex"
+                                        justifyContent="space-between"
+                                        alignItems="center"
+                                        mt={1}
+                                    >
+                                        <Typography
+                                            variant="body2"
+                                            color={"#525252"}
+                                            fontWeight={600}
+                                        >
+                                            {formatPrice(item.price)}
+                                        </Typography>
+                                        <IconButton
+                                            sx={{ marginLeft: 10 }}
+                                            onClick={() => toggleFavorite(item)}
+                                        >
+                                            <AiFillHeart
+                                                color="red"
+                                                size={30}
+                                            />
+                                        </IconButton>
+                                    </Box>
+                                </Paper>
+                            </Grid>
+                        ))}
+                    </>
+                )}
             </Grid>
         </Container>
     );

@@ -1,7 +1,7 @@
 import Category from "../model/Category.js";
 import Products from "../model/Products.js";
 import Older from "../model/Older.js";
-
+import Cart from "../model/Cart.js";
 export const createProduct = async (req, res, next) => {
     try {
         console.log("createProduct");
@@ -85,7 +85,19 @@ export const removeProductById = async (req, res, next) => {
                     "Không thể xóa sản phẩm vì đang được sử dụng trong đơn hàng!",
             });
         }
+        const CartProducts = await Cart.find({
+            items: { $elemMatch: { product: req.params.id } },
+        });
 
+        console.log(orderProducts);
+        // Kiểm tra nếu có đơn hàng đang sử dụng sản phẩm này
+        if (CartProducts.length > 0) {
+            return res.status(400).json({
+                success: false,
+                message:
+                    "Không thể xóa sản phẩm vì đang được sử dụng trong giỏ hàng",
+            });
+        }
         const data = await Products.findByIdAndDelete(req.params.id);
         if (data) {
             return res.status(200).json({

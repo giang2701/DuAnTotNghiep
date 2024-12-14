@@ -20,6 +20,8 @@ export interface Order {
     phone: string;
     address: string;
     city: string;
+    district: string;
+    ward: string;
   };
   paymentMethod: string;
   status: string;

@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-
 import instance from "../../../api";
 import { Order } from "../../../interface/Order";
 import { toast } from "react-toastify";
-
+import { jsPDF } from "jspdf";
 const OrderManagement = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isFilterVisible, setFilterVisible] = useState(false);
   const [filterStatus, setFilterStatus] = useState<string | null>(null);
+  const [serachOrderCode, setSeachOrderCode] = useState("");
   const modalRef = useRef<HTMLDivElement | null>(null); //cho vào ordermanger
   // Fetch orders khi component được render
   useEffect(() => {
@@ -76,7 +76,6 @@ const OrderManagement = () => {
         closeOrderDetails();
       }
     };
-
     // Thêm sự kiện khi component được mount
     document.addEventListener("mousedown", handleClickOutside);
 
@@ -85,6 +84,7 @@ const OrderManagement = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
   // Lọc đơn hàng theo trạng thái
   const toggleFilter = () => {
     setFilterVisible((prevState) => !prevState);
@@ -93,11 +93,143 @@ const OrderManagement = () => {
     setFilterStatus(status);
     setFilterVisible(false);
   };
-  const filteredOrders = filterStatus
-    ? orders.filter((order) => order.status === filterStatus)
-    : orders;
+  // Lọc đơn hàng theo trạng thái và mã đơn hàng
+  const filteredOrders = orders.filter((order) => {
+    const matchesStatus = filterStatus ? order.status === filterStatus : true;
+    const matchesSearch = serachOrderCode
+      ? order._id.toLowerCase().includes(serachOrderCode.toLowerCase())
+      : true;
+    return matchesStatus && matchesSearch;
+  });
+  // Hàm xuất chi tiết đơn hàng dưới dạng PDF
+  const exportOrderDetailsToPDF = (order: any) => {
+    const doc = new jsPDF();
+    let yPosition = 20; // Vị trí y ban đầu
+
+    // Tiêu đề
+    doc.setFontSize(18);
+    doc.text("Chi tiet don hang", 105, yPosition, { align: "center" });
+    yPosition += 15;
+
+    // Hàm loại bỏ dấu
+    const removeAccents = (str: any) => {
+      return str
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/đ/g, "d")
+        .replace(/Đ/g, "D");
+    };
+
+    // Thông tin đơn hàng
+    doc.setFontSize(12);
+    const orderInfo = [
+      `Ma don hang: ${removeAccents(order._id)}`,
+      `Ten khach hang: ${removeAccents(order.shippingAddress.name)}`,
+      `So dien thoai: ${removeAccents(order.shippingAddress.phone)}`,
+      `Dia chi: ${removeAccents(order.shippingAddress.address)}`,
+      `Thanh pho: ${removeAccents(order.shippingAddress.city)}`,
+      `Quan: ${removeAccents(order.shippingAddress.district)}`,
+      `Phuong: ${removeAccents(order.shippingAddress.ward)}`,
+      `Phuong thuc thanh toan: ${removeAccents(order.paymentMethod)}`,
+      `Tong tien: ${new Intl.NumberFormat("vi-VN", {
+        style: "currency",
+        currency: "VND",
+        currencyDisplay: "code", // Hiển thị "VND"
+      }).format(order.totalPrice)}`,
+    ];
+
+    orderInfo.forEach((text) => {
+      const lines = doc.splitTextToSize(text, 180);
+      doc.text(lines, 20, yPosition);
+      yPosition += lines.length * 10;
+
+      if (yPosition + 10 > doc.internal.pageSize.height) {
+        doc.addPage();
+        yPosition = 20;
+      }
+    });
+
+    // Dòng ngăn cách
+    doc.setDrawColor(0);
+    doc.line(20, yPosition, 190, yPosition);
+    yPosition += 10;
+
+    // Thêm danh sách sản phẩm
+    doc.text("Danh sach san pham:", 20, yPosition);
+    yPosition += 10;
+
+    order.products.forEach((product: any, index: any) => {
+      const productInfo = `${index + 1}. ${removeAccents(
+        product.product.title
+      )} - Size: ${removeAccents(product.size.nameSize)} - So luong: ${
+        product.quantity
+      }`;
+      const lines = doc.splitTextToSize(productInfo, 180);
+
+      doc.text(lines, 20, yPosition);
+      yPosition += lines.length * 10;
+
+      if (yPosition + 10 > doc.internal.pageSize.height) {
+        doc.addPage();
+        yPosition = 20;
+      }
+    });
+
+    // Tải file PDF
+    doc.save(`${order._id}_details.pdf`);
+  };
+
   return (
     <div className="container" style={{ paddingTop: "5px", marginLeft: "5px" }}>
+      <div className="box_table_products">
+        <div
+          className="container"
+          style={{
+            paddingTop: "50px",
+            marginBottom: "15px",
+            marginLeft: "-8px",
+            width: "100%",
+          }}
+        >
+          <div className="box_table_products" style={{ marginBottom: "17px" }}>
+            <div className="header_table_products bg-black text-white fs-5 fw-medium py-3 ps-3 d-flex justify-content-between">
+              <span>Tìm kiếm</span>
+            </div>
+            <div className="body_table_products p-3 bg-white">
+              <div
+                className="d-flex align-items-center"
+                style={{ gap: "10px" }}
+              >
+                <div className="position-relative">
+                  <i
+                    className="fa-solid fa-magnifying-glass position-absolute"
+                    style={{
+                      left: "10px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      zIndex: 1,
+                      fontSize: "16px",
+                    }}
+                  ></i>
+                  <input
+                    type="text"
+                    placeholder="Tìm kiếm theo mã đơn hàng"
+                    className="form-control ps-5"
+                    style={{
+                      width: "500px",
+                      height: "43px",
+                      marginTop: "1px",
+                      fontSize: "15px",
+                    }}
+                    value={serachOrderCode}
+                    onChange={(e) => setSeachOrderCode(e.target.value)} // Cập nhật giá trị tìm kiếm
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="box_table_products">
         <div
           className="container"
@@ -292,6 +424,22 @@ const OrderManagement = () => {
                         >
                           <i className="fa-regular fa-eye"></i>
                         </button>
+                        <button
+                          onClick={() => exportOrderDetailsToPDF(order)}
+                          style={{
+                            borderRadius: "5px",
+                            width: "30px",
+                            height: "30px",
+                            backgroundColor: "black",
+                            color: "white",
+                            border: "none",
+                            paddingTop: "2px",
+                            marginLeft: "2px",
+                          }}
+                        >
+                          <i className="fa-solid fa-print"></i>
+                          {/* Icon máy in */}
+                        </button>
                         <i
                           className="fa-solid fa-pen d-none"
                           onClick={() =>
@@ -340,12 +488,12 @@ const OrderManagement = () => {
             style={{
               backgroundColor: "white",
               width: "800px", // Chiếm gần như toàn bộ màn hình
-              height: "600px", // Chiếm gần như toàn bộ màn hình
+              height: "700px", // Chiếm gần như toàn bộ màn hình
               borderRadius: "10px",
               overflowY: "auto",
               padding: "0px",
               marginLeft: "100px",
-              marginBottom: "80px",
+              marginBottom: "10px",
             }}
           >
             <div className="orderCode">
@@ -389,6 +537,33 @@ const OrderManagement = () => {
                 >
                   <strong className="me-1">Địa chỉ:</strong>
                   {selectedOrder.shippingAddress.address}
+                </p>
+                <p
+                  style={{
+                    fontSize: "16px",
+                    paddingLeft: "80px",
+                  }}
+                >
+                  <strong className="me-1">Thành phố:</strong>
+                  {selectedOrder.shippingAddress.city}
+                </p>
+                <p
+                  style={{
+                    fontSize: "16px",
+                    paddingLeft: "80px",
+                  }}
+                >
+                  <strong className="me-1">Quận: </strong>
+                  {selectedOrder.shippingAddress.district}
+                </p>
+                <p
+                  style={{
+                    fontSize: "16px",
+                    paddingLeft: "80px",
+                  }}
+                >
+                  <strong className="me-1">Phường: </strong>
+                  {selectedOrder.shippingAddress.ward}
                 </p>
                 <p
                   style={{
@@ -477,7 +652,9 @@ const OrderManagement = () => {
                 marginTop: "60px",
               }}
             >
-              Tổng tiền : {selectedOrder.totalPrice}VND
+              Tổng tiền :{" "}
+              {new Intl.NumberFormat("vi-VN").format(selectedOrder.totalPrice)}{" "}
+              VND
             </p>
             <button
               className="btn btn-danger"

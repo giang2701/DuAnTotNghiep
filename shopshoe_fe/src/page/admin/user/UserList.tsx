@@ -109,14 +109,14 @@ const UserList = () => {
                             paddingTop: "50px",
                             marginBottom: "15px",
                             marginLeft: "-8px",
-                            width: "1800px",
+                            width: "100%",
                         }}
                     >
                         <div className="box_table_products">
                             <div className="header_table_products bg-black text-white fs-5 fw-medium py-3 ps-3 d-flex justify-content-between">
                                 <span>Tìm kiếm</span>
                             </div>
-                            <div className="body_table_products p-3 bg-white">
+                            <div className="body_table_products p-3 bg-white"  style={{ width: "1260px" }}>
                                 <div
                                     className="d-flex align-items-center"
                                     style={{ gap: "10px" }}
