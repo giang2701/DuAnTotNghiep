@@ -218,7 +218,6 @@ const TrashCan = () => {
                                     )
                                     .map((item) => (
                                         <tr key={item._id}>
-                                            <td>{item._id}</td>
                                             <td>{item.title}</td>
                                             <td className="text-center">
                                                 {item.brand?.title}

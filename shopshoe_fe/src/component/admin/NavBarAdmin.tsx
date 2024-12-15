@@ -23,18 +23,7 @@ const NavBar = ({ ClickSideBar, collapsed }: Props) => {
     return (
         <>
             <div className={` header_admin ${collapsed ? "collapsed" : ""}`}>
-                <div className="search_admin">
-                    <form action="">
-                        {/* icon */}
-                        <i className="fa-solid fa-magnifying-glass"></i>
-                        {/* Search */}
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Search......"
-                        />
-                    </form>
-                </div>
+                <div className="search_admin"></div>
             </div>
             {/* Sidebar */}
             <div>

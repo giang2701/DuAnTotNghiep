@@ -13,6 +13,8 @@ export const authShema = Joi.object({
         "string.min": "Password must have at least 6 characters",
         "string.max": "Password must have at most 255 characters",
     }),
+    level: Joi.string().optional(),
+    role: Joi.string().optional(),
 });
 export const Login = Joi.object({
     email: Joi.string().required().email().messages({

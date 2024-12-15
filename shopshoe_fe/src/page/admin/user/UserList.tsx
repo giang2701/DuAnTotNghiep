@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import instance from "../../../api";
 import { User } from "../../../interface/User";
+import { useAuth } from "../../../context/AuthContext";
 
 const UserList = () => {
     const [user, setUser] = useState<User[]>([]); // Danh sách người dùng
+    const UserLocal = localStorage.getItem("user");
+    const level = UserLocal ? JSON.parse(UserLocal).level : null;
     const [filteredUsers, setFilteredUsers] = useState<User[]>([]); // Danh sách người dùng đã lọc
     const [editingUserId, setEditingUserId] = useState<string | null>(null); // ID người dùng đang chỉnh sửa
     const [editedRole, setEditedRole] = useState<string>(""); // Vai trò người dùng đang chỉnh sửa
@@ -15,8 +18,13 @@ const UserList = () => {
     useEffect(() => {
         (async () => {
             const { data } = await instance.get("/user");
-            setUser(data.data);
-            setFilteredUsers(data.data);
+            // setUser(data.data);
+            // setFilteredUsers(data.data);
+            setUser(data.data); // Lưu toàn bộ dữ liệu gốc
+            console.log(data.data);
+            setFilteredUsers(
+                data.data.filter((user: User) => user.level !== "boss")
+            ); // Lọc bỏ 'boss'
         })();
     }, []);
 
@@ -43,7 +51,6 @@ const UserList = () => {
                     ? ({ ...item, role: editedRole } as User)
                     : item
             );
-            console.log(updatedUsers);
             setUser(updatedUsers);
             setFilteredUsers(updatedUsers);
             setEditingUserId(null);
@@ -80,6 +87,10 @@ const UserList = () => {
         if (filterRole) {
             filtered = filtered.filter((item) => item.role === filterRole);
         }
+
+        // Lọc trừ level "boss"
+        filtered = filtered.filter((item) => item.level !== "boss");
+
         setFilteredUsers(filtered);
     }, [searchTerm, user, filterRole]);
 
@@ -116,7 +127,10 @@ const UserList = () => {
                             <div className="header_table_products bg-black text-white fs-5 fw-medium py-3 ps-3 d-flex justify-content-between">
                                 <span>Tìm kiếm</span>
                             </div>
-                            <div className="body_table_products p-3 bg-white"  style={{ width: "1260px" }}>
+                            <div
+                                className="body_table_products p-3 bg-white"
+                                style={{ width: "1260px" }}
+                            >
                                 <div
                                     className="d-flex align-items-center"
                                     style={{ gap: "10px" }}
@@ -236,7 +250,9 @@ const UserList = () => {
                                     <th>Tên người dùng</th>
                                     <th>Email người dùng</th>
                                     <th>Quyền truy cập</th>
-                                    <th>Thanh điều hướng</th>
+                                    {level === "boss" && (
+                                        <th>Quyền truy cập</th>
+                                    )}
                                     <th> Active/ deactive</th>
                                 </tr>
                             </thead>
@@ -253,53 +269,58 @@ const UserList = () => {
                                             <td className="text-center">
                                                 {item.role}
                                             </td>
-                                            <td>
-                                                <div
-                                                    className="d-flex justify-content-center"
-                                                    style={{ gap: "10px" }}
-                                                >
-                                                    <button
-                                                        className="me-3"
-                                                        onClick={() =>
-                                                            handleDelete(
-                                                                item._id?.toString() ??
-                                                                    ""
-                                                            )
-                                                        }
-                                                        style={{
-                                                            borderRadius: "5px",
-                                                            width: "30px",
-                                                            height: "30px",
-                                                            backgroundColor:
-                                                                "black",
-                                                            color: "white",
-                                                            border: "none",
-                                                        }}
+                                            {level === "boss" && (
+                                                <td>
+                                                    <div
+                                                        className="d-flex justify-content-center"
+                                                        style={{ gap: "10px" }}
                                                     >
-                                                        {" "}
-                                                        <i className="fa-solid fa-trash"></i>
-                                                    </button>
+                                                        <button
+                                                            className="me-3"
+                                                            onClick={() =>
+                                                                handleDelete(
+                                                                    item._id?.toString() ??
+                                                                        ""
+                                                                )
+                                                            }
+                                                            style={{
+                                                                borderRadius:
+                                                                    "5px",
+                                                                width: "30px",
+                                                                height: "30px",
+                                                                backgroundColor:
+                                                                    "black",
+                                                                color: "white",
+                                                                border: "none",
+                                                            }}
+                                                        >
+                                                            {" "}
+                                                            <i className="fa-solid fa-trash"></i>
+                                                        </button>
 
-                                                    <button
-                                                        onClick={() =>
-                                                            handleEditClick(
-                                                                item
-                                                            )
-                                                        }
-                                                        style={{
-                                                            borderRadius: "5px",
-                                                            width: "70px",
-                                                            height: "30px",
-                                                            backgroundColor:
-                                                                "red",
-                                                            color: "white",
-                                                            border: "none",
-                                                        }}
-                                                    >
-                                                        Cập nhật
-                                                    </button>
-                                                </div>
-                                            </td>
+                                                        <button
+                                                            onClick={() =>
+                                                                handleEditClick(
+                                                                    item
+                                                                )
+                                                            }
+                                                            style={{
+                                                                borderRadius:
+                                                                    "5px",
+                                                                width: "70px",
+                                                                height: "30px",
+                                                                backgroundColor:
+                                                                    "red",
+                                                                color: "white",
+                                                                border: "none",
+                                                            }}
+                                                        >
+                                                            Cập nhật
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            )}
+
                                             <td className="d-flex justify-content-center">
                                                 <button
                                                     className="Button_admin "
