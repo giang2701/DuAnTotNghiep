@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useVoucher } from "../../../context/Voucher";
 import { Voucher } from "../../../interface/Voucher";
+import { useState } from "react";
 
 const CreateVoucher = () => {
   const { handleVoucher } = useVoucher();
@@ -9,6 +10,19 @@ const CreateVoucher = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Voucher>();
+  const [formattedPrice, setFormattedPrice] = useState<string>("");
+  const formatPrice = (price: number): string => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    })
+      .format(price)
+      .replace("₫", "đ");
+  };
+  const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(event.target.value, 10);
+    setFormattedPrice(formatPrice(value));
+  };
 
   return (
     <>
@@ -112,7 +126,9 @@ const CreateVoucher = () => {
               id="expiryDate"
               className="form-control"
               {...register("minPrice")}
+              onChange={handlePriceChange}
             />
+            <p className="fs-5 text-danger fw-medium">{formattedPrice}</p>
           </div>
           <button type="submit" className="btn btn-primary">
             Save

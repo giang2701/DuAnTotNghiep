@@ -104,6 +104,9 @@ const ProductsLiked = () => {
                 variant="h4"
                 fontFamily="Poppins"
                 fontWeight={400}
+                textAlign={"center"}
+                color="red"
+                // fontSize={30}
                 my={4}
             >
                 Sản phẩm yêu thích

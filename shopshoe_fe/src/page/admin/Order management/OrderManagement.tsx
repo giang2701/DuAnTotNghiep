@@ -168,9 +168,8 @@ const OrderManagement = () => {
         order.products.forEach((product: any, index: any) => {
             const productInfo = `${index + 1}. ${removeAccents(
                 product.product.title
-            )} - Size: ${removeAccents(product.size.nameSize)} - So luong: ${
-                product.quantity
-            }`;
+            )} - Size: ${removeAccents(product.size.nameSize)} - So luong: ${product.quantity
+                }`;
             const lines = doc.splitTextToSize(productInfo, 180);
 
             doc.text(lines, 20, yPosition);
