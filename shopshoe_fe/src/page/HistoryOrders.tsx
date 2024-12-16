@@ -3,6 +3,9 @@ import instance from "../api";
 import { toast } from "react-toastify";
 import { Order } from "../interface/Order";
 import Swal from "sweetalert2";
+import { Box, Button, Rating, TextField, Typography } from "@mui/material";
+import axios from "axios";
+
 const HistoryOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
@@ -11,9 +14,36 @@ const HistoryOrders = () => {
   const [selectedStatus, setSelectedStatus] = useState<string>("");
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
+  const userId = user ? user._id : null;
+
+  const [rating, setRating] = useState<number | null>(0);
+  const [comment, setComment] = useState("");
+  const [productId] = useState("6714ffaf2c9f0f1a49e63cc9");
+  const [isFormOpen, setIsFormOpen] = useState(false); // Quản lý trạng thái form
+
+  const submitComment = async () => {
+    if (!userId) {
+      return;
+    }
+    if (comment.length > 200) {
+      toast.error("Bình luận không được vượt quá 200 ký tự.");
+      return;
+    }
+    const newComment = { productId, userId, rating, comment };
+    try {
+      await axios.post("http://localhost:8000/api/comments", newComment);
+      setRating(0);
+      setComment("");
+      setIsFormOpen(false);
+      toast.success("Đánh giá thành công!"); // Hiển thị thông báo đánh giá thành công
+    } catch (error) {
+      toast.error("Có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại sau.");
+    }
+  };
+
   const support = () => {
     Swal.fire({
-      title: "Liên hệ với shop để nhận hỗ trơ: 0385137427",
+      title: "Liên hệ với shop để nhận hỗ trợ: 0385137427",
       showClass: {
         popup: `
           animate__animated
@@ -42,11 +72,9 @@ const HistoryOrders = () => {
           const sortedOrders = [...data].sort((a, b) => {
             if (a.status === "Pending" && b.status !== "Pending") return -1;
             if (a.status !== "Pending" && b.status === "Pending") return 1;
-            // Sắp xếp theo ngày nếu có các đơn hàng có cùng trạng thái
             const dateA = new Date(a.createdAt).getTime();
             const dateB = new Date(b.createdAt).getTime();
-            return dateB - dateA; // Đảm bảo đơn hàng mới nhất lên đầu
-            return 0;
+            return dateB - dateA;
           });
 
           setOrders(sortedOrders);
@@ -75,31 +103,22 @@ const HistoryOrders = () => {
 
   const handleCancelOrder = async (orderId: string) => {
     try {
-      // Gửi yêu cầu hủy đơn hàng tới API
       await instance.put(`/orders/statusCancel/${orderId}`);
       toast.success("Đơn hàng đã được hủy.");
-
-      // Cập nhật trạng thái đơn hàng trong local state
       const updatedOrders = orders.map((order) =>
         order._id === orderId ? { ...order, status: "Cancelled" } : order
       );
 
-      // Sắp xếp lại danh sách đơn hàng theo thời gian, đơn mới nhất lên đầu
       const sortedOrders = updatedOrders.sort((a, b) => {
         const dateA = new Date(a.createdAt).getTime();
         const dateB = new Date(b.createdAt).getTime();
-        return dateB - dateA; // Đảm bảo đơn mới nhất lên đầu
+        return dateB - dateA;
       });
 
-      // Cập nhật lại danh sách đơn hàng sau khi sắp xếp
       setOrders(sortedOrders);
-
-      // Nếu người dùng đang lọc theo trạng thái 'Đã hủy', thì lọc lại đơn hàng
       setFilteredOrders(
         sortedOrders.filter((order) => order.status === "Cancelled")
       );
-
-      // Cập nhật lại trạng thái lọc hiện tại
       setSelectedStatus("Cancelled");
     } catch (error: any) {
       const errorMessage =
@@ -107,9 +126,8 @@ const HistoryOrders = () => {
       Swal.fire({
         icon: "error",
         title: "Lỗi Khi Chuyển trạng Thái",
-        text: errorMessage, // Hiển thị nội dung của message
+        text: errorMessage,
       }).then(() => {
-        // Reload lại trang sau khi nhấn OK
         window.location.reload();
       });
     }
@@ -158,36 +176,39 @@ const HistoryOrders = () => {
             Tất cả
           </p>
           <p
-            className={`status-link ${selectedStatus === "Pending" ? "active" : ""
-              }`}
+            className={`status-link ${
+              selectedStatus === "Pending" ? "active" : ""
+            }`}
             onClick={() => handleFilter("Pending")}
           >
             Đang xử lý
           </p>
           <p
-            className={`status-link ${selectedStatus === "Shipping" ? "active" : ""
-              }`}
+            className={`status-link ${
+              selectedStatus === "Shipping" ? "active" : ""
+            }`}
             onClick={() => handleFilter("Shipping")}
           >
             Đang vận chuyển
           </p>
           <p
-            className={`status-link ${selectedStatus === "Completed" ? "active" : ""
-              }`}
+            className={`status-link ${
+              selectedStatus === "Completed" ? "active" : ""
+            }`}
             onClick={() => handleFilter("Completed")}
           >
             Hoàn thành
           </p>
           <p
-            className={`status-link  linkAHistory ${selectedStatus === "Cancelled" ? "active" : ""
-              }`}
+            className={`status-link  linkAHistory ${
+              selectedStatus === "Cancelled" ? "active" : ""
+            }`}
             onClick={() => handleFilter("Cancelled")}
           >
             Đã hủy
           </p>
         </div>
       </div>
-      {/* Kiểm tra và hiển thị thông báo nếu không có đơn hàng */}
       {filteredOrders.length === 0 ? (
         <div
           style={{
@@ -213,8 +234,6 @@ const HistoryOrders = () => {
               fontSize: "18px",
               fontWeight: "bold",
               color: "#f84d2e",
-              // paddingTop: "150px",
-              // marginBottom: "500px",
             }}
           >
             Chưa có đơn hàng nào
@@ -226,7 +245,6 @@ const HistoryOrders = () => {
             <div
               key={item._id}
               style={{
-                // border: "2px solid #ccc",
                 boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                 padding: "20px 10px 100px",
                 marginBottom: "15px",
@@ -234,7 +252,6 @@ const HistoryOrders = () => {
                 width: "800px",
                 marginLeft: "400px",
                 position: "relative",
-                // backgroundColor: "red",
               }}
               className="menu_HistoryOrder"
             >
@@ -279,7 +296,6 @@ const HistoryOrders = () => {
                   </p>
                 </div>
               ))}
-              {/* Hiển thị mã đơn hàng và phương thức thanh toán */}
               <div
                 style={{
                   position: "absolute",
@@ -306,9 +322,7 @@ const HistoryOrders = () => {
                     fontSize: "14px",
                     color: "gray",
                     position: "absolute",
-                    // top: "260px",
                     bottom: "0px",
-                    // backgroundColor: "red",
                   }}
                 >
                   Đã hủy bởi bạn
@@ -339,16 +353,15 @@ const HistoryOrders = () => {
                       position: "absolute",
                       bottom: "10px",
                       right: "10px",
-                      backgroundColor: "#817876", // Màu khi đã hủy
+                      backgroundColor: "#817876",
                       color: "white",
                       border: "none",
                       padding: "10px 20px",
                       borderRadius: "5px",
                       fontSize: "12px",
-                      cursor: "not-allowed", // Thêm hiệu ứng không cho click
-                      width: "120px",
+                      cursor: "not-allowed",
                     }}
-                    disabled // Ngăn không cho nút "Đã hủy" được nhấn
+                    disabled
                   >
                     Đã hủy
                   </button>
@@ -359,13 +372,13 @@ const HistoryOrders = () => {
                     position: "absolute",
                     bottom: "10px",
                     right: "10px",
-                    backgroundColor: "#817876", // Màu khi vận chuyển
+                    backgroundColor: "#817876",
                     color: "white",
                     border: "none",
                     padding: "10px 20px",
                     borderRadius: "5px",
                     fontSize: "12px",
-                    cursor: "not-allowed", // Ngăn không cho nút nhấn
+                    cursor: "not-allowed",
                     width: "120px",
                   }}
                   disabled
@@ -373,24 +386,46 @@ const HistoryOrders = () => {
                   Không thể hủy
                 </button>
               ) : item.status === "Completed" ? (
-                <button
-                  style={{
-                    position: "absolute",
-                    bottom: "10px",
-                    right: "10px",
-                    backgroundColor: "#817876", // Màu khi vận chuyển
-                    color: "white",
-                    border: "none",
-                    padding: "10px 20px",
-                    borderRadius: "5px",
-                    fontSize: "12px",
-                    cursor: "not-allowed", // Ngăn không cho nút nhấn
-                    width: "120px",
-                  }}
-                >
-                  {" "}
-                  Không thể hủy
-                </button>
+                <>
+                  <button
+                    onClick={() => setIsFormOpen(true)} // Hiển thị form
+                    style={{
+                      position: "absolute",
+                      bottom: "10px",
+                      right: "140px", // Đặt khoảng cách với nút "Không thể hủy"
+                      backgroundColor: "#4caf50", // Màu xanh cho nút đánh giá
+                      color: "white",
+                      textTransform: "none",
+                      border: "none",
+                      padding: "10px 20px",
+                      borderRadius: "5px",
+                      fontSize: "12px",
+                      cursor: "pointer",
+                      width: "120px",
+                    }}
+                  >
+                    Đánh giá
+                  </button>
+
+                  <button
+                    style={{
+                      position: "absolute",
+                      bottom: "10px",
+                      right: "10px",
+                      backgroundColor: "#817876", // Màu khi vận chuyển
+                      color: "white",
+                      border: "none",
+                      padding: "10px 20px",
+                      borderRadius: "5px",
+                      fontSize: "12px",
+                      cursor: "not-allowed", // Ngăn không cho nút nhấn
+                      width: "120px",
+                    }}
+                  >
+                    {" "}
+                    Không thể hủy
+                  </button>
+                </>
               ) : item.paymentMethod === "MOMO" ? (
                 <button
                   onClick={() => support()}
@@ -405,7 +440,6 @@ const HistoryOrders = () => {
                     borderRadius: "5px",
                     cursor: "pointer",
                     fontSize: "12px",
-                    // marginBottom: "30px",
                   }}
                 >
                   Liên Hệ với Shop
@@ -424,11 +458,105 @@ const HistoryOrders = () => {
                     borderRadius: "5px",
                     cursor: "pointer",
                     fontSize: "12px",
-                    // marginBottom: "30px",
                   }}
                 >
                   Hủy đơn hàng
                 </button>
+              )}
+
+              {isFormOpen && (
+                <>
+                  {/* Overlay */}
+                  <Box
+                    sx={{
+                      position: "fixed",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                      backgroundColor: "rgba(0, 0, 0, 0.5)",
+                      zIndex: 999,
+                    }}
+                    onClick={() => setIsFormOpen(false)} // Đóng form khi nhấp ngoài
+                  />
+                  {/* Form Popup */}
+                  <Box
+                    sx={{
+                      position: "fixed",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      backgroundColor: "white",
+                      padding: "20px",
+                      borderRadius: "8px",
+                      boxShadow: "#ffffff",
+                      zIndex: 1000,
+                      minWidth: "300px",
+                      border: "2px solid #ccc", // Thêm viền ngoài cho form
+                    }}
+                  >
+                    {userId ? (
+                      <div>
+                        <Typography
+                          variant="h6"
+                          sx={{ marginBottom: "10px", fontWeight: "bold" }}
+                        >
+                          Viết bình luận
+                        </Typography>
+                        <Rating
+                          name="rating"
+                          value={rating}
+                          onChange={(event, newValue) => setRating(newValue)}
+                          sx={{ marginBottom: "10px" }}
+                        />
+                        <TextField
+                          label="Viết bình luận..."
+                          multiline
+                          rows={2}
+                          value={comment}
+                          onChange={(e) => setComment(e.target.value)}
+                          variant="outlined"
+                          fullWidth
+                          sx={{
+                            marginBottom: "10px",
+                            backgroundColor: "#ffffff",
+                            borderRadius: "5px",
+                          }}
+                        />
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={submitComment}
+                            sx={{
+                              textTransform: "none",
+                              boxShadow: "#ffffff",
+                            }}
+                          >
+                            Submit
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            color="secondary"
+                            onClick={() => setIsFormOpen(false)} // Nút "Đóng"
+                            sx={{ textTransform: "none" }}
+                          >
+                            Đóng
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <Typography variant="h6" color="error">
+                        Bạn cần đăng nhập để bình luận.
+                      </Typography>
+                    )}
+                  </Box>
+                </>
               )}
             </div>
           ))}
