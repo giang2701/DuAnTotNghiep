@@ -627,6 +627,36 @@ const DetailProduct = () => {
           {/* button mua + add to add to card */}
           <div className="mb-3 d-flex justify-content-start mb-3 action__buy-cart">
             {product.isActive ? (
+              <>
+                <button
+                  className="btn btn-black me-4 btn_buy"
+                  disabled={quantity === 0 || selectedSize === null}
+                  onClick={() => {
+                    handleAddToCart(product, selectedSize as any); // selectedSize bây giờ là đối tượng kích thước
+                  }}
+                >
+                  Thêm Vào Giỏ
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  className="btn btn-black me-4 btn_buy"
+                  style={{ cursor: "not-allowed", opacity: "0.3" }}
+                  onClick={() => {
+                    Swal.fire({
+                      icon: "error",
+                      title: "Đã Xảy Ra Lỗi",
+                      text: "Sản Phẩm Không Còn Tồn Tại",
+                    });
+                  }}
+                >
+                  Thêm Vào Giỏ
+                </button>
+              </>
+            )}
+
+            {product.isActive ? (
               <button
                 className="btn btn-outline btn_buy "
                 style={{ cursor: "pointer" }}
