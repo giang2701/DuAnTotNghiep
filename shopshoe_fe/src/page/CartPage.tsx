@@ -258,7 +258,7 @@ const CartPage = () => {
             <tbody>
               {cart ? (
                 cart.map((item: any) => {
-                  console.log(item.product.isActive);
+                  // console.log(item.product.isActive);
                   // điều kiện nếu isActive ===false thì sẽ ko dc ấn chỉ dc xóa
                   // lấy b1 : lấy dc isActive
 
@@ -351,7 +351,7 @@ const CartPage = () => {
         </div>
         {cart.map((item: any) => {
           const isActive = item.product.isActive;
-          console.log("item", isActive);
+          // console.log("item", isActive);
 
           // Hàm xử lý khi click vào "Đặt hàng"
           const handleLinkClick = (e: React.MouseEvent) => {

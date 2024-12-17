@@ -626,31 +626,37 @@ const DetailProduct = () => {
           </div>
           {/* button mua + add to add to card */}
           <div className="mb-3 d-flex justify-content-start mb-3 action__buy-cart">
-            <button
-              className="btn btn-black me-4 btn_buy"
-              disabled={quantity === 0 || selectedSize === null}
-              onClick={() => {
-                handleAddToCart(product, selectedSize as any); // selectedSize bây giờ là đối tượng kích thước
-              }}
-            >
-              Thêm Vào Giỏ
-            </button>
-
-            <button
-              className="btn btn-outline btn_buy "
-              style={{ cursor: "pointer" }}
-              disabled={quantity === 0 || selectedSize === null}
-              onClick={() => {
-                if (!user || !user._id) {
-                  navigate("/login");
-                  toast.error("Vui lòng đăng nhập để mua hàng");
-                  return;
-                }
-                buyProductsNow(product);
-              }}
-            >
-              Mua Ngay
-            </button>
+            {product.isActive ? (
+              <button
+                className="btn btn-outline btn_buy "
+                style={{ cursor: "pointer" }}
+                disabled={quantity === 0 || selectedSize === null}
+                onClick={() => {
+                  if (!user || !user._id) {
+                    navigate("/login");
+                    toast.error("Vui lòng đăng nhập để mua hàng");
+                    return;
+                  }
+                  buyProductsNow(product);
+                }}
+              >
+                Mua Ngay
+              </button>
+            ) : (
+              <button
+                className="btn btn-outline btn_buy"
+                style={{ cursor: "not-allowed", opacity: "0.3" }}
+                onClick={() => {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Đã Xảy Ra Lỗi",
+                    text: "Sản Phẩm Không Còn Tồn Tại",
+                  });
+                }}
+              >
+                Mua Ngay
+              </button>
+            )}
           </div>
 
           <div className="mb-3 ">
