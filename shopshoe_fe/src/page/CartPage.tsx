@@ -3,7 +3,7 @@ import { useCart } from "../context/cart";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-
+import Swal from "sweetalert2";
 interface Size {
   _id: string;
   name: string;
@@ -163,7 +163,6 @@ const CartPage = () => {
           {cart
             ? cart.map((item: any) => {
                 const sizeProducts = item.product.sizeStock;
-
                 const key = `${item.product._id}-${item.size}`;
                 const sizeData = sizes[item.size]; // Lấy dữ liệu size từ state
                 const IdSize = sizeData?._id;
@@ -176,9 +175,15 @@ const CartPage = () => {
                 const stockValue =
                   stockBySize.length > 0 ? stockBySize[0].stock : 0; // Nếu không có sản phẩm nào thì trả về 0
 
+                // Kiểm tra xem sản phẩm có active không
+                const isActive = item.product.isActive;
+
                 return (
                   <div key={key} className="cart-item">
-                    <div className="cart-item-info">
+                    <div
+                      className="cart-item-info"
+                      style={{ opacity: isActive ? 1 : 0.5 }} // Thêm điều kiện opacity
+                    >
                       <img
                         src={item.product.images}
                         alt={item.product.title}
@@ -192,10 +197,12 @@ const CartPage = () => {
                         <p className="text-danger">
                           Số lượng còn lại {stockValue}
                         </p>
-                        {/* Hiển thị tên size */}
                       </div>
                     </div>
-                    <div className="cart-item-quantity">
+                    <div
+                      className="cart-item-quantity"
+                      style={{ opacity: isActive ? 1 : 0.5 }} // Thêm điều kiện opacity
+                    >
                       <button
                         onClick={() =>
                           handleQuantityChange(
@@ -204,6 +211,7 @@ const CartPage = () => {
                             false
                           )
                         }
+                        disabled={!isActive} // Vô hiệu hóa nút nếu sản phẩm không active
                       >
                         -
                       </button>
@@ -216,6 +224,7 @@ const CartPage = () => {
                             true
                           )
                         }
+                        disabled={!isActive} // Vô hiệu hóa nút nếu sản phẩm không active
                       >
                         +
                       </button>
@@ -249,11 +258,22 @@ const CartPage = () => {
             <tbody>
               {cart ? (
                 cart.map((item: any) => {
+                  console.log(item.product.isActive);
+                  // điều kiện nếu isActive ===false thì sẽ ko dc ấn chỉ dc xóa
+                  // lấy b1 : lấy dc isActive
+
                   const key = `${item.product._id}-${item.size}`;
                   const sizeData = sizes[item.size]; // Lấy dữ liệu size từ state
+                  // Kiểm tra xem sản phẩm có active không
+                  const isActive = item.product.isActive;
+
                   return (
                     <tr key={key}>
-                      <td className="d-flex align-items-center ">
+                      <td
+                        className="d-flex align-items-center "
+                        style={{ opacity: isActive ? 1 : 0.5 }}
+                      >
+                        {/* // Thêm điều kiện opacity} */}
                         <img
                           src={item.product.images}
                           alt={item.product.title}
@@ -272,7 +292,7 @@ const CartPage = () => {
                           {/* Hiển thị tên size */}
                         </div>
                       </td>
-                      <td>
+                      <td style={{ opacity: isActive ? 1 : 0.5 }}>
                         <button
                           onClick={() =>
                             handleQuantityChange(
@@ -281,6 +301,7 @@ const CartPage = () => {
                               false
                             )
                           }
+                          disabled={!isActive}
                           className="w-25 border-0 rounded-3 me-2"
                         >
                           -
@@ -294,6 +315,7 @@ const CartPage = () => {
                               true
                             )
                           }
+                          disabled={!isActive}
                           className="w-25 border-0 rounded-3 ms-2   "
                         >
                           +
@@ -303,7 +325,12 @@ const CartPage = () => {
                         {formatPrice(item.price * tempQuantities[key])}
                       </td>
                       <td>
-                        <p className="ms-2">🗑️</p>
+                        <p
+                          className="ms-2"
+                          onClick={() => removeFromCart(item.product._id)}
+                        >
+                          🗑️
+                        </p>
                       </td>
                     </tr>
                   );
@@ -322,21 +349,48 @@ const CartPage = () => {
             </tbody>
           </table>
         </div>
-        <div className="cart-summary">
-          <h3>Tổng tiền giỏ hàng</h3>
-          <p>Tổng sản phẩm: {cart.length}</p>
-          <p>Tổng tiền hàng:{formatPrice(Number(totalPrice))}</p>
-          <p>Thành tiền: {formatPrice(Number(totalPrice))}</p>
-          <p>Tạm tính:{formatPrice(Number(totalPrice))}</p>
-          <Link
-            to={"/checkOut"}
-            onClick={handleCheckout}
-            state={{ cart, totalPrice }}
-            className="checkout-button nav-link text-center"
-          >
-            Đặt hàng
-          </Link>
-        </div>
+        {cart.map((item: any) => {
+          const isActive = item.product.isActive;
+          console.log("item", isActive);
+
+          // Hàm xử lý khi click vào "Đặt hàng"
+          const handleLinkClick = (e: React.MouseEvent) => {
+            if (!isActive) {
+              e.preventDefault(); // Ngừng chuyển trang
+              Swal.fire({
+                icon: "error",
+                title: "Có Lỗi Xảy ra",
+                text: "Sản Phẩm Bạn Đặt Không Còn Tại!!!",
+              });
+            }
+          };
+
+          return (
+            <div className="cart-summary">
+              <h3>Tổng tiền giỏ hàng</h3>
+              <p>Tổng sản phẩm: {cart.length}</p>
+              <p>Tổng tiền hàng:{formatPrice(Number(totalPrice))}</p>
+              <p>Thành tiền: {formatPrice(Number(totalPrice))}</p>
+              <p>Tạm tính:{formatPrice(Number(totalPrice))}</p>
+
+              <Link
+                to="/checkOut"
+                style={{
+                  opacity: isActive ? 1 : 0.3, // Thay đổi opacity nếu isActive là false
+                  cursor: isActive ? "pointer" : "not-allowed", // Thay đổi cursor nếu isActive là false
+                }}
+                onClick={(e) => {
+                  handleLinkClick(e); // Kiểm tra và ngừng chuyển trang nếu isActive === false
+                  if (isActive) handleCheckout(); // Nếu isActive === true, thực hiện checkout
+                }}
+                state={{ cart, totalPrice }}
+                className="checkout-button nav-link text-center"
+              >
+                Đặt hàng
+              </Link>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
