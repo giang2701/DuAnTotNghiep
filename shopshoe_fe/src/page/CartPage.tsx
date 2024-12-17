@@ -182,7 +182,7 @@ const CartPage = () => {
                   <div key={key} className="cart-item">
                     <div
                       className="cart-item-info"
-                      style={{ opacity: isActive ? 1 : 0.5 }} // Thêm điều kiện opacity
+                      style={{ opacity: isActive ? 1 : 0.3 }} // Thêm điều kiện opacity
                     >
                       <img
                         src={item.product.images}
@@ -201,7 +201,7 @@ const CartPage = () => {
                     </div>
                     <div
                       className="cart-item-quantity"
-                      style={{ opacity: isActive ? 1 : 0.5 }} // Thêm điều kiện opacity
+                      style={{ opacity: isActive ? 1 : 0.3 }} // Thêm điều kiện opacity
                     >
                       <button
                         onClick={() =>
@@ -271,7 +271,7 @@ const CartPage = () => {
                     <tr key={key}>
                       <td
                         className="d-flex align-items-center "
-                        style={{ opacity: isActive ? 1 : 0.5 }}
+                        style={{ opacity: isActive ? 1 : 0.3 }}
                       >
                         {/* // Thêm điều kiện opacity} */}
                         <img
@@ -292,7 +292,7 @@ const CartPage = () => {
                           {/* Hiển thị tên size */}
                         </div>
                       </td>
-                      <td style={{ opacity: isActive ? 1 : 0.5 }}>
+                      <td style={{ opacity: isActive ? 1 : 0.3 }}>
                         <button
                           onClick={() =>
                             handleQuantityChange(
