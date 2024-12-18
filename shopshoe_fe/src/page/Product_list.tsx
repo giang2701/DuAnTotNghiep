@@ -33,11 +33,11 @@ export default function Product_List() {
 
 
     useEffect(() => {
-        // Fetch brands using axios when component is mounted
+        //lấy dữ liệu 
         axios
-            .get("http://localhost:8000/api/Brand") // Update with your API endpoint
+            .get("http://localhost:8000/api/Brand")
             .then((response) => {
-                setBrands(response.data.data); // Assuming the response contains a list of brands
+                setBrands(response.data.data);
                 console.log(response.data);
 
             })
