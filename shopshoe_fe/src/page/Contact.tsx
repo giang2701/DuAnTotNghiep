@@ -1,8 +1,7 @@
 import React from "react";
 import "../App.css";
 import Swal from "sweetalert2";
-import { Breadcrumbs, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+
 const Contact = () => {
   const onSubmit = async (event: any) => {
     event.preventDefault();
