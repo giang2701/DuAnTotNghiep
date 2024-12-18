@@ -66,6 +66,7 @@ const CartPage = () => {
         }
     };
 
+    // Thiết lập số lượng ban đầu cho mỗi sản phẩm trong giỏ
     useEffect(() => {
         if (cart) {
             const initialQuantities = cart.reduce((acc, item) => {
@@ -76,6 +77,7 @@ const CartPage = () => {
         }
     }, [cart]);
 
+    // Gọi API lấy thông tin size cho mỗi sản phẩm trong giỏ hàng
     useEffect(() => {
         if (cart) {
             cart.forEach((item) => {
