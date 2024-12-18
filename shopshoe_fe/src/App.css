@@ -222,7 +222,13 @@ html {
 
 /* -----===============================Footer===================================== */
 /* Footer Styling */
-
+.footer {
+    color: #fff;
+    padding: 40px 20px 20px;
+    font-family: "Montserrat", sans-serif;
+    position: relative;
+    margin-top: 50px;
+}
 
 .footer::before {
     content: "";
