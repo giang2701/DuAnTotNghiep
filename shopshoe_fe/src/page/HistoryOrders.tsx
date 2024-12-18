@@ -308,9 +308,6 @@ const HistoryOrders = () => {
                         alt={child.product.title}
                       />
                     </div>
-                    <p className="p_History" style={{ fontSize: "12px" }}>
-                      Số lượng: {child.quantity}
-                    </p>
                   </div>
                 ))}
                 {/* Hiển thị mã đơn hàng và phương thức thanh toán */}
