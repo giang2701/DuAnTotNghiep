@@ -17,6 +17,9 @@ html {
     /* overflow-x: hidden; */
 }
 
+
+
+
 .header__bar {
     height: 40px;
     position: fixed;
@@ -164,10 +167,12 @@ html {
     height: 50px;
     margin-right: 10px;
 }
+
 .menuUser {
     position: relative;
     /* border: 1px solid red; */
 }
+
 .menuUser-hidden {
     position: absolute;
     top: 70px;
@@ -177,12 +182,15 @@ html {
     width: 130px;
     display: none;
 }
+
 .menuUser-hidden.hidden {
     display: block;
 }
+
 .menuUser-hidden.hidden p:hover {
     background-color: rgb(193, 189, 189);
 }
+
 .search-info h5 {
     margin: 0;
     font-size: 1rem;
@@ -194,7 +202,7 @@ html {
     color: gray;
 }
 
-.search input:focus + .search-container,
+.search input:focus+.search-container,
 .search-container {
     display: block;
     cursor: pointer;
@@ -214,13 +222,7 @@ html {
 
 /* -----===============================Footer===================================== */
 /* Footer Styling */
-.footer {
-    color: #fff;
-    padding: 40px 20px 20px;
-    font-family: "Montserrat", sans-serif;
-    position: relative;
-    margin-top: 50px;
-}
+
 
 .footer::before {
     content: "";
@@ -439,6 +441,7 @@ ul li:hover {
     opacity: 1;
     transform: translateY(0);
 }
+
 /* SHIPING */
 .box_shipping {
     height: 760px;
@@ -446,10 +449,12 @@ ul li:hover {
     margin-top: 44px;
     padding-top: 60px;
 }
+
 .sub_shipping {
     padding: 0 48px;
 }
-.sub_shipping > p:first-child {
+
+.sub_shipping>p:first-child {
     font-family: "Poppins , sans-serif";
     font-size: 20px;
     font-weight: 500;
@@ -458,7 +463,8 @@ ul li:hover {
     text-align: center;
     color: red;
 }
-.sub_shipping > p:nth-child(2) {
+
+.sub_shipping>p:nth-child(2) {
     font-family: "Poppins , sans-serif";
     font-size: 40px;
     font-weight: 700;
@@ -467,6 +473,7 @@ ul li:hover {
     width: 500px;
     margin-left: 360px;
 }
+
 .Free_shipping {
     width: 300px;
     height: 310px;
@@ -475,13 +482,15 @@ ul li:hover {
     padding-top: 53px;
     text-align: center;
 }
-.Free_shipping > p:nth-child(2) {
+
+.Free_shipping>p:nth-child(2) {
     font-family: "Poppins , sans-serif";
     font-size: 22px;
     font-weight: 600;
     line-height: 33px;
     letter-spacing: -0.01em;
 }
+
 .Free_shipping p:nth-child(3) {
     font-family: "Poppins , sans-serif";
     font-size: 14px;
@@ -492,6 +501,7 @@ ul li:hover {
     margin-left: 30px;
     color: #676767;
 }
+
 .days_returns {
     width: 300px;
     height: 310px;
@@ -502,6 +512,7 @@ ul li:hover {
     position: relative;
     z-index: 99;
 }
+
 .days_returns_before {
     position: absolute;
     top: 215px;
@@ -514,7 +525,8 @@ ul li:hover {
     text-align: center;
     transform: rotate(-3deg);
 }
-.days_returns > p:nth-child(2) {
+
+.days_returns>p:nth-child(2) {
     font-family: "Poppins , sans-serif";
     font-size: 22px;
     font-weight: 600;
@@ -522,6 +534,7 @@ ul li:hover {
     letter-spacing: -0.01em;
     margin-top: -23px;
 }
+
 .days_returns p:nth-child(3) {
     font-family: "Poppins , sans-serif";
     font-size: 14px;
@@ -532,6 +545,7 @@ ul li:hover {
     margin-left: 30px;
     color: #676767;
 }
+
 .Secure_checkout {
     width: 300px;
     height: 310px;
@@ -540,7 +554,8 @@ ul li:hover {
     padding-top: 53px;
     text-align: center;
 }
-.Secure_checkout > p:nth-child(2) {
+
+.Secure_checkout>p:nth-child(2) {
     font-family: "Poppins , sans-serif";
     font-size: 22px;
     font-weight: 600;
@@ -548,6 +563,7 @@ ul li:hover {
     letter-spacing: -0.01em;
     margin-top: -23px;
 }
+
 .Secure_checkout p:nth-child(3) {
     font-family: "Poppins , sans-serif";
     font-size: 14px;
@@ -558,6 +574,7 @@ ul li:hover {
     margin-left: 30px;
     color: #676767;
 }
+
 /* =====PRODUCTS DISPLAY==== */
 .display__products {
     position: relative;
@@ -1296,6 +1313,7 @@ ul li:hover {
     background-color: #ccc;
     color: #fff;
 }
+
 /* ------------------------------------------------------------------------ */
 /* Aboutus */
 /* ------------------------------------------------------------------------ */
@@ -1308,16 +1326,21 @@ ul li:hover {
 
 /* Breadcrumbs cố định ở góc trái */
 .breadcrumbs-wrapper {
-    position: relative; /* Đảm bảo không bị ảnh hưởng */
+    position: relative;
+    /* Đảm bảo không bị ảnh hưởng */
 }
 
 /* Hình ảnh trong gallery */
 .aboutus-gallery {
     display: flex;
-    flex-direction: column; /* Ảnh xếp dọc */
-    gap: 16px; /* Khoảng cách giữa các ảnh */
-    align-items: center; /* Căn giữa ảnh trong container */
+    flex-direction: column;
+    /* Ảnh xếp dọc */
+    gap: 16px;
+    /* Khoảng cách giữa các ảnh */
+    align-items: center;
+    /* Căn giữa ảnh trong container */
 }
+
 .trending-title {
     text-align: center;
     font-size: 2.5rem;
@@ -1325,12 +1348,16 @@ ul li:hover {
     color: #ff6f61;
     margin-bottom: 20px;
 }
+
 /* Ảnh */
 .aboutus-gallery img {
     width: 100%;
-    max-width: 1200px; /* Đảm bảo ảnh không quá lớn trên màn hình lớn */
-    height: auto; /* Giữ tỉ lệ ảnh */
+    max-width: 1200px;
+    /* Đảm bảo ảnh không quá lớn trên màn hình lớn */
+    height: auto;
+    /* Giữ tỉ lệ ảnh */
 }
+
 /* |**********************************************************
    |  History order
    | **********************************************************
@@ -1338,16 +1365,26 @@ ul li:hover {
 .pHistory {
     position: relative;
 }
+
 .pOrder {
-    display: -webkit-box; /* Sử dụng chế độ hiển thị khối linh hoạt */
-    -webkit-box-orient: vertical; /* Đặt hướng khối theo chiều dọc */
-    -webkit-line-clamp: var(--line-clamp, 1); /* Giới hạn số dòng hiển thị */
-    overflow: hidden; /* Ẩn nội dung vượt quá */
-    text-overflow: ellipsis; /* Thêm dấu ba chấm */
-    white-space: normal; /* Cho phép xuống dòng */
-    max-width: 300px; /* Tùy chỉnh chiều rộng tối đa */
-    font-size: 14px; /* Kích thước chữ */
-    color: #333; /* Màu chữ */
+    display: -webkit-box;
+    /* Sử dụng chế độ hiển thị khối linh hoạt */
+    -webkit-box-orient: vertical;
+    /* Đặt hướng khối theo chiều dọc */
+    -webkit-line-clamp: var(--line-clamp, 1);
+    /* Giới hạn số dòng hiển thị */
+    overflow: hidden;
+    /* Ẩn nội dung vượt quá */
+    text-overflow: ellipsis;
+    /* Thêm dấu ba chấm */
+    white-space: normal;
+    /* Cho phép xuống dòng */
+    max-width: 300px;
+    /* Tùy chỉnh chiều rộng tối đa */
+    font-size: 14px;
+    /* Kích thước chữ */
+    color: #333;
+    /* Màu chữ */
     position: absolute;
     left: 150px;
     bottom: 10px;
@@ -1358,131 +1395,174 @@ ul li:hover {
     right: -40px;
     bottom: 50px;
 }
+
 .totalPrice2 {
     position: relative;
     right: -45px;
     bottom: 50px;
 }
+
 .status-link {
     display: inline-block;
     padding: 8px 5px;
     text-align: center;
-    color: #333; /* Màu chữ mặc định */
-    text-decoration: none; /* Xóa gạch chân mặc định */
+    color: #333;
+    /* Màu chữ mặc định */
+    text-decoration: none;
+    /* Xóa gạch chân mặc định */
     font-size: 19px;
-    position: relative; /* Để sử dụng pseudo-element */
+    position: relative;
+    /* Để sử dụng pseudo-element */
     margin: 0 5px;
     margin-left: 50px;
 }
 
 .status-link:hover {
-    color: red; /* Màu chữ đỏ khi hover */
+    color: red;
+    /* Màu chữ đỏ khi hover */
 }
+
 .status-link.active {
     color: red;
 }
+
 .status-link.active::after {
-    content: ""; /* Bắt buộc thêm nội dung để pseudo-element hoạt động */
+    content: "";
+    /* Bắt buộc thêm nội dung để pseudo-element hoạt động */
     display: block;
-    height: 2px; /* Độ dày của gạch chân */
-    background-color: red; /* Màu gạch chân */
+    height: 2px;
+    /* Độ dày của gạch chân */
+    background-color: red;
+    /* Màu gạch chân */
     position: absolute;
     bottom: -5px;
     left: 0;
     right: 0;
 }
+
 .status-link::after {
     background-color: red;
 }
+
 .status-link:hover::after {
     content: "";
     display: block;
-    height: 2px; /* Độ dày của gạch chân */
-    background-color: red; /* Gạch chân màu đỏ */
+    height: 2px;
+    /* Độ dày của gạch chân */
+    background-color: red;
+    /* Gạch chân màu đỏ */
     position: absolute;
 }
+
 .status-links {
     display: inline-block;
     padding: 8px 5px;
     text-align: center;
-    color: #333; /* Màu chữ mặc định */
-    text-decoration: none; /* Xóa gạch chân mặc định */
+    color: #333;
+    /* Màu chữ mặc định */
+    text-decoration: none;
+    /* Xóa gạch chân mặc định */
     font-size: 19px;
-    position: relative; /* Để sử dụng pseudo-element */
+    position: relative;
+    /* Để sử dụng pseudo-element */
     margin: 0 5px;
     margin-left: 50px;
 }
+
 .status-links:hover {
-    color: red; /* Màu chữ đỏ khi hover */
+    color: red;
+    /* Màu chữ đỏ khi hover */
 }
+
 .status-links.active {
     color: red;
 }
+
 .status-links.active::after {
-    content: ""; /* Bắt buộc thêm nội dung để pseudo-element hoạt động */
+    content: "";
+    /* Bắt buộc thêm nội dung để pseudo-element hoạt động */
     display: block;
-    height: 2px; /* Độ dày của gạch chân */
-    background-color: red; /* Màu gạch chân */
+    height: 2px;
+    /* Độ dày của gạch chân */
+    background-color: red;
+    /* Màu gạch chân */
     position: absolute;
     bottom: -5px;
     left: -48px;
     right: 0;
     width: 129px;
 }
+
 .status-links:hover::after {
     content: "";
     display: block;
-    height: 2px; /* Độ dày của gạch chân */
-    background-color: red; /* Gạch chân màu đỏ */
+    height: 2px;
+    /* Độ dày của gạch chân */
+    background-color: red;
+    /* Gạch chân màu đỏ */
     position: absolute;
 }
+
 .linkAHistory.active::after {
-    content: ""; /* Bắt buộc thêm nội dung để pseudo-element hoạt động */
+    content: "";
+    /* Bắt buộc thêm nội dung để pseudo-element hoạt động */
     display: block;
-    height: 2px; /* Độ dày của gạch chân */
-    background-color: red; /* Màu gạch chân */
+    height: 2px;
+    /* Độ dày của gạch chân */
+    background-color: red;
+    /* Màu gạch chân */
     position: absolute;
     bottom: -5px;
     left: -33px;
     right: 0;
     width: 129px;
 }
+
 .linkAHistory:hover::after {
     content: "";
     display: block;
-    height: 2px; /* Độ dày của gạch chân */
-    background-color: red; /* Gạch chân màu đỏ */
+    height: 2px;
+    /* Độ dày của gạch chân */
+    background-color: red;
+    /* Gạch chân màu đỏ */
     position: absolute;
 }
+
 .imageOrder {
     position: relative;
     bottom: 20px;
 }
+
 .cartHistory {
     position: relative;
     bottom: -150px;
 }
+
 .pOrder {
     position: absolute;
     bottom: -35px;
 }
+
 .p_Order {
     left: 19.3%;
     position: relative;
     top: 34px;
 }
+
 .p_History {
     position: absolute;
     top: 109px;
     left: 160px;
 }
+
 /* |**********************************************************
    |  Contact 
    | **********************************************************
 */
 .contact-container {
     display: flex;
-    flex-wrap: wrap; /* Cho phép phần tử xuống dòng nếu không đủ không gian */
+    flex-wrap: wrap;
+    /* Cho phép phần tử xuống dòng nếu không đủ không gian */
     justify-content: space-between;
     align-items: flex-start;
     gap: 20px;
@@ -1490,7 +1570,8 @@ ul li:hover {
 }
 
 .contact-info {
-    max-width: 45%; /* Chiều rộng tối đa cho phần thông tin liên hệ */
+    max-width: 45%;
+    /* Chiều rộng tối đa cho phần thông tin liên hệ */
     font-size: 16px;
     line-height: 1.8;
     margin-top: 129px;
@@ -1515,7 +1596,8 @@ ul li:hover {
 
 .form {
     width: 100%;
-    max-width: 600px; /* Đảm bảo chiều rộng tối đa của form */
+    max-width: 600px;
+    /* Đảm bảo chiều rộng tối đa của form */
     padding: 25px;
     color: #333;
     margin-top: 100px;
@@ -1565,24 +1647,31 @@ ul li:hover {
 .form button:hover {
     background: #1b1a1a;
 }
+
 .h2_Contact {
     padding-left: 19px;
 }
+
 /* Bản đồ */
 .map-container {
     width: 100%;
-    padding: 0 190px; /* Đảm bảo padding giống như phần trên */
-    margin-top: 10px; /* Khoảng cách giữa bản đồ và các phần trên */
+    padding: 0 190px;
+    /* Đảm bảo padding giống như phần trên */
+    margin-top: 10px;
+    /* Khoảng cách giữa bản đồ và các phần trên */
     position: relative;
     left: -190px;
 }
 
 .map-container iframe {
-    width: 1100px; /* Chiều rộng bản đồ đầy đủ */
-    height: 500px; /* Chiều cao của bản đồ */
+    width: 1100px;
+    /* Chiều rộng bản đồ đầy đủ */
+    height: 500px;
+    /* Chiều cao của bản đồ */
     border: none;
     border-radius: 8px;
 }
+
 /* ****phóng to ảnh  *************** */
 #myImg {
     border-radius: 9px;
@@ -2318,6 +2407,7 @@ input[type="radio"]:checked {
     display: inline-block;
     transition: opacity 0.3s ease;
 }
+
 /* page404 */
 .four_zero_four_bg {
     background-image: url(../public/images/404-Page.gif);
@@ -2342,11 +2432,13 @@ input[type="radio"]:checked {
 .constant_box_404 {
     margin-top: -30px;
 }
+
 /* end---page404 */
 /* order */
 .checkout {
     margin-top: 150px;
 }
+
 .btn_checkout {
     background-color: black;
     border: 2px solid black;
@@ -2422,13 +2514,14 @@ ul.progressbar li:first-child::after {
     content: none;
 }
 
-ul.progressbar li.active + li::after {
+ul.progressbar li.active+li::after {
     background-color: #ddd;
 }
 
-ul.progressbar li.active + li.active::after {
+ul.progressbar li.active+li.active::after {
     background-color: #000;
 }
+
 /* end---order */
 
 /* |**********************************************************
@@ -2443,6 +2536,7 @@ ul.progressbar li.active + li.active::after {
     text-align: center;
     position: relative;
 }
+
 .pCode {
     position: absolute;
     top: 9px;
@@ -2452,6 +2546,7 @@ ul.progressbar li.active + li.active::after {
 .text_order {
     position: relative;
 }
+
 .textOrderCode::before {
     content: "";
     position: absolute;
@@ -2461,9 +2556,11 @@ ul.progressbar li.active + li.active::after {
     left: 56px;
     top: 60px;
 }
+
 .orderText {
     position: relative;
 }
+
 .codeText::after {
     content: "";
     position: absolute;
@@ -2474,9 +2571,11 @@ ul.progressbar li.active + li.active::after {
     background-color: #000;
     bottom: -30px;
 }
+
 .Orderstatus {
     position: relative;
 }
+
 .code_Order::after {
     content: "";
     position: absolute;
@@ -2486,6 +2585,7 @@ ul.progressbar li.active + li.active::after {
     background-color: #b5b0b0;
     bottom: 37px;
 }
+
 .orderStatus {
     position: absolute;
     background-color: #39ac31;
@@ -2498,16 +2598,20 @@ ul.progressbar li.active + li.active::after {
     height: 29px;
     padding-top: 2px;
 }
+
 .iconFilter {
     position: relative;
 }
+
 .icon_Filter {
     position: absolute;
     bottom: 8px;
 }
+
 .order_Text {
     position: relative;
 }
+
 /* ---------Ql san pham------- */
 .sidebar ul li p {
     color: white;
@@ -2790,13 +2894,16 @@ ul.progressbar li.active + li.active::after {
     height: 100%;
     object-fit: cover;
 }
+
 /* |-------------------Voucher------------------| */
 .modal_voucher_admin .voucher_first {
     position: relative;
 }
+
 .modal_voucher_admin .voucher_first .Group_circle {
     position: absolute;
 }
+
 .modal_voucher_admin .voucher_first .Group_circle .circle {
     width: 8px;
     height: 8px;
@@ -2813,10 +2920,12 @@ ul.progressbar li.active + li.active::after {
     margin-left: 20px;
     margin-top: 30px;
 }
+
 .modal_voucher_admin .voucher_first i {
     margin-left: 30px;
     margin-top: -10px;
 }
+
 .box__voucher {
     position: fixed;
     top: 120px;
@@ -2826,16 +2935,20 @@ ul.progressbar li.active + li.active::after {
     padding: 50px 30px;
     display: none;
 }
+
 .box__voucher.show {
     display: block;
     animation: fadeIn 0.3s ease-in-out;
 }
+
 .overlayVoucher {
     display: none;
 }
+
 .overlayVoucher.show {
     display: block;
 }
+
 /* |-------------------End Voucher------------------| */
 /* CartPage */
 .cart-page {
@@ -2860,9 +2973,11 @@ ul.progressbar li.active + li.active::after {
     display: flex;
     gap: 40px;
 }
+
 .cart-table-mobile {
     display: none;
 }
+
 .cart-table {
     flex: 3;
     width: 100%;
@@ -2881,8 +2996,8 @@ ul.progressbar li.active + li.active::after {
     color: #555;
 }
 
-.cart-table-header > div,
-.cart-item > div {
+.cart-table-header>div,
+.cart-item>div {
     flex: 1;
     text-align: center;
 }
@@ -3134,6 +3249,7 @@ label {
     border: 1px solid rgb(182, 178, 178);
     margin-bottom: 10px;
 }
+
 /* statistic
  */
 .wrapper {
@@ -3143,8 +3259,10 @@ label {
     padding: 16px;
     border-radius: 8px;
 }
+
 .custom-confirm-button {
-    background-color: #28a745 !important; /* Màu xanh lá */
+    background-color: #28a745 !important;
+    /* Màu xanh lá */
     color: #fff !important;
     border: 1px solid transparent !important;
     padding: 7px 20px;
@@ -3156,7 +3274,8 @@ label {
 }
 
 .custom-cancel-button {
-    background-color: #dc3545 !important; /* Màu đỏ */
+    background-color: #dc3545 !important;
+    /* Màu đỏ */
     color: #fff !important;
     border: 1px solid transparent !important;
     padding: 7px 20px;
@@ -3167,30 +3286,38 @@ label {
 }
 
 .custom-confirm-button:hover {
-    background-color: #218838 !important; /* Xanh lá đậm hơn khi hover */
+    background-color: #218838 !important;
+    /* Xanh lá đậm hơn khi hover */
 }
 
 .custom-cancel-button:hover {
-    background-color: #c82333 !important; /* Đỏ đậm hơn khi hover */
+    background-color: #c82333 !important;
+    /* Đỏ đậm hơn khi hover */
 }
+
 /* Order detail   */
 .overlayOrderDetail {
     display: none;
 }
+
 .overlayOrderDetail.show {
     display: block;
 }
+
 .orderById {
     display: none;
 }
+
 .orderById.show {
     display: block;
 }
+
 .container__orderById {
     height: 100vh;
     width: 100vw;
     overflow-x: hidden;
 }
+
 .header__orderById {
     /* background-color: red; */
     height: 70px;
@@ -3198,29 +3325,35 @@ label {
         rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
     padding: 20px 0px 20px 20px;
 }
+
 .header__orderById h2 {
     /* font-weight: 700; */
     font-size: 24px;
     color: rgb(0, 0, 0);
     text-align: left;
 }
+
 .body__orderById {
     margin: 10px 0px 20px 20px;
 }
-.body__orderById > p {
+
+.body__orderById>p {
     font-size: 15px;
     font-family: "Roboto", sans-serif;
     font-weight: 500;
 }
-.body__orderById > p:nth-child(2) {
+
+.body__orderById>p:nth-child(2) {
     font-weight: 700;
     margin-top: 20px;
 }
-.body__orderById > p:nth-child(4) {
+
+.body__orderById>p:nth-child(4) {
     margin: 10px 0px 20px;
     font-size: 15px;
     font-weight: 700;
 }
+
 .address_body__orderById i {
     margin-top: 15px;
     font-size: 18px;
@@ -3234,6 +3367,7 @@ label {
     font-weight: 500;
     /* line-height: 80px; */
 }
+
 .address_body__orderById .address p:nth-child(2) {
     font-size: 15px;
     font-family: "Roboto", sans-serif;
@@ -3241,6 +3375,7 @@ label {
     font-weight: 500;
     width: 450px;
 }
+
 .sub_info_order__body__orderById {
     position: relative;
     margin-bottom: 40px;
@@ -3251,19 +3386,21 @@ label {
     width: 480px;
 }
 
-.info_order__body__orderById .d-flex > p {
+.info_order__body__orderById .d-flex>p {
     font-size: 12px;
     font-weight: 600;
     width: 350px;
     margin-left: 10px;
     margin-top: 10px;
 }
+
 .info_order__body__orderById .info {
     position: absolute;
     top: 45px;
     left: 100px;
     width: 620px;
 }
+
 .info_order__body__orderById .info_price {
     color: red;
     font-weight: 500;
@@ -3278,50 +3415,65 @@ label {
     font-weight: 500;
     margin-left: 280px;
 }
+
 .footer__orderById p:last-child {
     font-size: 15px;
     font-weight: 400;
     margin-left: 130px;
 }
+
 /* --Tablet */
 @media (min-width: 740px) and (max-width: 1024px) {
+
     /* |**********************************************************
    |  Contact Tarlet 
    | **********************************************************
 */
     .contact-container {
-        padding: 20px; /* Giảm padding cho màn hình nhỏ */
+        padding: 20px;
+        /* Giảm padding cho màn hình nhỏ */
     }
+
     .contact-info {
         margin-top: 150px;
     }
+
     .h2Contact {
         font-size: 26px !important;
     }
+
     .h2_Contact {
         font-size: 26px !important;
     }
+
     .contact-info,
     .contact5 {
-        max-width: 100%; /* Cho phép chúng chiếm toàn bộ chiều rộng */
-        flex: 1 1 100%; /* Đảm bảo các phần tử chiếm 100% chiều rộng */
+        max-width: 100%;
+        /* Cho phép chúng chiếm toàn bộ chiều rộng */
+        flex: 1 1 100%;
+        /* Đảm bảo các phần tử chiếm 100% chiều rộng */
     }
+
     .form {
         width: 100%;
         margin-top: -400px;
         margin-left: 500px;
         padding-top: 30px;
     }
+
     .map-container {
-        padding: 0px; /* Căn lề lại cho bản đồ */
+        padding: 0px;
+        /* Căn lề lại cho bản đồ */
         position: relative;
         left: 5px;
     }
 
     .map-container iframe {
         width: 930px;
-        height: 500px; /* Giảm chiều cao của bản đồ trên thiết bị di động */
+        height: 500px;
+        /* Giảm chiều cao của bản đồ trên thiết bị di động */
     }
+
     /*|**********************************************************
    ***|  HEADER
    ***| *********************************************************
@@ -3510,13 +3662,16 @@ label {
         left: 267px;
         transition: all 0.2s ease-in-out;
     }
+
     /* -----Shipping------- */
     .sub_shipping {
         padding: 0 0px;
     }
-    .sub_shipping > p:nth-child(2) {
+
+    .sub_shipping>p:nth-child(2) {
         margin-left: 210px;
     }
+
     .Free_shipping {
         width: 260px;
         height: 310px;
@@ -3525,6 +3680,7 @@ label {
         padding-top: 53px;
         text-align: center;
     }
+
     .Free_shipping p:nth-child(3) {
         font-family: "Poppins , sans-serif";
         font-size: 14px;
@@ -3535,6 +3691,7 @@ label {
         margin-left: 10px;
         color: #676767;
     }
+
     .days_returns {
         width: 260px;
         height: 310px;
@@ -3543,6 +3700,7 @@ label {
         padding-top: 53px;
         text-align: center;
     }
+
     .days_returns p:nth-child(3) {
         font-family: "Poppins , sans-serif";
         font-size: 14px;
@@ -3553,6 +3711,7 @@ label {
         margin-left: 10px;
         color: #676767;
     }
+
     .days_returns_before {
         position: absolute;
         top: 220px;
@@ -3565,6 +3724,7 @@ label {
         text-align: center;
         transform: rotate(-2deg);
     }
+
     .Secure_checkout {
         width: 260px;
         height: 310px;
@@ -3573,6 +3733,7 @@ label {
         padding-top: 53px;
         text-align: center;
     }
+
     .Secure_checkout p:nth-child(3) {
         font-family: "Poppins , sans-serif";
         font-size: 14px;
@@ -3583,6 +3744,7 @@ label {
         margin-left: 10px;
         color: #676767;
     }
+
     /* -----PRODUCTS DISPLAY---- */
     .display__products {
         position: static;
@@ -3646,9 +3808,7 @@ label {
         transition: all 0.5s ease;
     }
 
-    .sub__display__products:nth-child(1):hover
-        .sub__display__products__img
-        img {
+    .sub__display__products:nth-child(1):hover .sub__display__products__img img {
         transform: scale(1.3);
     }
 
@@ -3694,9 +3854,7 @@ label {
         transition: all 0.5s ease;
     }
 
-    .sub__display__products:nth-child(2):hover
-        .sub__display__products__img
-        img {
+    .sub__display__products:nth-child(2):hover .sub__display__products__img img {
         transform: scale(1.3);
     }
 
@@ -3742,9 +3900,7 @@ label {
         transition: all 0.5s ease;
     }
 
-    .sub__display__products:nth-child(3):hover
-        .sub__display__products__img
-        img {
+    .sub__display__products:nth-child(3):hover .sub__display__products__img img {
         transform: scale(1.3);
     }
 
@@ -3790,9 +3946,7 @@ label {
         transition: all 0.5s ease;
     }
 
-    .sub__display__products:nth-child(4):hover
-        .sub__display__products__img
-        img {
+    .sub__display__products:nth-child(4):hover .sub__display__products__img img {
         transform: scale(1.3);
     }
 
@@ -3804,6 +3958,7 @@ label {
         scrollbar-color: transparent transparent;
         margin-left: 15px;
     }
+
     /*|**********************************************************
    ***|  History Tarlet
    ***| *********************************************************
@@ -3812,16 +3967,20 @@ label {
         position: absolute;
         left: -290px;
     }
+
     .p_Order {
         bottom: -35px;
     }
+
     .menu_HistoryOrder {
         position: absolute;
         margin-left: 110px !important;
     }
+
     .swal2-popup {
         margin-bottom: 500px;
     }
+
     /* ---------- */
     /*|**********************************************************
    ***|  DETAIL PRODUCT
@@ -4349,11 +4508,12 @@ label {
         color: #555;
     }
 
-    .cart-table-header > div,
-    .cart-item > div {
+    .cart-table-header>div,
+    .cart-item>div {
         flex: 1;
         text-align: center;
     }
+
     .cart-item-info {
         display: flex;
         align-items: center;
@@ -4464,6 +4624,7 @@ label {
 
 /* --Mobile */
 @media (max-width: 739px) {
+
     /*|**********************************************************
    ***|  HEADER
    ***| *********************************************************
@@ -4538,7 +4699,7 @@ label {
         z-index: 99;
     }
 
-    .search__checkbox:checked ~ .overlay__search__mobile {
+    .search__checkbox:checked~.overlay__search__mobile {
         display: block;
     }
 
@@ -4563,7 +4724,7 @@ label {
         font-weight: 600;
     }
 
-    .search__checkbox:checked ~ .search_drawer {
+    .search__checkbox:checked~.search_drawer {
         transform: translateY(0%);
         opacity: 1;
     }
@@ -4647,68 +4808,87 @@ label {
         margin-left: 0px !important;
         width: 100% !important;
     }
+
     .menu_historyOrder {
         margin-left: 0px !important;
         width: 100% !important;
     }
+
     .p_Order {
         width: 100px !important;
     }
+
     .p_History {
         width: 100px !important;
     }
+
     .pStatus {
         position: absolute;
         left: -380px;
         font-size: 15px !important;
     }
+
     .imageOrder {
         padding-top: 30px;
     }
+
     .pHistory {
         position: relative;
     }
+
     .pOrder {
         position: absolute;
         left: 108px;
         top: 19px;
         font-size: 12px !important;
     }
+
     .p_Order {
         position: relative;
         left: 109px;
         bottom: -40px;
         font-size: 10px !important;
     }
+
     .p_History {
         bottom: 80px;
         font-size: 10px !important;
         left: 108px;
     }
+
     .status-link {
         padding-left: 20px;
-        color: #333; /* Màu chữ mặc định */
-        text-decoration: none; /* Xóa gạch chân mặc định */
+        color: #333;
+        /* Màu chữ mặc định */
+        text-decoration: none;
+        /* Xóa gạch chân mặc định */
         font-size: 13px;
         margin: 0px;
     }
 
     .status-link:hover {
-        color: red; /* Màu chữ đỏ khi hover */
+        color: red;
+        /* Màu chữ đỏ khi hover */
     }
+
     .status-link.active {
         color: red;
     }
+
     .status-link.active::after {
-        content: ""; /* Bắt buộc thêm nội dung để pseudo-element hoạt động */
+        content: "";
+        /* Bắt buộc thêm nội dung để pseudo-element hoạt động */
         display: block;
-        height: 2px; /* Độ dày của gạch chân */
-        background-color: red; /* Màu gạch chân */
+        height: 2px;
+        /* Độ dày của gạch chân */
+        background-color: red;
+        /* Màu gạch chân */
         position: absolute;
         bottom: -13px;
         left: 0;
         right: 0;
     }
+
     .pStatus {
         font-size: 12px !important;
         position: absolute;
@@ -4716,156 +4896,213 @@ label {
         top: 10px;
         padding-left: 0px !important;
     }
+
     .status-link::after {
         background-color: red;
     }
+
     .status-link:hover::after {
         content: "";
         display: block;
-        height: 2px; /* Độ dày của gạch chân */
-        background-color: red; /* Gạch chân màu đỏ */
+        height: 2px;
+        /* Độ dày của gạch chân */
+        background-color: red;
+        /* Gạch chân màu đỏ */
         position: absolute;
     }
+
     .status-links {
         display: inline-block;
         padding: 8px 5px;
-        color: #333; /* Màu chữ mặc định */
-        text-decoration: none; /* Xóa gạch chân mặc định */
+        color: #333;
+        /* Màu chữ mặc định */
+        text-decoration: none;
+        /* Xóa gạch chân mặc định */
         font-size: 13px;
-        position: relative; /* Để sử dụng pseudo-element */
+        position: relative;
+        /* Để sử dụng pseudo-element */
         margin: 0 5px;
     }
+
     .status-links:hover {
-        color: red; /* Màu chữ đỏ khi hover */
+        color: red;
+        /* Màu chữ đỏ khi hover */
     }
+
     .status-links.active {
         color: red;
     }
+
     .status-links.active::after {
-        content: ""; /* Bắt buộc thêm nội dung để pseudo-element hoạt động */
-        height: 1.9px; /* Độ dày của gạch chân */
-        background-color: red; /* Màu gạch chân */
+        content: "";
+        /* Bắt buộc thêm nội dung để pseudo-element hoạt động */
+        height: 1.9px;
+        /* Độ dày của gạch chân */
+        background-color: red;
+        /* Màu gạch chân */
         position: absolute;
         bottom: -14px;
         left: -48px;
         right: 0;
         width: 100px;
     }
+
     .status-links:hover::after {
         content: "";
         display: block;
-        height: 2px; /* Độ dày của gạch chân */
-        background-color: red; /* Gạch chân màu đỏ */
+        height: 2px;
+        /* Độ dày của gạch chân */
+        background-color: red;
+        /* Gạch chân màu đỏ */
         position: absolute;
     }
+
     .linkAHistory.active::after {
-        content: ""; /* Bắt buộc thêm nội dung để pseudo-element hoạt động */
+        content: "";
+        /* Bắt buộc thêm nội dung để pseudo-element hoạt động */
         display: block;
-        height: 2px; /* Độ dày của gạch chân */
-        background-color: red; /* Màu gạch chân */
+        height: 2px;
+        /* Độ dày của gạch chân */
+        background-color: red;
+        /* Màu gạch chân */
         position: absolute;
         bottom: -13px;
         left: -1px;
         width: 70px;
     }
+
     .linkAHistory:hover::after {
         content: "";
         display: block;
-        height: 2px; /* Độ dày của gạch chân */
-        background-color: red; /* Gạch chân màu đỏ */
+        height: 2px;
+        /* Độ dày của gạch chân */
+        background-color: red;
+        /* Gạch chân màu đỏ */
         position: absolute;
     }
+
     .totalPrice {
         font-size: 12px !important;
     }
+
     .totalPrice2 {
         font-size: 12px !important;
     }
+
     .payMethod {
         font-size: 10px !important;
     }
+
     .pOrder {
-        display: -webkit-box; /* Sử dụng chế độ hiển thị khối linh hoạt */
-        -webkit-box-orient: vertical; /* Đặt hướng khối theo chiều dọc */
-        -webkit-line-clamp: var(
-            --line-clamp,
-            1
-        ); /* Giới hạn số dòng hiển thị */
-        overflow: hidden; /* Ẩn nội dung vượt quá */
-        text-overflow: ellipsis; /* Thêm dấu ba chấm */
-        white-space: normal; /* Cho phép xuống dòng */
-        max-width: 250px; /* Tùy chỉnh chiều rộng tối đa */
-        font-size: 14px !important; /* Kích thước chữ */
-        color: #333; /* Màu chữ */
+        display: -webkit-box;
+        /* Sử dụng chế độ hiển thị khối linh hoạt */
+        -webkit-box-orient: vertical;
+        /* Đặt hướng khối theo chiều dọc */
+        -webkit-line-clamp: var(--line-clamp,
+                1);
+        /* Giới hạn số dòng hiển thị */
+        overflow: hidden;
+        /* Ẩn nội dung vượt quá */
+        text-overflow: ellipsis;
+        /* Thêm dấu ba chấm */
+        white-space: normal;
+        /* Cho phép xuống dòng */
+        max-width: 250px;
+        /* Tùy chỉnh chiều rộng tối đa */
+        font-size: 14px !important;
+        /* Kích thước chữ */
+        color: #333;
+        /* Màu chữ */
         position: relative;
         left: 106px;
         top: 19px;
     }
+
     /* |**********************************************************
    |  Contact  mobile 
    | **********************************************************
 */
     .contact-container {
-        padding: 20px; /* Giảm padding cho màn hình nhỏ */
+        padding: 20px;
+        /* Giảm padding cho màn hình nhỏ */
         margin-top: -49px;
     }
+
     .contact-info {
         margin-top: 150px;
     }
+
     .h2Contact {
         margin-left: -30px;
         font-size: 20px !important;
     }
+
     .h2_Contact {
         font-size: 26px !important;
     }
+
     .contact-info,
     .contact5 {
-        max-width: 100%; /* Cho phép chúng chiếm toàn bộ chiều rộng */
-        flex: 1 1 100%; /* Đảm bảo các phần tử chiếm 100% chiều rộng */
+        max-width: 100%;
+        /* Cho phép chúng chiếm toàn bộ chiều rộng */
+        flex: 1 1 100%;
+        /* Đảm bảo các phần tử chiếm 100% chiều rộng */
     }
+
     .form {
         width: 100%;
         margin-top: -29px;
     }
+
     .map-container {
-        padding: 0px; /* Căn lề lại cho bản đồ */
+        padding: 0px;
+        /* Căn lề lại cho bản đồ */
         position: relative;
         left: 5px;
     }
 
     .map-container iframe {
         width: 100%;
-        height: 500px; /* Giảm chiều cao của bản đồ trên thiết bị di động */
+        height: 500px;
+        /* Giảm chiều cao của bản đồ trên thiết bị di động */
     }
+
     .swal2-popup {
         margin-bottom: 108px;
     }
+
     .maDonHang {
         font-size: 10px !important;
     }
+
     .imageOrder {
         position: relative;
         top: -65px;
     }
+
     .p_Order {
         position: relative;
     }
+
     .p_History {
         position: absolute;
         top: 69px;
         left: 120px;
     }
+
     .Pimager {
         width: 80px !important;
     }
+
     .sub__header__mobile {
         display: flex;
         align-items: center;
     }
+
     .action__sub__header__mobile .search {
         margin-left: 20px;
     }
+
     .action__sub__header__mobile .search input {
         border: 1px solid rgb(198, 195, 195);
         border-radius: 20px;
@@ -4972,11 +5209,11 @@ label {
         font-weight: 500;
     }
 
-    .menu-checkbox:checked ~ .overlay__mobile {
+    .menu-checkbox:checked~.overlay__mobile {
         display: block;
     }
 
-    .menu-checkbox:checked ~ .menu-drawer {
+    .menu-checkbox:checked~.menu-drawer {
         transform: translateX(0%);
         opacity: 1;
     }
@@ -5057,10 +5294,12 @@ label {
         left: 110px;
         transition: all 0.2s ease-in-out;
     }
+
     /* -----Shipping---- */
     .box_shipping {
         display: none;
     }
+
     /* .sub_shipping > p:nth-child(2) {
         font-family: "Poppins , sans-serif";
         font-size: 25px;
@@ -5075,9 +5314,11 @@ label {
         position: static;
         height: 1200px;
     }
+
     .title__products__GALLERY p {
         margin-bottom: 18rem;
     }
+
     .sub__display__products {
         background-color: rgb(246, 246, 246);
         width: 95vw;
@@ -5135,9 +5376,7 @@ label {
         transition: all 0.5s ease;
     }
 
-    .sub__display__products:nth-child(1):hover
-        .sub__display__products__img
-        img {
+    .sub__display__products:nth-child(1):hover .sub__display__products__img img {
         transform: scale(1.2);
     }
 
@@ -5184,9 +5423,7 @@ label {
         transition: all 0.5s ease;
     }
 
-    .sub__display__products:nth-child(2):hover
-        .sub__display__products__img
-        img {
+    .sub__display__products:nth-child(2):hover .sub__display__products__img img {
         transform: scale(1.3);
     }
 
@@ -5232,9 +5469,7 @@ label {
         transition: all 0.5s ease;
     }
 
-    .sub__display__products:nth-child(3):hover
-        .sub__display__products__img
-        img {
+    .sub__display__products:nth-child(3):hover .sub__display__products__img img {
         transform: scale(1.3);
     }
 
@@ -5281,9 +5516,7 @@ label {
         transition: all 0.5s ease;
     }
 
-    .sub__display__products:nth-child(4):hover
-        .sub__display__products__img
-        img {
+    .sub__display__products:nth-child(4):hover .sub__display__products__img img {
         transform: scale(1.3);
     }
 
@@ -5308,9 +5541,11 @@ label {
         margin-bottom: 20px;
         max-width: 1520px;
     }
+
     .Container__product__gallery .product {
         margin-bottom: 20px;
     }
+
     .Container__product__gallery {
         margin-left: 20px;
     }
@@ -5938,6 +6173,7 @@ label {
         cursor: not-allowed;
         opacity: 0.5;
     }
+
     .button_icon {
         margin-left: 240px;
         font-size: 18px;
@@ -5955,6 +6191,7 @@ label {
         font-size: 18px;
         color: #333;
     }
+
     /* stasitics thống kê */
     .chart-container {
         width: 600%;
@@ -5978,15 +6215,18 @@ label {
         flex-direction: column;
         gap: 20px;
     }
+
     .cart-table-mobile {
         display: block;
     }
+
     .cart-table {
         flex: 1;
         width: 100%;
         font-size: 8px;
         display: none;
     }
+
     .product-image {
         width: 20px;
         height: 20px;
@@ -6023,12 +6263,15 @@ label {
     .remove-item {
         font-size: 18px;
     }
+
     .aboutus-gallery {
-        gap: 8px; /* Giảm khoảng cách giữa ảnh trên mobile */
+        gap: 8px;
+        /* Giảm khoảng cách giữa ảnh trên mobile */
     }
 
     .aboutus-container {
-        padding-bottom: 80px; /* Đảm bảo nội dung không đè footer */
+        padding-bottom: 80px;
+        /* Đảm bảo nội dung không đè footer */
     }
 }
 
