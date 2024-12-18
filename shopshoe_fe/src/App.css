@@ -261,15 +261,12 @@ html {
     /* background-color: #007bff; */
 }
 
-/* New .spa-container to keep .spa on the right */
 .spa-container {
     position: absolute;
-    /* Absolutely position the container */
     top: 50px;
     left: 18%;
     transform: translate(-50%);
     margin-top: 150px;
-    /* Space from the top */
 }
 
 .spa {
