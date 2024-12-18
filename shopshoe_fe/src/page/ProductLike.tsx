@@ -21,11 +21,9 @@ const ProductsLiked = () => {
     const userArray = localStorage.getItem("user");
     const user = userArray ? JSON.parse(userArray) : null;
 
-    //lấy dữ liệu 
     useEffect(() => {
         const fetchData = async () => {
             if (user) {
-                //lấy sản phẩm bằng axios
                 const { data } = await instance.get(`/heart/user/${user._id}`);
                 setFavorites2(data.heart); // Đảm bảo rằng favorites là một mảng
             } else {
