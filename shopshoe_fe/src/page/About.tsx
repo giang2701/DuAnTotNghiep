@@ -10,7 +10,7 @@ const About = (props: Props) => {
         <Typography variant="h3" align="center" sx={{ mb: 4, fontWeight: "bold", fontSize: "3rem" }}>
           A Collection of Trendy Sneaker Models for Young People in 2024
         </Typography>
-  
+
         {/* Replace image with video */}
         <Box sx={{ mb: 4, width: "100%", maxWidth: "800px" }}>
           <video
@@ -19,13 +19,13 @@ const About = (props: Props) => {
             autoPlay
             muted
             style={{
-              width: "100%", // Video will take up the full width of the container
-              height: "auto", // Maintain the aspect ratio of the video
-              borderRadius: "8px", // Round the corners of the video
+              width: "100%",
+              height: "auto",
+              borderRadius: "8px",
             }}
           />
         </Box>
-  
+
         {/* Introduction about sneakers */}
         <Typography variant="body1" sx={{ maxWidth: "800px", textAlign: "left", lineHeight: 1.8, mb: 4, fontSize: "1.4rem" }}>
           Sneakers are not just fashion items but also a personal style statement, especially among young people.
@@ -33,71 +33,103 @@ const About = (props: Props) => {
           and high practicality. If you are looking for the perfect pair of sneakers to showcase your fashion taste,
           let's explore the top sneaker models of this year.
         </Typography>
-  
-        {/* First sneaker */}
+
+        {/* Puma Caven */}
         <Box sx={{ maxWidth: "800px", width: "100%" }}>
           <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2, fontSize: "2rem" }}>
             1. Puma Caven: Classic Fashion Sneaker
           </Typography>
-  
+
           <Typography variant="body1" sx={{ textAlign: "left", lineHeight: 1.8, mb: 2, fontSize: "1.4rem" }}>
             Puma Caven is one of the most popular sneakers in 2024. Inspired by retro style, Puma Caven blends the classic
             and modern looks harmoniously. The upper is made of premium synthetic leather, making it durable and giving it a
             luxurious appearance.
           </Typography>
-  
+
           <Typography variant="body1" sx={{ textAlign: "left", lineHeight: 1.8, mb: 4, fontSize: "1.4rem" }}>
             The special feature of these sneakers is their versatility in styling. You can wear Puma Caven with jeans for a sporty
             look or pair it with a skirt for a more feminine touch. The thick rubber outsole ensures grip and safety while moving.
           </Typography>
-  
-          {/* Product image */}
+
           <Box sx={{ mb: 4, width: "100%" }}>
             <img
-              src="https://myshoes.vn/image/catalog/2024/blog/huyen/18724/giay-puma-caven-nam-trang-xam-de.jpg" // Placeholder image for Puma Caven
+              src="https://myshoes.vn/image/catalog/2024/blog/huyen/18724/giay-puma-caven-nam-trang-xam-de.jpg"
               alt="Puma Caven"
               style={{
-                width: "100%", // Image takes up the full width of the container
-                height: "auto", // Maintain the aspect ratio of the image
-                borderRadius: "8px", // Round the corners of the image
+                width: "100%",
+                height: "auto",
+                borderRadius: "8px",
               }}
             />
           </Box>
-  
-          <Typography variant="body1" sx={{ textAlign: "left", lineHeight: 1.8, mb: 4, fontSize: "1.4rem" }}>
-            Whether you're a student, office worker, or street fashion lover, Puma Caven is always a worthy choice.
-          </Typography>
         </Box>
-  
-        {/* Conclusion section */}
+
+        {/* Nike Air Force 1 */}
+        <Box sx={{ maxWidth: "800px", width: "100%" }}>
+          <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2, fontSize: "2rem" }}>
+            2. Nike Air Force 1: Timeless Streetwear
+          </Typography>
+
+          <Typography variant="body1" sx={{ textAlign: "left", lineHeight: 1.8, mb: 2, fontSize: "1.4rem" }}>
+            The Nike Air Force 1 continues to be a staple in the sneaker world in 2024. Known for its sleek design and
+            unparalleled comfort, this sneaker is a favorite among both sneakerheads and casual wearers.
+          </Typography>
+
+          <Typography variant="body1" sx={{ textAlign: "left", lineHeight: 1.8, mb: 4, fontSize: "1.4rem" }}>
+            With its premium leather upper, perforated toe box for breathability, and durable rubber sole, the Air Force 1
+            is both stylish and functional. Perfect for any occasion, from streetwear outfits to semi-casual events.
+          </Typography>
+
+          <Box sx={{ mb: 4, width: "100%" }}>
+            <img
+              src="https://myshoes.vn/image/catalog/2024/blog/huyen/18724/giay-puma-caven-nam-trang-xam-de.jpg"
+              alt="Nike Air Force 1"
+              style={{
+                width: "100%",
+                height: "auto",
+                borderRadius: "8px",
+              }}
+            />
+          </Box>
+        </Box>
+
+        {/* Adidas Ultraboost 23 */}
+        <Box sx={{ maxWidth: "800px", width: "100%" }}>
+          <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2, fontSize: "2rem" }}>
+            3. Adidas Ultraboost 23: Ultimate Comfort and Performance
+          </Typography>
+
+          <Typography variant="body1" sx={{ textAlign: "left", lineHeight: 1.8, mb: 2, fontSize: "1.4rem" }}>
+            The Adidas Ultraboost 23 is designed for both athletes and casual users. With its innovative Boost midsole,
+            this sneaker offers superior cushioning and energy return, making it ideal for running or daily wear.
+          </Typography>
+
+          <Typography variant="body1" sx={{ textAlign: "left", lineHeight: 1.8, mb: 4, fontSize: "1.4rem" }}>
+            The Primeknit upper adapts to the shape of your foot, providing a snug fit, while the Continental rubber outsole
+            ensures excellent traction on various surfaces.
+          </Typography>
+
+          <Box sx={{ mb: 4, width: "100%" }}>
+            <img
+              src="https://myshoes.vn/image/catalog/2024/blog/huyen/18724/giay-puma-caven-nam-trang-xam-de.jpg"
+              alt="Adidas Ultraboost 23"
+              style={{
+                width: "100%",
+                height: "auto",
+                borderRadius: "8px",
+              }}
+            />
+          </Box>
+        </Box>
+
+        {/* Conclusion */}
         <Box sx={{ maxWidth: "800px", width: "100%", mt: 4 }}>
           <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2, fontSize: "1.8rem" }}>
-            If you are wondering where to buy authentic trendy sneakers to ensure quality and reliability, visit Myshoes.vn.
-          </Typography>
-  
-          <Typography variant="body1" sx={{ textAlign: "left", lineHeight: 1.8, mb: 4, fontSize: "1.4rem" }}>
-            Why should you choose Myshoes.vn for your authentic sneaker purchases?
-          </Typography>
-  
-          <ul>
-            <li><Typography variant="body1" sx={{ fontSize: "1.4rem" }}>100% Authentic products: Myshoes.vn guarantees authentic sneakers from famous brands like Puma, Adidas, Nike.</Typography></li>
-            <li><Typography variant="body1" sx={{ fontSize: "1.4rem" }}>Wide variety: Here, you can find sneakers for sports, fashion, and office wear, suitable for all needs and preferences.</Typography></li>
-            <li><Typography variant="body1" sx={{ fontSize: "1.4rem" }}>Reasonable prices: Myshoes.vn always ensures competitive prices along with exciting promotions.</Typography></li>
-            <li><Typography variant="body1" sx={{ fontSize: "1.4rem" }}>Professional service: The staff are dedicated to helping you find the perfect pair of sneakers.</Typography></li>
-          </ul>
-  
-          <Typography variant="body1" sx={{ textAlign: "left", lineHeight: 1.8, mb: 4, fontSize: "1.4rem" }}>
-            Visit Myshoes.vn to find the perfect sneakers and enjoy a professional, reliable shopping experience. 
-            With Myshoes.vn, owning an authentic trendy sneaker has never been easier!
-          </Typography>
-  
-          <Typography variant="body1" sx={{ fontWeight: "bold", mb: 2, fontSize: "1.6rem" }}>
-            Buy authentic sneakers at Myshoes!
+            Find your perfect sneakers at Zokong today!
           </Typography>
         </Box>
       </Box>
     );
   };
-  
-  export default About;
 
+export default About;
