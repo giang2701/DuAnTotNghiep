@@ -54,7 +54,15 @@ const orderSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["Pending", "Shipping", "Completed", "Cancelled"],
+      enum: [
+        "Pending", // đang xử lý
+        "Confirmed", // đã Xác nhận //admin
+        "Shipping", // đang vận chuyển //admin
+        "Goodsreceived", // Đã nhận được hàng //client //
+        "Completed", // hoan thành //admin
+        "Cancelled", // hủy //client
+        "Delivered", // Đã giao hàng //admin
+      ],
       default: "Pending",
     },
   },

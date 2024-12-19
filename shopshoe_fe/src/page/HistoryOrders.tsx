@@ -45,34 +45,32 @@ const HistoryOrders = () => {
       },
     });
   };
+  const getOrderByid = async () => {
+    try {
+      const { data } = await instance.get(`/orders/user/${user._id}`);
+      const sortedOrders = [...data].sort((a, b) => {
+        if (a.status === "Pending" && b.status !== "Pending") return -1;
+        if (a.status !== "Pending" && b.status === "Pending") return 1;
+        // Sắp xếp theo ngày nếu có các đơn hàng có cùng trạng thái
+        const dateA = new Date(a.createdAt).getTime();
+        const dateB = new Date(b.createdAt).getTime();
+        return dateB - dateA; // Đảm bảo đơn hàng mới nhất lên đầu
+        return 0;
+      });
 
+      setOrders(sortedOrders);
+      setFilteredOrders(data);
+    } catch (error) {
+      setError("Có lỗi khi tải đơn hàng.");
+      console.error("Error fetching orders:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     // console.log("Filtered Orders:", filteredOrders);
     if (user?._id) {
-      (async () => {
-        try {
-          const { data } = await instance.get(`/orders/user/${user._id}`);
-          // console.log(data);
-
-          const sortedOrders = [...data].sort((a, b) => {
-            if (a.status === "Pending" && b.status !== "Pending") return -1;
-            if (a.status !== "Pending" && b.status === "Pending") return 1;
-            // Sắp xếp theo ngày nếu có các đơn hàng có cùng trạng thái
-            const dateA = new Date(a.createdAt).getTime();
-            const dateB = new Date(b.createdAt).getTime();
-            return dateB - dateA; // Đảm bảo đơn hàng mới nhất lên đầu
-            return 0;
-          });
-
-          setOrders(sortedOrders);
-          setFilteredOrders(data);
-        } catch (error) {
-          setError("Có lỗi khi tải đơn hàng.");
-          console.error("Error fetching orders:", error);
-        } finally {
-          setLoading(false);
-        }
-      })();
+      getOrderByid();
     } else {
       setLoading(false);
     }
@@ -81,9 +79,18 @@ const HistoryOrders = () => {
   const getStatusText = (status: string) => {
     const statusMap: { [key: string]: string } = {
       Pending: "Đang  xử lý",
-      Shipping: "vận chuyển",
+      Confirmed: "Xác nhận",
+      Shipping: "Đang vận chuyển",
+      Goodsreceived: "Đã Nhận Được Hàng",
       Completed: "Hoàn thành",
       Cancelled: "Đã hủy đơn",
+      Delivered: "Đã giao hàng",
+      // "Pending", //đang xử lý
+      //   "Confirmed", // đã Xác nhận
+      //   "Shipping", // đang vận chuyển
+      //   "Goodsreceived", //Đã nhận được hàng
+      //   "Completed", //hoan thành
+      //   "Cancelled", // hủy
     };
     return statusMap[status] || "Trạng thái không xác định";
   };
@@ -116,6 +123,7 @@ const HistoryOrders = () => {
 
       // Cập nhật lại trạng thái lọc hiện tại
       setSelectedStatus("Cancelled");
+      // getOrderByid();
     } catch (error: any) {
       const errorMessage =
         error.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại sau.";
@@ -149,14 +157,23 @@ const HistoryOrders = () => {
   const detailOrder = async (orderId: string) => {
     try {
       const { data } = await instance.get(`/orders/${orderId}`);
-      console.log(data);
       setDetailOrderById(data);
     } catch (error) {
       Swal.fire({
         icon: "error",
-        title: "Lỗi Khi xem chi tiếttiết",
+        title: "Lỗi Khi xem chi tiết",
         text: "Đã xảy ra lỗi, vui lòng thử lagi sau.",
       });
+    }
+  };
+  const handleGoodsreceived = async (orderId: string) => {
+    try {
+      await instance.put(`/orders/statusGoodsreceived/${orderId}`);
+      getOrderByid();
+    } catch (error) {
+      toast(
+        "Cập Nhật Trạng Thái Không Thành Công .Vui Lòng Liên Hệ 0385137427 để được hỗ trợ "
+      );
     }
   };
   return (
@@ -170,7 +187,7 @@ const HistoryOrders = () => {
             position: "relative",
             boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
             width: "798px",
-            marginLeft: "403px",
+            marginLeft: "293px",
             borderRadius: "5px",
             marginBottom: "10px",
             height: "50px",
@@ -197,11 +214,35 @@ const HistoryOrders = () => {
             </p>
             <p
               className={`status-link ${
+                selectedStatus === "Confirmed" ? "active" : ""
+              }`}
+              onClick={() => handleFilter("Confirmed")}
+            >
+              Đã xác nhận
+            </p>
+            <p
+              className={`status-link ${
                 selectedStatus === "Shipping" ? "active" : ""
               }`}
               onClick={() => handleFilter("Shipping")}
             >
-              Đang vận chuyển
+              Vận chuyển
+            </p>
+            {/* <p
+              className={`status-link ${
+                selectedStatus === "Goodsreceived" ? "active" : ""
+              }`}
+              onClick={() => handleFilter("Goodsreceived")}
+            >
+              Đã nhận được hàng
+            </p> */}
+            <p
+              className={`status-link ${
+                selectedStatus === "Delivered" ? "active" : ""
+              }`}
+              onClick={() => handleFilter("Delivered")}
+            >
+              Đã giao hàng
             </p>
             <p
               className={`status-link ${
@@ -227,7 +268,7 @@ const HistoryOrders = () => {
             style={{
               border: "2px solid #ccc",
               width: "798px",
-              marginLeft: "403px",
+              marginLeft: "293px",
               borderRadius: "5px",
               marginBottom: "10px",
               padding: "20px",
@@ -256,7 +297,7 @@ const HistoryOrders = () => {
           </div>
         ) : (
           <div>
-            {filteredOrders.map((item) => (
+            {filteredOrders.map((item: any) => (
               <div
                 key={item._id}
                 style={{
@@ -266,7 +307,7 @@ const HistoryOrders = () => {
                   marginBottom: "15px",
                   borderRadius: "8px",
                   width: "800px",
-                  marginLeft: "400px",
+                  marginLeft: "293px",
                   position: "relative",
                   // backgroundColor: "red",
                 }}
@@ -277,13 +318,13 @@ const HistoryOrders = () => {
                     fontSize: "18px",
                     fontWeight: "bold",
                     color: "red",
-                    paddingLeft: "670px",
+                    paddingLeft: "800px",
                   }}
                   className="pStatus"
                 >
                   {getStatusText(item.status)}
                 </p>
-                {item.products.map((child) => (
+                {item.products.map((child: any) => (
                   <div
                     key={child.product._id}
                     style={{ marginBottom: "20px" }}
@@ -373,7 +414,6 @@ const HistoryOrders = () => {
                     }).format(item.totalPrice)}
                   </span>
                 </p>
-
                 {item.status === "Cancelled" ? (
                   <div>
                     <button
@@ -410,9 +450,29 @@ const HistoryOrders = () => {
                       cursor: "not-allowed", // Ngăn không cho nút nhấn
                       width: "120px",
                     }}
-                    disabled
                   >
+                    {" "}
                     Không thể hủy
+                  </button>
+                ) : item.status === "Delivered" ? (
+                  <button
+                    style={{
+                      position: "absolute",
+                      bottom: "10px",
+                      right: "10px",
+                      backgroundColor: "white",
+                      color: "red",
+                      border: "1px solid red",
+                      padding: "10px 20px",
+                      borderRadius: "5px",
+                      fontSize: "12px",
+                      width: "120px",
+                    }}
+                    onClick={() => {
+                      handleGoodsreceived(item._id);
+                    }}
+                  >
+                    Đã Nhận Hàng
                   </button>
                 ) : item.status === "Completed" ? (
                   <button

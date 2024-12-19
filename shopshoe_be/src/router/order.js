@@ -12,6 +12,7 @@ import {
   momoWebhook,
   updateOrderStatus,
   updateStatusCancel,
+  updateStatusGoodsreceived,
 } from "../controller/Orders.js";
 const RouterOrder = express.Router();
 RouterOrder.post("/", createOrder);
@@ -21,6 +22,7 @@ RouterOrder.get("/:id", getOrderDetail);
 RouterOrder.get("/user/:id", getOrderDetailById);
 RouterOrder.put("/status/:id", updateOrderStatus);
 RouterOrder.put("/statusCancel/:id", updateStatusCancel);
+RouterOrder.put("/statusGoodsreceived/:id", updateStatusGoodsreceived);
 RouterOrder.delete("/:id", deleteOrder);
 RouterOrder.post("/payWithMoMo", createOrderAndPayment);
 RouterOrder.post("/payWithMoMoDetail", createOrderAndPaymentDetail);
