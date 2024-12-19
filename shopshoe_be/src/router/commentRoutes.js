@@ -1,16 +1,15 @@
 import { Router } from "express";
 import {
   createComment,
+  getAllComments,
   getCommentsByProductId,
-  updateCommentById,
-  deleteCommentById,
+  hideComment,
 } from "../controller/commentController.js";
 
 const commentRouter = Router();
 
 commentRouter.post("/", createComment);
-commentRouter.get("/:productId", getCommentsByProductId);
-commentRouter.put("/:id", updateCommentById);
-commentRouter.delete("/:id", deleteCommentById);
-
+commentRouter.get("/product/:productId", getCommentsByProductId);
+commentRouter.get("/", getAllComments);
+commentRouter.put("/:commentId/hide", hideComment);
 export default commentRouter;

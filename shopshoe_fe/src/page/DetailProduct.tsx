@@ -686,7 +686,8 @@ const DetailProduct = () => {
           </div>
         </div>
 
-        <ProductComments />
+        <ProductComments productId={product._id} />
+
         <div className="title__products__Related">
           <p>Sản phẩm liên quan </p>
         </div>

@@ -12,6 +12,7 @@ export interface Order {
     quantity: number;
     size: Size;
     _id: string;
+    isRated: boolean;
   }[];
   totalPrice: number;
   voucher: string | null;

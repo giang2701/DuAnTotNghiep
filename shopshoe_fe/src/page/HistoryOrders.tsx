@@ -3,41 +3,86 @@ import instance from "../api";
 import { toast } from "react-toastify";
 import { Order } from "../interface/Order";
 import Swal from "sweetalert2";
-import { Box, Button, Rating, TextField, Typography } from "@mui/material";
-import axios from "axios";
+import CommentForm from "./CommentForm/CommentForm";
+
+const RateButton = ({ order, onClick }: { order: Order; onClick: any }) => {
+  const isRateAll = order?.products?.every((it) => it.isRated);
+
+  if (isRateAll) return;
+
+  return (
+    <button
+      onClick={onClick} // Hiển thị form
+      style={{
+        position: "absolute",
+        bottom: "10px",
+        right: "140px", // Đặt khoảng cách với nút "Không thể hủy"
+        backgroundColor: "#4caf50", // Màu xanh cho nút đánh giá
+        color: "white",
+        textTransform: "none",
+        border: "none",
+        padding: "10px 20px",
+        borderRadius: "5px",
+        fontSize: "12px",
+        cursor: "pointer",
+        width: "120px",
+      }}
+    >
+      Đánh giá
+    </button>
+  );
+};
 
 const HistoryOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string>("");
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
-  const userId = user ? user._id : null;
 
-  const [rating, setRating] = useState<number | null>(0);
-  const [comment, setComment] = useState("");
-  const [productId] = useState("6714ffaf2c9f0f1a49e63cc9");
   const [isFormOpen, setIsFormOpen] = useState(false); // Quản lý trạng thái form
 
-  const submitComment = async () => {
-    if (!userId) {
-      return;
-    }
-    if (comment.length > 200) {
-      toast.error("Bình luận không được vượt quá 200 ký tự.");
-      return;
-    }
-    const newComment = { productId, userId, rating, comment };
-    try {
-      await axios.post("http://localhost:8000/api/comments", newComment);
-      setRating(0);
-      setComment("");
-      setIsFormOpen(false);
-      toast.success("Đánh giá thành công!"); // Hiển thị thông báo đánh giá thành công
-    } catch (error) {
-      toast.error("Có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại sau.");
+  const refreshAfterComment = ({
+    type,
+    productId,
+    orderId,
+  }: {
+    type: "SINGLE_RATE" | "RATE_ALL";
+    productId?: string;
+    orderId: string;
+  }) => {
+    if (type === "SINGLE_RATE") {
+      const newOrders = filteredOrders?.map((it) => {
+        if (it._id === orderId) {
+          const newProducts = it?.products?.map((it) =>
+            it.product._id === productId ? { ...it, isRated: true } : it
+          );
+
+          return { ...it, products: newProducts };
+        }
+
+        return it;
+      });
+
+      setFilteredOrders(newOrders);
+    } else {
+      const newOrders = filteredOrders?.map((it) => {
+        if (it._id === orderId) {
+          const newProducts = it?.products?.map((it) => ({
+            ...it,
+            isRated: true,
+          }));
+
+          return { ...it, products: newProducts };
+        }
+
+        return it;
+      });
+
+      setFilteredOrders(newOrders);
     }
   };
 
@@ -387,25 +432,13 @@ const HistoryOrders = () => {
                 </button>
               ) : item.status === "Completed" ? (
                 <>
-                  <button
-                    onClick={() => setIsFormOpen(true)} // Hiển thị form
-                    style={{
-                      position: "absolute",
-                      bottom: "10px",
-                      right: "140px", // Đặt khoảng cách với nút "Không thể hủy"
-                      backgroundColor: "#4caf50", // Màu xanh cho nút đánh giá
-                      color: "white",
-                      textTransform: "none",
-                      border: "none",
-                      padding: "10px 20px",
-                      borderRadius: "5px",
-                      fontSize: "12px",
-                      cursor: "pointer",
-                      width: "120px",
+                  <RateButton
+                    onClick={() => {
+                      setIsFormOpen(true);
+                      setSelectedOrder(item);
                     }}
-                  >
-                    Đánh giá
-                  </button>
+                    order={item}
+                  />
 
                   <button
                     style={{
@@ -464,100 +497,12 @@ const HistoryOrders = () => {
                 </button>
               )}
 
-              {isFormOpen && (
-                <>
-                  {/* Overlay */}
-                  <Box
-                    sx={{
-                      position: "fixed",
-                      top: 0,
-                      left: 0,
-                      width: "100%",
-                      height: "100%",
-                      backgroundColor: "rgba(0, 0, 0, 0.5)",
-                      zIndex: 999,
-                    }}
-                    onClick={() => setIsFormOpen(false)} // Đóng form khi nhấp ngoài
-                  />
-                  {/* Form Popup */}
-                  <Box
-                    sx={{
-                      position: "fixed",
-                      top: "50%",
-                      left: "50%",
-                      transform: "translate(-50%, -50%)",
-                      backgroundColor: "white",
-                      padding: "20px",
-                      borderRadius: "8px",
-                      boxShadow: "#ffffff",
-                      zIndex: 1000,
-                      minWidth: "300px",
-                      border: "2px solid #ccc", // Thêm viền ngoài cho form
-                    }}
-                  >
-                    {userId ? (
-                      <div>
-                        <Typography
-                          variant="h6"
-                          sx={{ marginBottom: "10px", fontWeight: "bold" }}
-                        >
-                          Viết bình luận
-                        </Typography>
-                        <Rating
-                          name="rating"
-                          value={rating}
-                          onChange={(event, newValue) => setRating(newValue)}
-                          sx={{ marginBottom: "10px" }}
-                        />
-                        <TextField
-                          label="Viết bình luận..."
-                          multiline
-                          rows={2}
-                          value={comment}
-                          onChange={(e) => setComment(e.target.value)}
-                          variant="outlined"
-                          fullWidth
-                          sx={{
-                            marginBottom: "10px",
-                            backgroundColor: "#ffffff",
-                            borderRadius: "5px",
-                          }}
-                        />
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={submitComment}
-                            sx={{
-                              textTransform: "none",
-                              boxShadow: "#ffffff",
-                            }}
-                          >
-                            Submit
-                          </Button>
-                          <Button
-                            variant="outlined"
-                            color="secondary"
-                            onClick={() => setIsFormOpen(false)} // Nút "Đóng"
-                            sx={{ textTransform: "none" }}
-                          >
-                            Đóng
-                          </Button>
-                        </div>
-                      </div>
-                    ) : (
-                      <Typography variant="h6" color="error">
-                        Bạn cần đăng nhập để bình luận.
-                      </Typography>
-                    )}
-                  </Box>
-                </>
-              )}
+              <CommentForm
+                open={isFormOpen}
+                onClose={() => setIsFormOpen(false)}
+                selectedOrder={selectedOrder}
+                refreshAfterComment={refreshAfterComment}
+              />
             </div>
           ))}
         </div>

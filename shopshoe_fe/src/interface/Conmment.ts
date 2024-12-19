@@ -6,4 +6,5 @@ export interface iComment {
   comment: String;
   createdAt?: string;
   updatedAt?: string;
+  hidden: Boolean;
 }

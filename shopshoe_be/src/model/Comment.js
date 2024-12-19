@@ -20,8 +20,15 @@ const commentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    hidden: { type: Boolean, default: false },
+
+    orderId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Order",
+      required: true,
+    },
   },
-  { timestamps: true } // Thêm timestamps để tự động tạo `createdAt` và `updatedAt`
+  { timestamps: true }
 );
 
 const Comment = mongoose.model("Comment", commentSchema);

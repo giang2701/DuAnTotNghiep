@@ -22,6 +22,7 @@ const orderSchema = new Schema(
           ref: "Size",
           required: true, // Bắt buộc chọn size
         },
+        // commented: { type: Boolean, default: false },
       },
     ],
     totalPrice: {
@@ -57,6 +58,16 @@ const orderSchema = new Schema(
       enum: ["Pending", "Shipping", "Completed", "Cancelled"],
       default: "Pending",
     },
+    productComments: [
+      {
+        productId: {
+          type: Schema.Types.ObjectId,
+          ref: "Product",
+          required: true,
+        },
+        comment: { type: String, required: false },
+      },
+    ],
   },
   { versionKey: false, timestamps: true }
 );

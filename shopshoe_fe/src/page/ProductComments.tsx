@@ -1,35 +1,45 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import {
-  Container,
+  Box,
   Typography,
-  List,
-  ListItem,
-  ListItemText,
   Rating,
+  CircularProgress,
   Pagination,
 } from "@mui/material";
+import instance from "../api";
 import { iComment } from "../interface/Conmment";
 
-const ProductComments = () => {
-  const [comments, setComments] = useState<iComment[]>([]);
-  const [productId] = useState("6714ffaf2c9f0f1a49e63cc9");
+const ProductComments = ({ productId }: { productId: string }) => {
+  const [comments, setComments] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const commentsPerPage = 4;
+  const commentsPerPage = 3;
+
+  const fetchComments = async () => {
+    try {
+      const response = await instance.get(`/comments/product/${productId}`);
+      const fifterCmt = response.data.data.filter(
+        (product: iComment) => product.hidden
+      );
+      console.log("fifterCmt", fifterCmt);
+
+      //  const activeProducts = data.data.filter(
+      //           (product: Product) => product.isActive
+      //         );
+      setComments(fifterCmt); // API chỉ trả về bình luận `hidden: false`
+    } catch (error) {
+      console.error("Lỗi khi lấy bình luận:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchComments();
-  }, []);
-
-  const fetchComments = async () => {
-    const response = await axios.get(
-      `http://localhost:8000/api/comments/${productId}`
-    );
-    setComments(response.data.data);
-  };
+  }, [productId]);
 
   const handlePageChange = (
-    _event: React.ChangeEvent<unknown>,
+    event: React.ChangeEvent<unknown>,
     value: number
   ) => {
     setCurrentPage(value);
@@ -41,44 +51,67 @@ const ProductComments = () => {
     startIndex + commentsPerPage
   );
 
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "200px",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
-    <Container>
-      <Typography sx={{ marginTop: "20px", marginBottom: "20px" }} variant="h4">
-        Comments
+    <Box>
+      <Typography
+        variant="h5"
+        sx={{ marginBottom: "20px", fontWeight: "bold" }}
+      >
+        Đánh giá
       </Typography>
 
-      <List>
-        {currentComments?.length > 0 ? (
-          currentComments.map((comment) => (
-            <ListItem key={comment._id}>
-              <ListItemText
-                primary={
-                  <>
-                    <Typography variant="body1" fontWeight="bold">
-                      {comment.userId.username}
-                    </Typography>
-                    <Rating
-                      sx={{ marginLeft: "-8px" }}
-                      value={comment.rating}
-                      readOnly
-                    />
-                  </>
-                }
-                secondary={comment.comment}
-              />
-            </ListItem>
-          ))
-        ) : (
-          <Typography>Chưa có lượt đánh giá nào.</Typography>
-        )}
-      </List>
-      <Pagination
-        count={Math.ceil(comments.length / commentsPerPage)}
-        page={currentPage}
-        onChange={handlePageChange}
-        sx={{ marginTop: "20px", display: "flex", justifyContent: "center" }}
-      />
-    </Container>
+      {comments.length === 0 ? (
+        <Typography>Chưa có bình luận nào cho sản phẩm này.</Typography>
+      ) : (
+        <>
+          {currentComments.map((comment) => (
+            <Box
+              key={comment._id}
+              sx={{
+                marginBottom: "20px",
+                padding: "15px",
+                border: "1px solid #ccc",
+                borderRadius: "5px",
+                backgroundColor: "#f9f9f9",
+              }}
+            >
+              <Typography sx={{ fontWeight: "bold" }}>
+                {comment.userId.username || "Người dùng ẩn danh"}
+              </Typography>
+              <Rating value={comment.rating} readOnly sx={{ marginY: "2px" }} />
+              <Typography>{comment.comment}</Typography>
+              <Typography variant="caption" color="text.secondary">
+                {new Date(comment.createdAt).toLocaleDateString("vi-VN")}
+              </Typography>
+            </Box>
+          ))}
+
+          <Box display="flex" justifyContent="center" marginTop="20px">
+            <Pagination
+              count={Math.ceil(comments.length / commentsPerPage)}
+              page={currentPage}
+              onChange={handlePageChange}
+              color="primary"
+            />
+          </Box>
+        </>
+      )}
+    </Box>
   );
 };
 

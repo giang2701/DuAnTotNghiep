@@ -1,17 +1,25 @@
 import Comment from "../model/Comment.js";
-export const createComment = async (req, res, next) => {
+import { censorComment } from "../utils/censor.js";
+export const createComment = async (req, res) => {
   try {
-    const { productId, userId, rating, comment } = req.body;
-    const newComment = await Comment.create({
+    const { productId, userId, rating, comment, orderId } = req.body;
+
+    const sanitizedComment = censorComment(comment);
+
+    const newComment = new Comment({
       productId,
       userId,
       rating,
-      comment,
+      comment: sanitizedComment,
+      hidden: true,
+      orderId,
     });
+
+    await newComment.save();
+
     res.status(201).json({ success: true, data: newComment });
   } catch (error) {
-    console.log(error);
-    next(error);
+    res.status(500).json({ success: false, message: "Có lỗi xảy ra." });
   }
 };
 
@@ -27,23 +35,42 @@ export const getCommentsByProductId = async (req, res, next) => {
   }
 };
 
-export const updateCommentById = async (req, res, next) => {
+export const getAllComments = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const updatedComment = await Comment.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
-    res.status(200).json({ success: true, data: updatedComment });
+    const comments = await Comment.find()
+      .populate("userId", "username")
+      .populate("productId", "title")
+      .sort({ createdAt: -1 });
+    res.status(200).json({ success: true, data: comments });
   } catch (error) {
+    console.log("Lỗi khi lấy tất cả bình luận:", error);
     next(error);
   }
 };
 
-export const deleteCommentById = async (req, res, next) => {
+// Trong commentController.js
+export const hideComment = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    await Comment.findByIdAndDelete(id);
-    res.status(200).json({ success: true, message: "Comment deleted" });
+    const { commentId } = req.params;
+    const { hidden } = req.body;
+
+    const updatedComment = await Comment.findByIdAndUpdate(
+      commentId,
+      { hidden },
+      { new: true }
+    );
+
+    if (!updatedComment) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Bình luận không tồn tại." });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Bình luận đã được ${hidden ? "hiện" : "ẩn"}.`,
+      data: updatedComment,
+    });
   } catch (error) {
     next(error);
   }

@@ -368,7 +368,7 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
                     verticalAlign: "middle",
                   }}
                 ></i>
-                <span className="menu-text">QL comments</span>
+                <span className="menu-text">QL đánh giá</span>
               </Link>
             </li>
             <li>
