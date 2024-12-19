@@ -109,13 +109,17 @@ export default function Product_List1() {
             }
         });
     };
-    const updatePriceRange = (e: any, type: "min" | "max") => {
-        const value = parseInt(e.target.value);
-        if (type === "min") {
-            setPriceRange([value, priceRange[1]]);
-        } else {
-            setPriceRange([priceRange[0], value]);
-        }
+    //hàm lọc min max
+
+    const updatePriceRange = (e, type) => {
+        const value = Number(e.target.value);
+        setPriceRange((prev) => {
+            if (type === "min") {
+                return [Math.min(value, prev[1]), prev[1]]; // Không để min > max
+            } else {
+                return [prev[0], Math.max(value, prev[0])]; // Không để max < min
+            }
+        });
     };
 
 
@@ -310,19 +314,39 @@ export default function Product_List1() {
                             {isPriceRangeOpen && (
                                 <div className="shop-sidebar__range-slider">
                                     <label htmlFor="price-range">Mức giá</label>
-                                    <input
-                                        type="range"
-                                        min="0"
-                                        max="10000000"
-                                        value={priceRange[0]}
-                                        onChange={(e) =>
-                                            updatePriceRange(e, "min")
-                                        }
-                                        className="slider-input"
-                                        id="price-range"
-                                    />
+                                    <div className="range-slider-container">
+                                        <span className="range-label">0 đ</span>
+                                        <div className="dual-slider">
+                                            <input
+                                                type="range"
+                                                min="0"
+                                                max="10000000"
+                                                step="100000"
+                                                value={priceRange[0]}
+                                                onChange={(e) => updatePriceRange(e, "min")}
+                                                className="slider-input"
+                                            />
+                                            <input
+                                                type="range"
+                                                min="0"
+                                                max="10000000"
+                                                step="100000"
+                                                value={priceRange[1]}
+                                                onChange={(e) => updatePriceRange(e, "max")}
+                                                className="slider-input"
+                                            />
+                                            <div
+                                                className="slider-track"
+                                                style={{
+                                                    left: `${(priceRange[0] / 10000000) * 100}%`,
+                                                    right: `${100 - (priceRange[1] / 10000000) * 100}%`,
+                                                }}
+                                            ></div>
+                                        </div>
+                                        <span className="range-label">10.000.000 đ</span>
+                                    </div>
                                     <span className="item_price">
-                                        {priceRange[0].toLocaleString()} đ
+                                        {priceRange[0].toLocaleString()} đ - {priceRange[1].toLocaleString()} đ
                                     </span>
                                 </div>
                             )}

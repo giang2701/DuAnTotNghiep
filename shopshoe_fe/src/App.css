@@ -2145,36 +2145,136 @@ ul li:hover {
 /* Thanh Trượt */
 .shop-sidebar__range-slider {
   display: flex;
-  align-items: center;
   flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.range-slider-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+
+.dual-slider {
+  position: relative;
+  width: 100%;
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 12px;
+  margin: 10px 0;
 }
 
 .slider-input {
+  position: absolute;
   width: 100%;
-  appearance: none;
-  height: 6px;
-  background: #ddd;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 0.5rem 0;
+  height: 8px;
+  -webkit-appearance: none;
+  background: transparent;
+  pointer-events: none;
 }
 
+
+/* nút thanh trượt của min */
 .slider-input::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 20px;
-  height: 20px;
-  background: #ddd;
+  width: 18px;
+  height: 18px;
+  background: #007bff;
   border-radius: 50%;
+  pointer-events: all;
+  cursor: pointer;
+  border: 2px solid #007bff;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
+
+/* nút thanh trượt max  */
 .slider-input::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  background: #ddd;
+  width: 18px;
+  height: 18px;
+  background: #007bff;
   border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #007bff;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
+/* Thanh nối giữa 2 nút trượt */
+.slider-track {
+  position: absolute;
+  height: 8px;
+  background: #007bff;
+  border-radius: 12px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* thanh trượt trong xuốt  */
+.slider-input::-webkit-slider-runnable-track {
+  background: transparent;
+}
+
+/* không hiển thị thanh trượt mặc định */
+.slider-input::-moz-range-track {
+  background: transparent;
+}
+
+.range-label {
+  font-size: 1rem;
+  color: #333;
+  white-space: nowrap;
+  margin: 0 1rem;
+  font-weight: 600;
+}
+
+.item_price {
+  margin-top: 0.5rem;
+  font-weight: bold;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.slider-input::-webkit-slider-thumb:hover,
+.slider-input::-moz-range-thumb:hover {
+  background-color: #00aaff;
+  border: 2px solid #007bff;
+}
+
+.slider-input::-webkit-slider-thumb:active,
+.slider-input::-moz-range-thumb:active {
+  transform: scale(1.1);
+}
+
+
+.range-label {
+  font-size: 1rem;
+  color: #333;
+  white-space: nowrap;
+  margin: 0 1rem;
+  font-weight: 600;
+}
+
+.item_price {
+  margin-top: 0.5rem;
+  font-weight: bold;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.slider-input::-webkit-slider-thumb:hover,
+.slider-input::-moz-range-thumb:hover {
+  background-color: #05283a;
+  border: 2px solid #061525;
+}
+
+.slider-input::-webkit-slider-thumb:active,
+.slider-input::-moz-range-thumb:active {
+  transform: scale(1.1);
+}
 /* Radio */
 .shop-sidebar__sub-list {
   display: grid;

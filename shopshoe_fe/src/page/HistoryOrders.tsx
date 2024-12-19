@@ -15,8 +15,8 @@ const RateButton = ({ order, onClick }: { order: Order; onClick: any }) => {
       onClick={onClick} // Hiển thị form
       style={{
         position: "absolute",
-        bottom: "10px",
-        right: "280px", // Đặt khoảng cách với nút "Không thể hủy"
+        bottom: "14px",
+        right: "290px", // Đặt khoảng cách với nút "Không thể hủy"
         backgroundColor: "#4caf50", // Màu xanh cho nút đánh giá
         color: "white",
         textTransform: "none",
@@ -269,33 +269,29 @@ const HistoryOrders = () => {
         >
           <div className="status-links-container" style={{ cursor: "pointer" }}>
             <p
-              className={`status-links ${
-                selectedStatus === "" ? "active" : ""
-              }`}
+              className={`status-links ${selectedStatus === "" ? "active" : ""
+                }`}
               onClick={() => handleFilter("")}
             >
               Tất cả
             </p>
             <p
-              className={`status-link ${
-                selectedStatus === "Pending" ? "active" : ""
-              }`}
+              className={`status-link ${selectedStatus === "Pending" ? "active" : ""
+                }`}
               onClick={() => handleFilter("Pending")}
             >
               Đang xử lý
             </p>
             <p
-              className={`status-link ${
-                selectedStatus === "Confirmed" ? "active" : ""
-              }`}
+              className={`status-link ${selectedStatus === "Confirmed" ? "active" : ""
+                }`}
               onClick={() => handleFilter("Confirmed")}
             >
               Đã xác nhận
             </p>
             <p
-              className={`status-link ${
-                selectedStatus === "Shipping" ? "active" : ""
-              }`}
+              className={`status-link ${selectedStatus === "Shipping" ? "active" : ""
+                }`}
               onClick={() => handleFilter("Shipping")}
             >
               Vận chuyển
@@ -309,25 +305,22 @@ const HistoryOrders = () => {
               Đã nhận được hàng
             </p> */}
             <p
-              className={`status-link ${
-                selectedStatus === "Delivered" ? "active" : ""
-              }`}
+              className={`status-link ${selectedStatus === "Delivered" ? "active" : ""
+                }`}
               onClick={() => handleFilter("Delivered")}
             >
               Đã giao hàng
             </p>
             <p
-              className={`status-link ${
-                selectedStatus === "Completed" ? "active" : ""
-              }`}
+              className={`status-link ${selectedStatus === "Completed" ? "active" : ""
+                }`}
               onClick={() => handleFilter("Completed")}
             >
               Hoàn thành
             </p>
             <p
-              className={`status-link  linkAHistory ${
-                selectedStatus === "Cancelled" ? "active" : ""
-              }`}
+              className={`status-link  linkAHistory ${selectedStatus === "Cancelled" ? "active" : ""
+                }`}
               onClick={() => handleFilter("Cancelled")}
             >
               Đã hủy
@@ -473,7 +466,7 @@ const HistoryOrders = () => {
                   style={{
                     fontSize: "18px",
                     position: "absolute",
-                    bottom: "5px",
+                    bottom: "15px",
                     right: "50px",
                     fontWeight: "bold",
                   }}
@@ -491,7 +484,7 @@ const HistoryOrders = () => {
                     <button
                       style={{
                         position: "absolute",
-                        bottom: "10px",
+                        bottom: "15px",
                         right: "10px",
                         backgroundColor: "#817876", // Màu khi đã hủy
                         color: "white",
@@ -511,7 +504,7 @@ const HistoryOrders = () => {
                   <button
                     style={{
                       position: "absolute",
-                      bottom: "10px",
+                      bottom: "15px",
                       right: "10px",
                       backgroundColor: "#817876", // Màu khi vận chuyển
                       color: "white",
@@ -530,7 +523,7 @@ const HistoryOrders = () => {
                   <button
                     style={{
                       position: "absolute",
-                      bottom: "10px",
+                      bottom: "15px",
                       right: "10px",
                       backgroundColor: "white",
                       color: "red",
@@ -559,7 +552,7 @@ const HistoryOrders = () => {
                     <button
                       style={{
                         position: "absolute",
-                        bottom: "10px",
+                        bottom: "15px",
                         right: "10px",
                         backgroundColor: "#817876", // Màu khi vận chuyển
                         color: "white",
@@ -568,7 +561,7 @@ const HistoryOrders = () => {
                         borderRadius: "5px",
                         fontSize: "12px",
                         cursor: "not-allowed", // Ngăn không cho nút nhấn
-                        width: "120px",
+                        width: "129px",
                       }}
                     >
                       {" "}
@@ -604,7 +597,7 @@ const HistoryOrders = () => {
                       backgroundColor: "red",
                       color: "white",
                       border: "none",
-                      padding: "10px 20px",
+                      padding: "10px 27px",
                       borderRadius: "5px",
                       cursor: "pointer",
                       fontSize: "12px",
@@ -621,8 +614,8 @@ const HistoryOrders = () => {
                   }}
                   style={{
                     position: "absolute",
-                    bottom: "12px",
-                    right: "140px",
+                    bottom: "14px",
+                    right: "145px",
                     backgroundColor: "red",
                     color: "white",
                     border: "none",
