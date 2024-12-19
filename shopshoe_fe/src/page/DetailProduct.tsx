@@ -25,6 +25,7 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import ProductItem from "./ProductItem";
 import TymButton from "../component/Btn__tym";
+import ProductComments from "./ProductComments";
 const DetailProduct = () => {
   const { id } = useParams();
   const userArray = localStorage.getItem("user");
@@ -719,6 +720,8 @@ const DetailProduct = () => {
             </IconButton>
           </div>
         </div>
+
+        <ProductComments productId={product._id} />
         <div className="title__products__Related">
           <p>Sản phẩm liên quan </p>
         </div>

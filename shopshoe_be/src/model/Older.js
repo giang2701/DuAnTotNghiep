@@ -65,6 +65,16 @@ const orderSchema = new Schema(
       ],
       default: "Pending",
     },
+    productComments: [
+      {
+        productId: {
+          type: Schema.Types.ObjectId,
+          ref: "Product",
+          required: true,
+        },
+        comment: { type: String, required: false },
+      },
+    ],
   },
   { versionKey: false, timestamps: true }
 );

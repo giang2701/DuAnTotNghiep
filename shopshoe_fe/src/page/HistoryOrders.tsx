@@ -3,6 +3,35 @@ import instance from "../api";
 import { toast } from "react-toastify";
 import { Order } from "../interface/Order";
 import Swal from "sweetalert2";
+import CommentForm from "./CommentForm/CommentForm";
+
+const RateButton = ({ order, onClick }: { order: Order; onClick: any }) => {
+  const isRateAll = order?.products?.every((it) => it.isRated);
+
+  if (isRateAll) return;
+
+  return (
+    <button
+      onClick={onClick} // Hiển thị form
+      style={{
+        position: "absolute",
+        bottom: "10px",
+        right: "280px", // Đặt khoảng cách với nút "Không thể hủy"
+        backgroundColor: "#4caf50", // Màu xanh cho nút đánh giá
+        color: "white",
+        textTransform: "none",
+        border: "none",
+        padding: "10px 20px",
+        borderRadius: "5px",
+        fontSize: "12px",
+        cursor: "pointer",
+        width: "120px",
+      }}
+    >
+      Đánh giá
+    </button>
+  );
+};
 const HistoryOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
@@ -13,6 +42,10 @@ const HistoryOrders = () => {
   const user = storedUser ? JSON.parse(storedUser) : null;
   const [detailOrderById, setDetailOrderById] = useState<Order | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+
+  const [isFormOpen, setIsFormOpen] = useState(false); // Quản lý trạng thái form
+
   const handleCopyOrderId = () => {
     const orderId = detailOrderById?._id;
     if (orderId) {
@@ -75,7 +108,46 @@ const HistoryOrders = () => {
       setLoading(false);
     }
   }, [user?._id]);
+  const refreshAfterComment = ({
+    type,
+    productId,
+    orderId,
+  }: {
+    type: "SINGLE_RATE" | "RATE_ALL";
+    productId?: string;
+    orderId: string;
+  }) => {
+    if (type === "SINGLE_RATE") {
+      const newOrders = filteredOrders?.map((it) => {
+        if (it._id === orderId) {
+          const newProducts = it?.products?.map((it) =>
+            it.product._id === productId ? { ...it, isRated: true } : it
+          );
 
+          return { ...it, products: newProducts };
+        }
+
+        return it;
+      });
+
+      setFilteredOrders(newOrders);
+    } else {
+      const newOrders = filteredOrders?.map((it) => {
+        if (it._id === orderId) {
+          const newProducts = it?.products?.map((it) => ({
+            ...it,
+            isRated: true,
+          }));
+
+          return { ...it, products: newProducts };
+        }
+
+        return it;
+      });
+
+      setFilteredOrders(newOrders);
+    }
+  };
   const getStatusText = (status: string) => {
     const statusMap: { [key: string]: string } = {
       Pending: "Đang  xử lý",
@@ -475,24 +547,34 @@ const HistoryOrders = () => {
                     Đã Nhận Hàng
                   </button>
                 ) : item.status === "Completed" ? (
-                  <button
-                    style={{
-                      position: "absolute",
-                      bottom: "10px",
-                      right: "10px",
-                      backgroundColor: "#817876", // Màu khi vận chuyển
-                      color: "white",
-                      border: "none",
-                      padding: "10px 20px",
-                      borderRadius: "5px",
-                      fontSize: "12px",
-                      cursor: "not-allowed", // Ngăn không cho nút nhấn
-                      width: "120px",
-                    }}
-                  >
+                  <>
                     {" "}
-                    Không thể hủy
-                  </button>
+                    <RateButton
+                      onClick={() => {
+                        setIsFormOpen(true);
+                        setSelectedOrder(item);
+                      }}
+                      order={item}
+                    />
+                    <button
+                      style={{
+                        position: "absolute",
+                        bottom: "10px",
+                        right: "10px",
+                        backgroundColor: "#817876", // Màu khi vận chuyển
+                        color: "white",
+                        border: "none",
+                        padding: "10px 20px",
+                        borderRadius: "5px",
+                        fontSize: "12px",
+                        cursor: "not-allowed", // Ngăn không cho nút nhấn
+                        width: "120px",
+                      }}
+                    >
+                      {" "}
+                      Không thể hủy
+                    </button>
+                  </>
                 ) : item.paymentMethod === "MOMO" ? (
                   <button
                     onClick={() => support()}
@@ -555,6 +637,12 @@ const HistoryOrders = () => {
                 </button>
               </div>
             ))}
+            <CommentForm
+              open={isFormOpen}
+              onClose={() => setIsFormOpen(false)}
+              selectedOrder={selectedOrder}
+              refreshAfterComment={refreshAfterComment}
+            />
           </div>
         )}
       </div>

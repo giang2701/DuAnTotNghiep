@@ -5,6 +5,7 @@ import Cart from "../model/Cart.js";
 import crypto from "crypto";
 import axios from "axios";
 import mongoose from "mongoose";
+import Comment from "../model/Comments.js";
 export const createOrder = async (req, res, next) => {
   try {
     const {
@@ -636,6 +637,7 @@ export const updateOrderStatus = async (req, res, next) => {
       .json({ message: "Lỗi máy chủ. Không thể cập nhật trạng thái." });
   }
 };
+
 // lấy theo id user
 export const getOrderDetailById = async (req, res, next) => {
   try {
@@ -644,12 +646,35 @@ export const getOrderDetailById = async (req, res, next) => {
     const order = await Order.find({ userId: userId })
       .populate("products.product")
       .populate("products.size");
-    // console.log(order);
-    if (!order) {
-      return res.status(404).json({ message: "Đơn hàng không tồn tại." });
-    }
+    const newOrders = await Promise.all(
+      order.map(async (it) => {
+        const products = await Promise.all(
+          it.products.map(async (x) => {
+            const isRated = await Comment.findOne({
+              userId,
+              productId: x.product._id,
+              orderId: it._id,
+            });
 
-    return res.status(200).json(order); // Trả về chi tiết đơn hàng
+            return {
+              ...x.toJSON(),
+              isRated: !!isRated,
+            };
+          })
+        );
+
+        return {
+          ...it.toJSON(),
+          products,
+        };
+      })
+    );
+
+    // console.log(order);
+    // if (!order) {
+    //   return res.status(404).json({ message: "Đơn hàng không tồn tại." });
+    // }
+    return res.status(200).json(newOrders); // Trả về chi tiết đơn hàng
   } catch (error) {
     console.error("Lỗi khi lấy chi tiết đơn hàng:", error);
     return res
