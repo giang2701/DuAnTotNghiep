@@ -240,7 +240,7 @@ const TrashCan = () => {
                                             </td>
                                             <td>
                                                 <div className="d-flex justify-content-center">
-                                                    <button
+                                                    {/* <button
                                                         className="me-3"
                                                         onClick={() =>
                                                             handleDelete(
@@ -258,7 +258,7 @@ const TrashCan = () => {
                                                         }}
                                                     >
                                                         <i className="fa-solid fa-trash"></i>
-                                                    </button>
+                                                    </button> */}
                                                     <button
                                                         style={{
                                                             borderRadius: "5px",

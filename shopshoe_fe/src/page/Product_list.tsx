@@ -31,21 +31,18 @@ export default function Product_List() {
         indexOfLastProduct
     );
 
-
     useEffect(() => {
         // Fetch brands using axios when component is mounted
         axios
             .get("http://localhost:8000/api/Brand") // Update with your API endpoint
             .then((response) => {
                 setBrands(response.data.data); // Assuming the response contains a list of brands
-                console.log(response.data);
-
+                // console.log(response.data);
             })
             .catch((error) => {
                 console.error("Error fetching brands:", error);
             });
     }, []);
-
 
     useEffect(() => {
         setGender("None");
@@ -70,7 +67,7 @@ export default function Product_List() {
 
     //hàm lọc min max
 
-    const updatePriceRange = (e, type) => {
+    const updatePriceRange = (e: any, type: any) => {
         const value = Number(e.target.value);
         setPriceRange((prev) => {
             if (type === "min") {
@@ -113,8 +110,8 @@ export default function Product_List() {
     //         .replace("₫", "đ");
     // };
 
-    const userArray = localStorage.getItem("user")
-    const user = userArray ? JSON.parse(userArray) : null
+    const userArray = localStorage.getItem("user");
+    const user = userArray ? JSON.parse(userArray) : null;
 
     const [favorites, setFavorites] = useState<Product[]>(() => {
         try {
@@ -126,14 +123,14 @@ export default function Product_List() {
         }
     });
 
-
     const toggleFavorite = async (item: Product) => {
-
         const isAlreadyFavorite = favorites.some((fav) => fav._id === item._id);
-        console.log(isAlreadyFavorite)
+        // console.log(isAlreadyFavorite)
 
         if (!user) {
-            const isAlreadyFavorite = favorites.some((fav) => fav._id === item._id);
+            const isAlreadyFavorite = favorites.some(
+                (fav) => fav._id === item._id
+            );
             // Xử lý khi không có user (chưa đăng nhập)
             const updatedFavorites = isAlreadyFavorite
                 ? favorites.filter((fav) => fav._id !== item._id)
@@ -147,12 +144,15 @@ export default function Product_List() {
                 if (isAlreadyFavorite) {
                     // Nếu đã thích, xóa khỏi server và localStorage
                     await instance.delete(`/heart/${user._id}/${item._id}`);
-                    toast.success("Bỏ thích thành công")
+                    toast.success("Bỏ thích thành công");
                     const updatedFavorites = favorites.filter(
                         (fav) => fav._id !== item._id
                     );
                     setFavorites(updatedFavorites);
-                    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+                    localStorage.setItem(
+                        "favorites",
+                        JSON.stringify(updatedFavorites)
+                    );
                 } else {
                     // Nếu chưa thích, thêm vào server và localStorage
                     const heart = {
@@ -160,10 +160,13 @@ export default function Product_List() {
                         productId: item._id,
                     };
                     await instance.post("/heart", heart);
-                    toast.success("Thích sản phẩm thành công")
+                    toast.success("Thích sản phẩm thành công");
                     const updatedFavorites = [...favorites, item];
                     setFavorites(updatedFavorites);
-                    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+                    localStorage.setItem(
+                        "favorites",
+                        JSON.stringify(updatedFavorites)
+                    );
                 }
             } catch (error) {
                 console.error("Error toggling favorite:", error);
@@ -173,7 +176,10 @@ export default function Product_List() {
 
     const isFavorite = (item: Product) => {
         // Kiểm tra `favorites` là mảng hợp lệ
-        return Array.isArray(favorites) && favorites.some((fav) => fav._id === item._id);
+        return (
+            Array.isArray(favorites) &&
+            favorites.some((fav) => fav._id === item._id)
+        );
     };
 
     return (
@@ -217,16 +223,27 @@ export default function Product_List() {
                             {isBrandOpen && (
                                 <div className="shop-sidebar__sub-list">
                                     {brands.map((brand: any) => (
-                                        <label className="shop-sidebar__sub-item" key={brand._id}>
+                                        <label
+                                            className="shop-sidebar__sub-item"
+                                            key={brand._id}
+                                        >
                                             <input
                                                 className="input1"
                                                 type="checkbox"
                                                 name={brand.title}
                                                 value={brand.title}
-                                                checked={selectedBrands.includes(brand.title)}
-                                                onChange={() => updateBrandSelection(brand.title)}
+                                                checked={selectedBrands.includes(
+                                                    brand.title
+                                                )}
+                                                onChange={() =>
+                                                    updateBrandSelection(
+                                                        brand.title
+                                                    )
+                                                }
                                             />
-                                            <div className="text_item">{brand.title}</div>
+                                            <div className="text_item">
+                                                {brand.title}
+                                            </div>
                                         </label>
                                     ))}
                                 </div>
@@ -292,7 +309,9 @@ export default function Product_List() {
                                                 max="10000000"
                                                 step="100000"
                                                 value={priceRange[0]}
-                                                onChange={(e) => updatePriceRange(e, "min")}
+                                                onChange={(e) =>
+                                                    updatePriceRange(e, "min")
+                                                }
                                                 className="slider-input"
                                             />
                                             <input
@@ -301,21 +320,35 @@ export default function Product_List() {
                                                 max="10000000"
                                                 step="100000"
                                                 value={priceRange[1]}
-                                                onChange={(e) => updatePriceRange(e, "max")}
+                                                onChange={(e) =>
+                                                    updatePriceRange(e, "max")
+                                                }
                                                 className="slider-input"
                                             />
                                             <div
                                                 className="slider-track"
                                                 style={{
-                                                    left: `${(priceRange[0] / 10000000) * 100}%`,
-                                                    right: `${100 - (priceRange[1] / 10000000) * 100}%`,
+                                                    left: `${
+                                                        (priceRange[0] /
+                                                            10000000) *
+                                                        100
+                                                    }%`,
+                                                    right: `${
+                                                        100 -
+                                                        (priceRange[1] /
+                                                            10000000) *
+                                                            100
+                                                    }%`,
                                                 }}
                                             ></div>
                                         </div>
-                                        <span className="range-label">10.000.000 đ</span>
+                                        <span className="range-label">
+                                            10.000.000 đ
+                                        </span>
                                     </div>
                                     <span className="item_price">
-                                        {priceRange[0].toLocaleString()} đ - {priceRange[1].toLocaleString()} đ
+                                        {priceRange[0].toLocaleString()} đ -{" "}
+                                        {priceRange[1].toLocaleString()} đ
                                     </span>
                                 </div>
                             )}
@@ -387,7 +420,7 @@ export default function Product_List() {
                                 ...Array(
                                     Math.ceil(
                                         filteredProducts.length /
-                                        productsPerPage
+                                            productsPerPage
                                     )
                                 ).keys(),
                             ].map((number) => (
@@ -418,7 +451,7 @@ export default function Product_List() {
                                     setCurrentPage(
                                         Math.ceil(
                                             filteredProducts.length /
-                                            productsPerPage
+                                                productsPerPage
                                         )
                                     )
                                 }
@@ -426,7 +459,7 @@ export default function Product_List() {
                                     currentPage ===
                                     Math.ceil(
                                         filteredProducts.length /
-                                        productsPerPage
+                                            productsPerPage
                                     )
                                 }
                             >
