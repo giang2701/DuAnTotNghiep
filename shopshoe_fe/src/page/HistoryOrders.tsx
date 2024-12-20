@@ -224,17 +224,23 @@ const HistoryOrders = () => {
 
   const handleFilter = (status: string) => {
     setSelectedStatus(status);
-    if (status === "") {
+  };
+  useEffect(() => {
+    if (selectedStatus === "") {
       const sortedOrders = [...orders].sort((a, b) => {
         if (a.status === "Pending" && b.status !== "Pending") return -1;
         if (a.status !== "Pending" && b.status === "Pending") return 1;
-        return 0;
+        const dateA = new Date(a.createdAt).getTime();
+        const dateB = new Date(b.createdAt).getTime();
+        return dateB - dateA; // Đảm bảo đơn hàng mới nhất lên đầu
       });
       setFilteredOrders(sortedOrders);
     } else {
-      setFilteredOrders(orders.filter((order) => order.status === status));
+      setFilteredOrders(
+        orders.filter((order) => order.status === selectedStatus)
+      );
     }
-  };
+  }, [selectedStatus, orders]);
 
   if (loading) return <p>Đang tải đơn hàng...</p>;
   if (error) return <p>{error}</p>;
@@ -298,9 +304,7 @@ const HistoryOrders = () => {
         >
           <div className="status-links-container" style={{ cursor: "pointer" }}>
             <p
-              className={`status-links ${
-                selectedStatus === "" ? "active" : ""
-              }`}
+              className={`status-link ${selectedStatus === "" ? "active" : ""}`}
               onClick={() => handleFilter("")}
             >
               Tất cả
@@ -329,14 +333,6 @@ const HistoryOrders = () => {
             >
               Vận chuyển
             </p>
-            {/* <p
-              className={`status-link ${
-                selectedStatus === "Goodsreceived" ? "active" : ""
-              }`}
-              onClick={() => handleFilter("Goodsreceived")}
-            >
-              Đã nhận được hàng
-            </p> */}
             <p
               className={`status-link ${
                 selectedStatus === "Delivered" ? "active" : ""

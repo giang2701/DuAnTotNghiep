@@ -1219,7 +1219,7 @@ const Checkout = () => {
           >
             Chọn Mã Voucher
           </p>
-          <input
+          {/* <input
             type="text"
             value={couponCode}
             placeholder="Nhập mã giảm giá"
@@ -1246,7 +1246,7 @@ const Checkout = () => {
             }}
           >
             Áp dụng
-          </button>
+          </button> */}
           <div
             className="discount-message text-danger"
             style={{
