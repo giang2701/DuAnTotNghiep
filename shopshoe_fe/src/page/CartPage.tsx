@@ -405,51 +405,66 @@ const CartPage = () => {
                     <p>Tạm tính: {formatPrice(Number(totalPrice))}</p>
                     <Link
                         to={
-                            cart.some((item) => !item.product.isActive)
-                                ? "#"
-                                : "/checkOut"
+                            Array.isArray(cart) && cart.length > 0
+                                ? cart.some((item) => !item.product.isActive)
+                                    ? "#"
+                                    : "/checkOut"
+                                : "#"
                         }
                         onClick={(e) => {
-                            if (cart.some((item) => !item.product.isActive)) {
-                                e.preventDefault(); // Ngăn điều hướng khi có sản phẩm không hoạt động
-                                Swal.fire({
-                                    icon: "error",
-                                    title: "Có Lỗi Xảy ra",
-                                    text: "Sản Phẩm Bạn Đặt Không Còn Tại!!!",
-                                });
-                            } else if (
-                                !cart.every(
-                                    (item: any) =>
-                                        item.quantity <=
-                                        item.product.sizeStock?.find(
-                                            (s) => s.size === item.size
-                                        )?.stock
-                                )
-                            ) {
-                                e.preventDefault(); // Ngăn điều hướng khi số lượng vượt quá
-                                Swal.fire({
-                                    icon: "error",
-                                    title: "Có Lỗi Xảy ra",
-                                    text: "Số Lượng Sản Phẩm Vượt Quá Số Lượng Trong Kho!!!",
-                                });
+                            if (Array.isArray(cart) && cart.length > 0) {
+                                if (
+                                    cart.some((item) => !item.product.isActive)
+                                ) {
+                                    e.preventDefault(); // Ngăn điều hướng khi có sản phẩm không hoạt động
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Có Lỗi Xảy ra",
+                                        text: "Sản Phẩm Bạn Đặt Không Còn Tại!!!",
+                                    });
+                                } else if (
+                                    !cart.every(
+                                        (item: any) =>
+                                            item.quantity <=
+                                            item.product.sizeStock?.find(
+                                                (s: any) => s.size === item.size
+                                            )?.stock
+                                    )
+                                ) {
+                                    e.preventDefault(); // Ngăn điều hướng khi số lượng vượt quá
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Có Lỗi Xảy ra",
+                                        text: "Số Lượng Sản Phẩm Vượt Quá Số Lượng Trong Kho!!!",
+                                    });
+                                } else {
+                                    handleCheckout();
+                                }
                             } else {
-                                handleCheckout();
+                                e.preventDefault();
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Có Lỗi Xảy ra",
+                                    text: "Giỏ hàng trống!",
+                                });
                             }
                         }}
                         state={{ cart, totalPrice }}
                         className="checkout-button nav-link text-center text-white"
                     >
-                        {cart.some((item) => !item.product.isActive)
-                            ? "Vui Lòng Kiêm Tra Lại Sản Phẩm"
-                            : !cart.every(
-                                  (item: any) =>
-                                      item.quantity <=
-                                      item.product.sizeStock?.find(
-                                          (s) => s.size === item.size
-                                      )?.stock
-                              )
-                            ? "Vui Lòng Kiêm Tra Lại Sản Phẩm"
-                            : "Đặt hàng"}
+                        {Array.isArray(cart) && cart.length > 0
+                            ? cart.some((item) => !item.product.isActive)
+                                ? "Vui Lòng Kiêm Tra Lại Sản Phẩm"
+                                : !cart.every(
+                                      (item: any) =>
+                                          item.quantity <=
+                                          item.product.sizeStock?.find(
+                                              (s: any) => s.size === item.size
+                                          )?.stock
+                                  )
+                                ? "Vui Lòng Kiêm Tra Lại Sản Phẩm"
+                                : "Đặt hàng"
+                            : "Vui Lòng Thêm Sản Phẩm Vào Giỏ Hàng"}
                     </Link>
                 </div>
             </div>

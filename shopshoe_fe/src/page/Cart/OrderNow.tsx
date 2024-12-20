@@ -81,9 +81,13 @@ const CheckoutNow = () => {
 
     // Tính lại tổng tiền khi có phí vận chuyển
     useEffect(() => {
-        setFinalTotal(totalPriceNow + shippingFee - discountAmount - (totalPriceNow * discount) / 100);
+        setFinalTotal(
+            totalPriceNow +
+                shippingFee -
+                discountAmount -
+                (totalPriceNow * discount) / 100
+        );
     }, [totalPriceNow, shippingFee, discountAmount, discount]);
-
 
     const validatePhone = (value: string) => {
         const phoneRegex = /^(0[3|5|7|8|9])+([0-9]{8})$/;
@@ -157,7 +161,7 @@ const CheckoutNow = () => {
             const errorResponse = error as AxiosError<{ message: string }>;
             setMessage(
                 errorResponse.response?.data?.message ||
-                "Có lỗi xảy ra. Vui lòng thử lại!"
+                    "Có lỗi xảy ra. Vui lòng thử lại!"
             );
             setDiscount(0);
             setDiscountAmount(0);
@@ -267,7 +271,7 @@ const CheckoutNow = () => {
             const errorResponse = error as AxiosError<{ message: string }>;
             setMessage(
                 errorResponse.response?.data?.message ||
-                "Có lỗi xảy ra. Vui lòng thử lại!"
+                    "Có lỗi xảy ra. Vui lòng thử lại!"
             );
             setDiscount(0);
             setDiscountAmount(0);
@@ -284,7 +288,7 @@ const CheckoutNow = () => {
                 toast.success("Thanh toán thành công bằng MOMO!");
                 navigate("/"); // Chuyển đến trang xác nhận thành công
             } else {
-                toast.error("Thanh toán chưa hoàn tất. Vui lòng thử lại.");
+                toast.error(response.data?.message);
             }
         } catch (error: any) {
             const errorMessage =
@@ -677,7 +681,9 @@ const CheckoutNow = () => {
                                 >
                                     Phí vận chuyển
                                 </Typography>
-                                <Typography variant="h6">{formatPrice(shippingFee)}</Typography>
+                                <Typography variant="h6">
+                                    {formatPrice(shippingFee)}
+                                </Typography>
                             </Grid>
                             <Grid
                                 container
@@ -1247,8 +1253,9 @@ const CheckoutNow = () => {
                 onClick={() => setHiddenVoucher(false)}
             ></div>
             <div
-                className={`box__voucher  ${hiddenVoucher ? "show" : ""
-                    } bg-white`}
+                className={`box__voucher  ${
+                    hiddenVoucher ? "show" : ""
+                } bg-white`}
             >
                 <div
                     className="coupon-section d-flex align-items-center"

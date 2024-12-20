@@ -1,4 +1,5 @@
 import Brand from "../model/Brand.js";
+import Products from "../model/Products.js";
 
 export const createBrand = async (req, res, next) => {
     try {
@@ -34,6 +35,20 @@ export const updateBrandById = async (req, res, next) => {
 
 export const deleteBrandById = async (req, res, next) => {
     try {
+        // Tìm tất cả sản phẩm có sử dụng size này
+        const BrandProducts = await Products.find({
+            brand: req.params.id,
+        });
+        console.log(BrandProducts);
+
+        // Kiểm tra nếu có sản phẩm đang sử dụng size này
+        if (BrandProducts.length > 0) {
+            return res.status(400).json({
+                success: false,
+                message:
+                    "Không thể xóa brand  vì đang được sử dụng trong sản phẩm!",
+            });
+        }
         const data = await Brand.findByIdAndDelete(req.params.id);
         if (data) {
             return res.status(200).json({

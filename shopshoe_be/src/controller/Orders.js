@@ -433,6 +433,31 @@ export const checkAndUpdatePaymentStatus = async (req, res) => {
             return res.status(404).json({ error: "Đơn hàng không tồn tại." });
         }
 
+        // 2. Kiểm tra số lượng sản phẩm trong kho
+        async function checkProductStock(order) {
+            for (const product of order.products) {
+                const productInStock = await Products.findById(product.product);
+                const sizeInStock = productInStock.sizeStock.find(
+                    (size) => size.size.toString() === product.size.toString()
+                );
+                if (sizeInStock.stock < product.quantity) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        if (!(await checkProductStock(order))) {
+            console.log("Số lượng sản phẩm trong kho không đủ");
+            order.paymentStatus = "Failed";
+            await order.save();
+            await deleteOrderStautus(orderId);
+            return res.json({
+                message: `Thanh toán thất bại: Số lượng sản phẩm trong kho không đủ`,
+                status: order.paymentStatus,
+            });
+        }
+
         // 2. Kiểm tra trạng thái thanh toán qua API MoMo
         const partnerCode = "MOMO";
         const accessKey = "F8BBA842ECF85";
@@ -807,6 +832,7 @@ export const updateStatusGoodsreceived = async (req, res, next) => {
     try {
         // 1. Tìm đơn hàng
         const order = await Order.findById(req.params.id).session(session);
+        console.log(order);
 
         if (!order) return res.status(404).json({ message: "Order not found" });
 
@@ -840,13 +866,19 @@ export const updateStatusGoodsreceived = async (req, res, next) => {
         order.status = "Goodsreceived";
         await order.save({ session });
 
-        // Commit transaction
-        await session.commitTransaction();
-        session.endSession();
+        // Update the status to "Completed" after one minute
+        setTimeout(async () => {
+            order.status = "Completed";
+            await order.save({ session });
 
-        return res.status(200).json({
-            message: "Order Goodsreceived successfully",
-        });
+            // Commit transaction
+            await session.commitTransaction();
+            session.endSession();
+
+            return res.status(200).json({
+                message: "Order Goodsreceived successfully",
+            });
+        }, 2000);
     } catch (error) {
         // Rollback transaction nếu có lỗi
         await session.abortTransaction();

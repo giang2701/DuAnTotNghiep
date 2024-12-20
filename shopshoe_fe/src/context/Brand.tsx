@@ -25,17 +25,6 @@ const BrandProvider = ({ children }: { children: React.ReactNode }) => {
         getAllBrand();
     }, []);
     const removeBrand = async (_id: string | undefined) => {
-        // try {
-        //     if (window.confirm("Ban chac chan muon xoa?")) {
-        //         await instance.delete(`/brand/${_id}`);
-        //         toast.success("Xoa thanh cong", {
-        //             autoClose: 2000, // Tự động đóng sau 3 giây
-        //         });
-        //     }
-        //     getAllBrand();
-        // } catch (error) {
-        //     toast.error("Xóa thất bại");
-        // }
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: "custom-confirm-button",
@@ -70,8 +59,15 @@ const BrandProvider = ({ children }: { children: React.ReactNode }) => {
                 });
             }
             await getAllBrand();
-        } catch (error) {
-            toast.error("Không thể xóa");
+        } catch (error: any) {
+            const errorMessage =
+                error.response?.data?.message ||
+                "Đã xảy ra lỗi, vui lòng thử lại sau.";
+            Swal.fire({
+                icon: "error",
+                title: "Lỗi Khi Xóa Brand ",
+                text: errorMessage, // Hiển thị nội dung của message
+            });
         }
     };
     const handleBrand = async (brand: Brand) => {
