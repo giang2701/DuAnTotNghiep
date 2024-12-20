@@ -21,7 +21,7 @@ const ProductsLiked = () => {
     const userArray = localStorage.getItem("user");
     const user = userArray ? JSON.parse(userArray) : null;
 
-    //lấy dữ liệu 
+    //lấy dữ liệu
     useEffect(() => {
         const fetchData = async () => {
             if (user) {
@@ -104,12 +104,19 @@ const ProductsLiked = () => {
         <Container maxWidth="xl" sx={{ paddingTop: "150px" }}>
             <Typography
                 variant="h4"
-                fontFamily="Poppins"
-                fontWeight={400}
-                textAlign={"center"}
-                color="red"
-                // fontSize={30}
-                my={4}
+                fontFamily="Poppins, sans-serif"
+                fontWeight={600}
+                textAlign="center"
+                sx={{
+                    background:
+                        "linear-gradient(90deg,rgb(247, 14, 26),rgb(241, 1, 41))",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    fontSize: 35,
+                    letterSpacing: "2px",
+                    textShadow: "1px 1px 3px rgba(0, 0, 0, 0.2)",
+                    marginY: 4,
+                }}
             >
                 Sản phẩm yêu thích
             </Typography>
