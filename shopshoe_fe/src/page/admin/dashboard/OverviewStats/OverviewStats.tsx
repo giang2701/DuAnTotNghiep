@@ -17,6 +17,14 @@ const OverviewStats = () => {
     fetchData();
   }, []);
 
+  const fetchData = async () => {
+    try {
+      const r = await instance.get("/statistics/general");
+      setData(r.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div
@@ -40,6 +48,20 @@ const OverviewStats = () => {
         description="Tổng số danh mục"
       />
 
+      <DashboardCard
+        title="Sản phẩm"
+        value={data?.productCount ?? 0}
+        color="#FFC107"
+        description="Số lượng sản phẩm hiện có"
+      />
+
+      <DashboardCard
+        title="Người dùng"
+        value={data?.userCount ?? 0}
+        color="#17A2B8"
+        description="Tổng số người dùng"
+      />
+    </div>
   );
 };
 

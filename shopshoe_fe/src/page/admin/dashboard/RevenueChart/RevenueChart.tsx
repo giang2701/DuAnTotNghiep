@@ -168,6 +168,70 @@ const RevenueByMonth = () => {
                 )}
             </Box>
         </Box>
+         <Box sx={{ p: 4 }}>
+         <h2>Doanh thu theo giai đoạn</h2>
+         <Grid
+             container
+             spacing={2}
+             alignItems="center"
+             justifyContent="center"
+         >
+             {/* Từ ngày */}
+             <Grid item xs={2}>
+                 <LocalizationProvider dateAdapter={AdapterDayjs}>
+                     <DatePicker
+                         label="Từ ngày"
+                         value={startDate}
+                         onChange={(newValue) => setStartDate(newValue)}
+                         slotProps={{ textField: { fullWidth: true } }} // Thay thế renderInput
+                     />
+                 </LocalizationProvider>
+             </Grid>
+             <Grid item xs={2}>
+                 <LocalizationProvider dateAdapter={AdapterDayjs}>
+                     <DatePicker
+                         label="Đến ngày"
+                         value={endDate}
+                         onChange={(newValue) => setEndDate(newValue)}
+                         slotProps={{ textField: { fullWidth: true } }} // Thay thế renderInput
+                     />
+                 </LocalizationProvider>
+             </Grid>
+             {/* Nhóm theo */}
+             <Grid item xs={2}>
+                 <TextField
+                     select
+                     label="Nhóm theo"
+                     value={groupBy}
+                     onChange={(e) => setGroupBy(e.target.value)}
+                     fullWidth
+                     SelectProps={{
+                         native: true,
+                     }}
+                 >
+                     <option value="day">Ngày</option>
+                     <option value="month">Tháng</option>
+                     <option value="year">Năm</option>
+                 </TextField>
+             </Grid>
+         </Grid>
+
+         {/* Hiển thị lỗi */}
+         {error && (
+             <Box sx={{ mt: 2, color: "red" }}>
+                 <p>{error}</p>
+             </Box>
+         )}
+
+         {/* Hiển thị biểu đồ */}
+         <Box sx={{ mt: 4 }}>
+             {data.length > 0 ? (
+                 <Bar options={options} data={chartData} />
+             ) : (
+                 <p>Không có dữ liệu để hiển thị.</p>
+             )}
+         </Box>
+     </Box>
     );
 };
 
