@@ -48,30 +48,30 @@ export const getAllComments = async (req, res, next) => {
   }
 };
 
-// Trong commentController.js
-export const hideComment = async (req, res, next) => {
-  try {
-    const { commentId } = req.params;
-    const { hidden } = req.body;
+// // Trong commentController.js
+// export const hideComment = async (req, res, next) => {
+//   try {
+//     const { commentId } = req.params;
+//     const { hidden } = req.body;
 
-    const updatedComment = await Comment.findByIdAndUpdate(
-      commentId,
-      { hidden },
-      { new: true }
-    );
+//     const updatedComment = await Comment.findByIdAndUpdate(
+//       commentId,
+//       { hidden },
+//       { new: true }
+//     );
 
-    if (!updatedComment) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Bình luận không tồn tại." });
-    }
+//     if (!updatedComment) {
+//       return res
+//         .status(404)
+//         .json({ success: false, message: "Bình luận không tồn tại." });
+//     }
 
-    res.status(200).json({
-      success: true,
-      message: `Bình luận đã được ${hidden ? "hiện" : "ẩn"}.`,
-      data: updatedComment,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+//     res.status(200).json({
+//       success: true,
+//       message: `Bình luận đã được ${hidden ? "hiện" : "ẩn"}.`,
+//       data: updatedComment,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
