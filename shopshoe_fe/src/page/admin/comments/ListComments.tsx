@@ -219,7 +219,6 @@ const ListComments: React.FC = () => {
                           Ẩn
                         </span>
                       )}
-                      a
                     </td>
                     <td>
                       <Button
