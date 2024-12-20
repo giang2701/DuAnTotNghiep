@@ -138,17 +138,6 @@ const CommentForm = ({
   };
 
   // Submit all comments
-  const submitAllComments = async () => {
-    for (const product of uniqueProducts) {
-      const productId = product.product._id;
-      const rating = ratings[productId] || 0;
-      const comment = comments[productId] || "";
-      if (comment.length > 200) {
-        toast.error(
-          `Bình luận cho sản phẩm "${product.product.title}" không được vượt quá 200 ký tự.`
-        );
-        return;
-      }
 
       // Kiểm duyệt bình luận trước khi gửi
       const sanitizedComment = censorComment(comment);
@@ -212,24 +201,6 @@ const CommentForm = ({
         >
           Viết bình luận
         </Typography>
-
-        {uniqueProducts.map((it) => (
-          <CommentFormItem
-            key={it.product._id}
-            productName={it.product.title}
-            productId={it.product._id!}
-            userId={userId}
-            rating={ratings[it.product._id!] || 0}
-            comment={comments[it.product._id!] || ""}
-            setRating={(rating) =>
-              setRatings((prev) => ({ ...prev, [it.product._id!]: rating }))
-            }
-            setComment={(comment) =>
-              setComments((prev) => ({ ...prev, [it.product._id!]: comment }))
-            }
-            onSubmit={() => submitSingleComment(it.product._id!)}
-          />
-        ))}
 
         {/* Conditionally render the "Rate All Products" button */}
         {uniqueProducts.length > 1 && (
