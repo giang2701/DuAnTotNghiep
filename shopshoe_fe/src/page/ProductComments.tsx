@@ -38,34 +38,6 @@ const ProductComments = ({ productId }: { productId: string }) => {
     fetchComments();
   }, [productId]);
 
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    value: number
-  ) => {
-    setCurrentPage(value);
-  };
-
-  const startIndex = (currentPage - 1) * commentsPerPage;
-  const currentComments = comments.slice(
-    startIndex,
-    startIndex + commentsPerPage
-  );
-
-  if (loading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "200px",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
-
   return (
     <Box>
       <Typography
