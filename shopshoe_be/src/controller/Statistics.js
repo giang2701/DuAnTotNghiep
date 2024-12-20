@@ -73,7 +73,65 @@ export const revenueStats = async (req, res, next) => {
     .endOf("month")
     .toDate();
 
-  
+  try {
+    const revenueData = await Order.aggregate([
+      { $match: { paymentStatus: "Completed", status: "Completed" } },
+      {
+        $match: {
+          createdAt: { $gte: startOfLastMonth, $lt: now.toDate() },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              format: "%Y-%m-%d",
+              date: "$createdAt",
+            },
+          },
+          totalRevenue: { $sum: "$totalPrice" },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+    const daysInLastMonth = [];
+    const daysInThisMonth = [];
+    const daysInPreviousMonth = moment(startOfLastMonth).daysInMonth();
+    for (let i = 1; i <= daysInPreviousMonth; i++) {
+      const day = moment(startOfLastMonth).date(i).format("YYYY-MM-DD");
+      daysInLastMonth.push({ _id: day, totalRevenue: 0 });
+    }
+    const daysInCurrentMonth = now.daysInMonth();
+    for (let i = 1; i <= daysInCurrentMonth; i++) {
+      const day = moment(startOfThisMonth).date(i).format("YYYY-MM-DD");
+      daysInThisMonth.push({ _id: day, totalRevenue: 0 });
+    }
+    revenueData.forEach((item) => {
+      const date = item._id;
+      const revenue = item.totalRevenue;
+      if (
+        moment(date).isBetween(startOfLastMonth, endOfLastMonth, null, "[]")
+      ) {
+        const day = daysInLastMonth.find((d) => d._id === date);
+        if (day) {
+          day.totalRevenue = revenue;
+        }
+      }
+      if (moment(date).isBetween(startOfThisMonth, now, null, "[]")) {
+        const day = daysInThisMonth.find((d) => d._id === date);
+        if (day) {
+          day.totalRevenue = revenue;
+        }
+      }
+    });
+    res.json({
+      lastMonth: daysInLastMonth,
+      currentMonth: daysInThisMonth,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 // thống kê thông tin chung
 export const generalStatistics = async (req, res, next) => {
   const now = moment();
