@@ -1,0 +1,59 @@
+import Joi from "joi";
+
+// Tạo schema validate
+const voucherSchema = Joi.object({
+    name: Joi.string().min(3).required().messages({
+        "string.base": `"name" phải là một chuỗi`,
+        "string.empty": `"name" không được để trống`,
+        "string.min": `"name" phải có ít nhất 3 ký tự`,
+        "any.required": `"name" là bắt buộc`,
+    }),
+    code: Joi.string().min(3).max(255).required().messages({
+        "string.base": `"code" phải là một chuỗi`,
+        "string.empty": `"code" không được để trống`,
+        "string.min": `"code" phải có ít nhất 3 ký tự`,
+        "string.max": `"code" không được vượt quá 255 ký tự`,
+        "any.required": `"code" là bắt buộc`,
+    }),
+    discount: Joi.number()
+        .min(0)
+        .required()
+        .when("type", {
+            is: "percent",
+            then: Joi.number().max(100).messages({
+                "number.max": `"discount" không được vượt quá 100% khi "type" là giảm theo phần trăm`,
+            }),
+            otherwise: Joi.number().messages({
+                "number.base": `"discount" phải là một số`,
+            }),
+        })
+        .messages({
+            "number.base": `"discount" phải là một số`,
+            "number.min": `"discount" phải lớn hơn hoặc bằng 0`,
+            "any.required": `"discount" là bắt buộc`,
+        }),
+    type: Joi.string().valid("percent", "fixed").required().messages({
+        "any.only": `"type" chỉ nhận giá trị "percent" hoặc "fixed"`,
+        "any.required": `"type" là bắt buộc`,
+    }),
+    expiryDate: Joi.date()
+        .iso()  // Kiểm tra định dạng ISO 8601
+        .min(new Date().toISOString().split('T')[0])  // Chỉ so sánh ngày (YYYY-MM-DD)
+        .required()
+        .messages({
+            "date.base": `"expiryDate" phải là một ngày hợp lệ`,
+            "date.min": `"expiryDate" phải lớn hơn hoặc bằng ngày hiện tại`,
+            "any.required": `"expiryDate" là bắt buộc`,
+        }),
+
+    isActive: Joi.boolean().optional().messages({
+        "boolean.base": `"isActive" phải là kiểu boolean`,
+    }),
+    minPrice: Joi.number().min(0).required().messages({
+        "number.base": `"minPrice" phải là một số`,
+        "number.min": `"minPrice" phải lớn hơn hoặc bằng 0`,
+        "any.required": `"minPrice" là bắt buộc`,
+    }),
+});
+
+export default voucherSchema;

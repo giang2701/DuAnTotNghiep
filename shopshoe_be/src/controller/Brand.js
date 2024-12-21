@@ -25,7 +25,7 @@ export const updateBrandById = async (req, res, next) => {
             return res.status(200).json({
                 success: true,
                 data,
-                message: "Update thuong hieu thanh cong!",
+                message: "Update thương hiệu thành công!",
             });
         }
     } catch (error) {
@@ -52,7 +52,7 @@ export const deleteBrandById = async (req, res, next) => {
         const data = await Brand.findByIdAndDelete(req.params.id);
         if (data) {
             return res.status(200).json({
-                message: "Xoa thuong hieu thanh cong!",
+                message: "Xóa thương hiệu thành công!",
             });
         }
     } catch (error) {
@@ -66,7 +66,7 @@ export const getBrandById = async (req, res, next) => {
             return res.status(200).json({
                 success: true,
                 data,
-                message: "Tim thuong hieu thanh cong!",
+                message: "Tìm thương hiệu thành công!",
             });
         }
     } catch (error) {

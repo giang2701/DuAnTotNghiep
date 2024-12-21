@@ -90,7 +90,7 @@ const BrandProvider = ({ children }: { children: React.ReactNode }) => {
             if (brand._id) {
                 toast.error("Cập nhật thất bại");
             } else {
-                toast.error("Thêm thất bại");
+                toast.error("Thêm thương hiệu thất bại do bị trùng ");
             }
             console.log(error);
         }

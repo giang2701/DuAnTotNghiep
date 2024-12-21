@@ -17,8 +17,18 @@ export const getAllSize = async (req, res, next) => {
 };
 export const CreateSize = async (req, res, next) => {
   try {
+    const existingSize = await Size.findOne({
+      nameSize: req.body.nameSize
+    });
+    // kiểm tra nameSize đã tồn tại chưa
+    if (existingSize) {
+      return res.status(400).json({
+        message: `Size ${req.body.nameSize} đã tồn tại. Không thể thêm mới.`,
+      });
+    }
     const data = await Size.create(req.body);
     if (data) {
+
       return res.status(201).json({
         success: true,
         data,

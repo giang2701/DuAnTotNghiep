@@ -30,8 +30,9 @@ export const SizeProvider = ({ children }: { children: React.ReactNode }) => {
       toast.success("Thêm size thành công");
       nav("/admin/size");
       console.log(dataSize);
-    } catch (error) {
-      toast.error("Thêm size thất bại");
+    } catch (error: any) {
+      const errorMsg = error.response?.data?.message || "Đã xảy ra lỗi khi thêm size.";
+      toast.error(errorMsg);
     }
   };
   const DeleteSize = async (_id: Size | undefined) => {

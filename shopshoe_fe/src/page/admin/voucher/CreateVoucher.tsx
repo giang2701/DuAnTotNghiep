@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form";
 import { useVoucher } from "../../../context/Voucher";
 import { Voucher } from "../../../interface/Voucher";
 import { useState } from "react";
+import { joiResolver } from "@hookform/resolvers/joi";
+import voucherSchema from "../../../validate/Voucher";
 
 const CreateVoucher = () => {
   const { handleVoucher } = useVoucher();
@@ -9,7 +11,9 @@ const CreateVoucher = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Voucher>();
+  } = useForm<Voucher>({
+    resolver: joiResolver(voucherSchema),
+  });
   const [formattedPrice, setFormattedPrice] = useState<string>("");
   const formatPrice = (price: number): string => {
     return new Intl.NumberFormat("vi-VN", {

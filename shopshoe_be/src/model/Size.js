@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const SizeSchema = new mongoose.Schema(
     {
         nameSize: {
-            type: String,
+            type: Number,
             required: true,
             unique: true,
         },

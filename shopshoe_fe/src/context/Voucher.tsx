@@ -77,13 +77,25 @@ export const VoucherProvider = ({
     };
 
     const handleVoucher = async (voucher: Voucher) => {
-        // console.log("voucher log", voucher);
-        await instance.post("/voucher", voucher);
-        toast.success("Them thanh cong", {
-            autoClose: 2000, // Tự động đóng sau 3 giây
-        });
-        nav("/admin/voucher");
-        GetAllVoucher();
+        try {
+            // console.log("voucher log", voucher);
+            await instance.post("/voucher", voucher);
+            toast.success("Them thanh cong", {
+                autoClose: 2000, // Tự động đóng sau 3 giây
+            });
+            nav("/admin/voucher");
+            GetAllVoucher();
+        } catch (error: any) {
+            const errorMessage =
+                error.response?.data?.errors || "Đã xảy ra lỗi, vui lòng thử lại sau.";
+            console.log(error);
+
+            Swal.fire({
+                icon: "error",
+                title: "Có lỗi xảy ra",
+                text: errorMessage, // Hiển thị nội dung của message
+            });
+        }
     };
     // update
     const toggleActiveStatus = async (voucherId: string, isActive: boolean) => {
