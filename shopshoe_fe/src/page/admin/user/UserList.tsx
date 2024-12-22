@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import instance from "../../../api";
 import { User } from "../../../interface/User";
 import { useAuth } from "../../../context/AuthContext";
+import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const UserList = () => {
     const [user, setUser] = useState<User[]>([]); // Danh sách người dùng
@@ -64,19 +66,57 @@ const UserList = () => {
         userId: string,
         currentStatus: boolean
     ) => {
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "custom-confirm-button",
+                cancelButton: "custom-cancel-button",
+            },
+            buttonsStyling: false,
+        });
         try {
-            const updatedStatus = !currentStatus;
-            await instance.put(`/user/${userId}`, { isActive: updatedStatus });
+            const result = await swalWithBootstrapButtons.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel!",
+                reverseButtons: true,
+            });
+            if (result.isConfirmed) {
+                const updatedStatus = !currentStatus;
+                await instance.put(`/user/${userId}`, {
+                    isActive: updatedStatus,
+                });
 
-            const updatedUsers = user.map((item) =>
-                item._id === userId
-                    ? { ...item, isActive: updatedStatus }
-                    : item
-            );
-            setUser(updatedUsers);
-            setFilteredUsers(updatedUsers);
-        } catch (error) {
-            console.error("Failed to update user status", error);
+                const updatedUsers = user.map((item) =>
+                    item._id === userId
+                        ? { ...item, isActive: updatedStatus }
+                        : item
+                );
+                swalWithBootstrapButtons.fire({
+                    title: "Successfully!",
+
+                    icon: "success",
+                });
+                setUser(updatedUsers);
+                setFilteredUsers(updatedUsers);
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                swalWithBootstrapButtons.fire({
+                    title: "Cancelled",
+                    text: "Account Activated Cancelled",
+                    icon: "error",
+                });
+            }
+        } catch (error: any) {
+            const errorMessage =
+                error.response?.data?.message ||
+                "Đã xảy ra lỗi, vui lòng thử lại sau.";
+            Swal.fire({
+                icon: "error",
+                title: "Lỗi Khi khi thay đổi trạng thái người dùng",
+                text: errorMessage, // Hiển thị nội dung của message
+            });
         }
     };
 
@@ -258,6 +298,7 @@ const UserList = () => {
                                         <th>Quyền truy cập</th>
                                     )}
                                     <th> Active/ deactive</th>
+                                    {level === "boss" && <th>Quyền Hạn</th>}
                                 </tr>
                             </thead>
                             <tbody>
@@ -344,10 +385,33 @@ const UserList = () => {
                                                     }}
                                                 >
                                                     {item.isActive
-                                                        ? "Tài khoản"
-                                                        : "Khóa Tài Khoản"}
+                                                        ? "Khóa Tài Khoản"
+                                                        : "Kích Hoạt"}
                                                 </button>
                                             </td>
+                                            {level === "boss" && (
+                                                <td className="text-center">
+                                                    <Link
+                                                        to={`/admin/user/permission/${item._id}`}
+                                                    >
+                                                        <button
+                                                            className="Button_admin"
+                                                            style={{
+                                                                borderRadius:
+                                                                    "5px",
+                                                                width: "70px",
+                                                                height: "30px",
+                                                                backgroundColor:
+                                                                    "red",
+                                                                color: "white",
+                                                                border: "none",
+                                                            }}
+                                                        >
+                                                            Quyền
+                                                        </button>
+                                                    </Link>
+                                                </td>
+                                            )}
                                         </tr>
                                     ))
                                 ) : (

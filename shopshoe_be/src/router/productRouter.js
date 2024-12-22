@@ -13,6 +13,7 @@ import productSchema from "../validSchema/productSchema.js";
 import { checkAuth } from "../middlewares/checkAuth.js";
 import { checkIsAdmin } from "../middlewares/checkAdmin.js";
 // import { upload } from "../middlewares/upoads.js";
+import checkPermission from "./../middlewares/checkPermission.js";
 
 const productRouter = Router();
 
@@ -24,17 +25,20 @@ productRouter.get("/", getAllProducts);
 productRouter.use("/", checkAuth, checkIsAdmin); //middleware này sẽ chạy trước các middleware ở dưới nó
 productRouter.post(
     "/",
-    // upload.single("images"),
     validBodyRequest(productSchema),
+    checkPermission("add-product"),
     createProduct
 );
+productRouter.put("/:id", checkPermission("edit-product"), updateProductById);
 productRouter.put(
-    "/:id",
-    // upload.single("images"),
-    // validBodyRequest(productSchema),
-    updateProductById
+    "/status/:id",
+    checkPermission("delete-product"),
+    updateProductsStatus
 );
-productRouter.delete("/:id", removeProductById);
-productRouter.put("/status/:id", updateProductsStatus);
+productRouter.delete(
+    "/:id",
+    checkPermission("delete-product"),
+    removeProductById
+);
 
 export default productRouter;

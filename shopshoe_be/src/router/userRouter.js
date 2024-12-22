@@ -1,13 +1,16 @@
 import { Router } from "express";
 import {
-  deleteUserById,
-  getAllUser,
-  updateUserById,
-  updateUserStatus,
+    deleteUserById,
+    getAllUser,
+    getUserById,
+    updateUserById,
+    updateUserStatus,
 } from "../controller/User.js";
+import checkPermission from "../middlewares/checkPermission.js";
 const userRouter = Router();
 userRouter.get("/", getAllUser);
-userRouter.put("/:id", updateUserById);
-userRouter.delete("/:id", deleteUserById);
-userRouter.put("/status/:id", updateUserStatus);
+userRouter.get("/:id", getUserById);
+userRouter.put("/:id", checkPermission("edit-user"), updateUserById);
+userRouter.delete("/:id", checkPermission("delete-user"), deleteUserById);
+userRouter.put("/status/:id", checkPermission("edit-user"), updateUserStatus);
 export default userRouter;

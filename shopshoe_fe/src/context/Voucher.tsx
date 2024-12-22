@@ -71,8 +71,15 @@ export const VoucherProvider = ({
             }
 
             await GetAllVoucher();
-        } catch (error) {
-            toast.error("Không thể xóa");
+        } catch (error: any) {
+            const errorMessage =
+                error.response?.data?.message ||
+                "Đã xảy ra lỗi, vui lòng thử lại sau.";
+            Swal.fire({
+                icon: "error",
+                title: "Lỗi Khi Xóa Voucher",
+                text: errorMessage, // Hiển thị nội dung của message
+            });
         }
     };
 
@@ -87,9 +94,8 @@ export const VoucherProvider = ({
             GetAllVoucher();
         } catch (error: any) {
             const errorMessage =
-                error.response?.data?.errors || "Đã xảy ra lỗi, vui lòng thử lại sau.";
-            console.log(error);
-
+                error.response?.data?.errors ||
+                "Đã xảy ra lỗi, vui lòng thử lại sau.";
             Swal.fire({
                 icon: "error",
                 title: "Có lỗi xảy ra",

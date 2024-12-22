@@ -77,22 +77,27 @@ const BrandProvider = ({ children }: { children: React.ReactNode }) => {
             const payload: any = { title };
 
             if (_id) {
-                const { data } = await instance.put(`/brand/${_id}`, payload);
+                await instance.put(`/brand/${_id}`, payload);
                 toast.success("Cập nhật thành công");
+
                 getAllBrand();
             } else {
-                const { data } = await instance.post(`/brand`, payload);
+                await instance.post(`/brand`, payload);
                 toast.success("Thêm thành công");
                 getAllBrand();
             }
             nav("/admin/brand");
-        } catch (error) {
-            if (brand._id) {
-                toast.error("Cập nhật thất bại");
-            } else {
-                toast.error("Thêm thương hiệu thất bại do bị trùng ");
-            }
-            console.log(error);
+        } catch (error: any) {
+            const errorMessage =
+                error.response?.data?.message ||
+                "Đã xảy ra lỗi, vui lòng thử lại sau.";
+            Swal.fire({
+                icon: "error",
+                title: "Có Lỗi Xảy ra",
+                text: errorMessage, // Hiển thị nội dung của message
+            }).then(() => {
+                window.location.reload();
+            });
         }
     };
 

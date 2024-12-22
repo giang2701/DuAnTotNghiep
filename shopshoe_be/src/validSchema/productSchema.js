@@ -6,7 +6,7 @@ const productSchema = Joi.object({
         "string.empty": "Title cannot be empty",
         "string.min": "Title must have at least 3 characters",
     }),
-    brand: Joi.string().required().min(3).max(255).messages({
+    brand: Joi.string().required().messages({
         "string.base": "Brand must be a string",
         "string.empty": "Brand cannot be empty",
         "string.min": "Brand must have at least 3 characters",

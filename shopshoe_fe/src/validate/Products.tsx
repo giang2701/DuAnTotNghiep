@@ -6,11 +6,9 @@ export const validateProduct = Joi.object({
         "string.empty": "Title cannot be empty",
         "string.min": "Title must have at least 3 characters",
     }),
-    brand: Joi.string().required().min(3).max(255).messages({
+    brand: Joi.string().required().messages({
         "string.base": "Brand must be a string",
         "string.empty": "Brand cannot be empty",
-        "string.min": "Brand must have at least 3 characters",
-        "string.max": "Brand must have at most 255 characters",
     }),
     price: Joi.number().required().min(0).messages({
         "number.base": "Price must be a number",

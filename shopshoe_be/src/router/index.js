@@ -11,6 +11,7 @@ import RouterHeart from "./heart.js";
 import statisticsRouter from "./statisticsRouter.js";
 import RouterBrand from "./Brand.js";
 import commentRouter from "./commentRoutes.js";
+import RouterCheckPermission from "./checkPermission.js";
 
 const router = Router();
 router.use("/products", productRouter);
@@ -25,4 +26,5 @@ router.use("/voucher", RouterVoucher);
 router.use("/heart", RouterHeart);
 router.use("/statistics", statisticsRouter);
 router.use("/comments", commentRouter);
+router.use("/permissions", RouterCheckPermission);
 export default router;

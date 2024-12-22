@@ -64,8 +64,15 @@ const CategoryProvider = ({ children }: { children: React.ReactNode }) => {
                     icon: "error",
                 });
             }
-        } catch (error) {
-            toast.error("Không thể xóa");
+        } catch (error: any) {
+            const errorMessage =
+                error.response?.data?.message ||
+                "Đã xảy ra lỗi, vui lòng thử lại sau.";
+            Swal.fire({
+                icon: "error",
+                title: "Lỗi Khi Xóa Danh Mục ",
+                text: errorMessage, // Hiển thị nội dung của message
+            });
         }
     };
     const handleCategory = async (category: Category) => {
@@ -87,11 +94,31 @@ const CategoryProvider = ({ children }: { children: React.ReactNode }) => {
                 toast.success("Thêm thành công");
             }
             nav("/admin/category");
-        } catch (error) {
+        } catch (error: any) {
             if (category._id) {
-                toast.error("Cập nhật thất bại");
+                // toast.error("Cập nhật thất bại");
+                const errorMessage =
+                    error.response?.data?.message ||
+                    "Đã xảy ra lỗi, vui lòng thử lại sau.";
+                Swal.fire({
+                    icon: "error",
+                    title: "Cập nhật thất bại ",
+                    text: errorMessage, // Hiển thị nội dung của message
+                }).then(() => {
+                    window.location.reload();
+                });
             } else {
-                toast.error("Thêm thất bại");
+                // toast.error("Thêm thất bại");
+                const errorMessage =
+                    error.response?.data?.message ||
+                    "Đã xảy ra lỗi, vui lòng thử lại sau.";
+                Swal.fire({
+                    icon: "error",
+                    title: "Thêm thất bại ",
+                    text: errorMessage, // Hiển thị nội dung của message
+                }).then(() => {
+                    window.location.reload();
+                });
             }
             console.log(error);
         }

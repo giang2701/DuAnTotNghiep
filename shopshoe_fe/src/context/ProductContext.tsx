@@ -201,9 +201,17 @@ const ProductProvider = ({ children }: { children: React.ReactNode }) => {
                 toast.success("Thêm sản phẩm thành công");
                 nav("/admin/products");
             }
-        } catch (error) {
-            console.log(error);
-            toast.error(error as string);
+        } catch (error: any) {
+            const errorMessage =
+                error.response?.data?.message ||
+                "Đã xảy ra lỗi, vui lòng thử lại sau.";
+            Swal.fire({
+                icon: "error",
+                title: "Lỗi Khi Thêm Sản Phẩm ",
+                text: errorMessage, // Hiển thị nội dung của message
+            }).then(() => {
+                window.location.reload();
+            });
         }
     };
 
