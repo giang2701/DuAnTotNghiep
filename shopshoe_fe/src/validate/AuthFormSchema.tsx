@@ -13,11 +13,11 @@ export const LoginSchema = Joi.object({
     }),
 });
 export const RegisterSchema = Joi.object({
-    username: Joi.string().required().min(3).max(255).messages({
+    username: Joi.string().required().min(3).max(20).messages({
         "string.base": "Username must be a string",
         "string.empty": "Username cannot be empty",
         "string.min": "Username must have at least 3 characters",
-        "string.max": "Username must have at most 255 characters",
+        "string.max": "Username must have at most 20 characters",
     }),
     email: Joi.string().required().messages({
         "string.base": "Email must be a string",
