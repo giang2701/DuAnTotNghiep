@@ -42,175 +42,153 @@ import PermissionDenied from "./page/admin/user/PermissionDenied.tsx";
 import UserList from "./page/admin/user/UserList";
 import CreateVoucher from "./page/admin/voucher/CreateVoucher";
 import Voucher from "./page/admin/voucher/Voucher";
+import ViewProductDetails from "./page/admin/Order management/ViewProductDetails.tsx";
 function App() {
-    const { mappedPermissions } = useAuth();
-    return (
-        <>
-            <CartProvider>
-                <Routes>
-                    {/* Client */}
+  const { mappedPermissions } = useAuth();
+  return (
+    <>
+      <CartProvider>
+        <Routes>
+          {/* Client */}
 
-                    <Route path="/" element={<LayoutClient />}>
-                        <Route index element={<Hompage />} />
-                        <Route path="/detail/:id" element={<DetailProduct />} />
-                        <Route
-                            path="/product_list"
-                            element={<Product_List />}
-                        />
-                        <Route
-                            path="/product_list1"
-                            element={<Product_List1 />}
-                        />
-                        <Route path="/CartPage" element={<CartPage />} />
+          <Route path="/" element={<LayoutClient />}>
+            <Route index element={<Hompage />} />
+            <Route path="/detail/:id" element={<DetailProduct />} />
+            <Route path="/product_list" element={<Product_List />} />
+            <Route path="/product_list1" element={<Product_List1 />} />
+            <Route path="/CartPage" element={<CartPage />} />
 
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/register" element={<Register />} />
-                        <Route path="/checkOut" element={<Checkout />} />
-                        <Route path="/checkOutNow" element={<CheckoutNow />} />
-                        <Route
-                            path="/paymentSuccess"
-                            element={<PaymentSuccessPage />}
-                        />
-                        <Route
-                            path="/historyOrder"
-                            element={<HistoryOrders />}
-                        />
-                        <Route path="/aboutus" element={<Aboutus />} />
-                        <Route path="/about" element={<About />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/checkOut" element={<Checkout />} />
+            <Route path="/checkOutNow" element={<CheckoutNow />} />
+            <Route path="/paymentSuccess" element={<PaymentSuccessPage />} />
+            <Route path="/historyOrder" element={<HistoryOrders />} />
+            <Route path="/aboutus" element={<Aboutus />} />
+            <Route path="/about" element={<About />} />
 
-                        <Route
-                            path="/productLike"
-                            element={<ProductsLiked />}
-                        />
-                        <Route path="/contact" element={<Contact />} />
-                    </Route>
-                    <Route path="/loginAdmin" element={<LoginAdmin />} />
-                    <Route path="/loading" element={<Loading />} />
-                    {/*================admin===========================*/}
+            <Route path="/productLike" element={<ProductsLiked />} />
+            <Route path="/contact" element={<Contact />} />
+          </Route>
+          <Route path="/loginAdmin" element={<LoginAdmin />} />
+          <Route path="/loading" element={<Loading />} />
+          {/*================admin===========================*/}
 
-                    <Route path="/admin" element={<LayoutAdmin />}>
-                        <Route index element={<Dashboard />} />{" "}
-                        {/* >>San Pham */}
-                        <Route
-                            path="/admin/products"
-                            element={<ProductList />}
-                        />
-                        <Route
-                            path="/admin/add"
-                            element={
-                                mappedPermissions.includes("add-product") ? (
-                                    <FormProduct />
-                                ) : (
-                                    <Authorization403 />
-                                )
-                            }
-                        />
-                        <Route
-                            path="/admin/edit/:id"
-                            element={
-                                mappedPermissions.includes("edit-product") ? (
-                                    <FormProduct />
-                                ) : (
-                                    <Authorization403 />
-                                )
-                            }
-                        />
-                        {/* >>Danh Muc */}
-                        <Route
-                            path="/admin/category"
-                            element={<ManagerCate />}
-                        />
-                        <Route
-                            path="/admin/category-add"
-                            // element={<CategoryForm />}
-                            element={
-                                mappedPermissions.includes("add-category") ? (
-                                    <CategoryForm />
-                                ) : (
-                                    <Authorization403 />
-                                )
-                            }
-                        />
-                        <Route
-                            path="/admin/category-edit/:id"
-                            element={
-                                mappedPermissions.includes("edit-category") ? (
-                                    <CategoryForm />
-                                ) : (
-                                    <Authorization403 />
-                                )
-                            }
-                        />
-                        {/* >>brand */}
-                        <Route path="/admin/brand" element={<Brand />} />
-                        <Route
-                            path="/admin/brand-add"
-                            element={
-                                mappedPermissions.includes("add-brand") ? (
-                                    <BrandForm />
-                                ) : (
-                                    <Authorization403 />
-                                )
-                            }
-                        />
-                        <Route
-                            path="/admin/brand-edit/:id"
-                            element={
-                                mappedPermissions.includes("edit-brand") ? (
-                                    <BrandForm />
-                                ) : (
-                                    <Authorization403 />
-                                )
-                            }
-                        />
-                        {/* >>Size*/}
-                        <Route path="/admin/size" element={<ListSize />} />
-                        <Route
-                            path="/admin/size/add"
-                            element={
-                                mappedPermissions.includes("add-size") ? (
-                                    <AddSize />
-                                ) : (
-                                    <Authorization403 />
-                                )
-                            }
-                        />
-                        {/* >>Usser*/}
-                        <Route path="/admin/user" element={<UserList />} />
-                        <Route
-                            path="/admin/user/permission/:id"
-                            element={<PermissionDenied />}
-                        />
-                        {/* >>comments management */}
-                        <Route
-                            path="/admin/comments"
-                            element={<ListComments />}
-                        />
-                        {/* >>Order management */}
-                        <Route
-                            path="/admin/orders"
-                            element={<OrderManagement />}
-                        />
-                        {/* >>Voucher*/}
-                        <Route path="/admin/voucher" element={<Voucher />} />
-                        <Route
-                            path="/admin/voucherAdd"
-                            element={
-                                mappedPermissions.includes("add-voucher") ? (
-                                    <CreateVoucher />
-                                ) : (
-                                    <Authorization403 />
-                                )
-                            }
-                        />
-                        <Route path="/admin/trashCan" element={<TrashCan />} />
-                    </Route>
-                    <Route path="*" element={<Page404 />} />
-                </Routes>
-            </CartProvider>
-            <ToastContainer />
-        </>
-    );
+          <Route path="/admin" element={<LayoutAdmin />}>
+            <Route index element={<Dashboard />} /> {/* >>San Pham */}
+            <Route path="/admin/products" element={<ProductList />} />
+            <Route
+              path="/admin/add"
+              element={
+                mappedPermissions.includes("add-product") ? (
+                  <FormProduct />
+                ) : (
+                  <Authorization403 />
+                )
+              }
+            />
+            <Route
+              path="/admin/edit/:id"
+              element={
+                mappedPermissions.includes("edit-product") ? (
+                  <FormProduct />
+                ) : (
+                  <Authorization403 />
+                )
+              }
+            />
+            {/* >>Danh Muc */}
+            <Route path="/admin/category" element={<ManagerCate />} />
+            <Route
+              path="/admin/category-add"
+              // element={<CategoryForm />}
+              element={
+                mappedPermissions.includes("add-category") ? (
+                  <CategoryForm />
+                ) : (
+                  <Authorization403 />
+                )
+              }
+            />
+            <Route
+              path="/admin/category-edit/:id"
+              element={
+                mappedPermissions.includes("edit-category") ? (
+                  <CategoryForm />
+                ) : (
+                  <Authorization403 />
+                )
+              }
+            />
+            {/* >>brand */}
+            <Route path="/admin/brand" element={<Brand />} />
+            <Route
+              path="/admin/brand-add"
+              element={
+                mappedPermissions.includes("add-brand") ? (
+                  <BrandForm />
+                ) : (
+                  <Authorization403 />
+                )
+              }
+            />
+            <Route
+              path="/admin/brand-edit/:id"
+              element={
+                mappedPermissions.includes("edit-brand") ? (
+                  <BrandForm />
+                ) : (
+                  <Authorization403 />
+                )
+              }
+            />
+            {/* >>Size*/}
+            <Route path="/admin/size" element={<ListSize />} />
+            <Route
+              path="/admin/size/add"
+              element={
+                mappedPermissions.includes("add-size") ? (
+                  <AddSize />
+                ) : (
+                  <Authorization403 />
+                )
+              }
+            />
+            {/* >>Usser*/}
+            <Route path="/admin/user" element={<UserList />} />
+            <Route
+              path="/admin/user/permission/:id"
+              element={<PermissionDenied />}
+            />
+            {/* >>comments management */}
+            <Route path="/admin/comments" element={<ListComments />} />
+            {/* >>Order management */}
+            <Route path="/admin/orders" element={<OrderManagement />} />
+            {/* >>Voucher*/}
+            <Route path="/admin/voucher" element={<Voucher />} />
+            <Route
+              path="/admin/voucherAdd"
+              element={
+                mappedPermissions.includes("add-voucher") ? (
+                  <CreateVoucher />
+                ) : (
+                  <Authorization403 />
+                )
+              }
+            />
+            <Route path="/admin/trashCan" element={<TrashCan />} />
+            {/* >>Xem chi tiết sản phẩm  */}
+            <Route
+              path="/admin/viewproductdetails/:id"
+              element={<ViewProductDetails />}
+            />
+          </Route>
+          <Route path="*" element={<Page404 />} />
+        </Routes>
+      </CartProvider>
+      <ToastContainer />
+    </>
+  );
 }
 
 export default App;

@@ -1562,6 +1562,33 @@ ul li:hover {
 .menu_HistoryOrder {
   width: 1000px !important;
 }
+.pending {
+  background-color: #ffcc00; /* Màu nền cho "Pending" */
+}
+
+.confirmed {
+  background-color: #4caf50; /* Màu nền cho "Confirmed" */
+}
+
+.shipping {
+  background-color: #2196f3; /* Màu nền cho "Shipping" */
+}
+
+.goodsreceived {
+  background-color: #f44336; /* Màu nền cho "Goodsreceived" */
+}
+
+.completed {
+  background-color: #8bc34a; /* Màu nền cho "Completed" */
+}
+
+.cancelled {
+  background-color: #f44336; /* Màu nền cho "Cancelled" */
+}
+
+.delivered {
+  background-color: #009688; /* Màu nền cho "Delivered" */
+}
 /* |**********************************************************
    |  Contact 
    | **********************************************************
@@ -1678,7 +1705,135 @@ ul li:hover {
   border: none;
   border-radius: 8px;
 }
-
+/* |**********************************************************
+   |  ViewProductDetails 
+   | **********************************************************
+*/
+.containerView {
+  display: flex;
+}
+.viewProductDetail {
+  margin-left: -268px;
+  margin-top: 110px;
+}
+.viewInformation {
+  margin-left: 80px;
+  margin-top: 110px;
+  width: 350px;
+  font-size: 15px;
+  padding-left: 9px;
+  height: 185px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.viewInformation1 {
+  position: relative;
+  top: -9px;
+}
+.orderCode1 {
+  font-size: 18px;
+  position: relative;
+  left: 80px;
+  top: 20px;
+}
+.orderCode2 {
+  position: relative;
+  left: 80px;
+  top: 20px;
+}
+.h1viewOrder {
+  position: relative;
+  left: 80px;
+  top: 20px;
+}
+.pViewOrder {
+  font-size: 18px;
+}
+.viewPhone {
+  position: relative;
+  top: -5px;
+}
+.fa-5email {
+  margin-top: 5px;
+}
+.viewAdress {
+  margin-left: 80px;
+  margin-top: 10px;
+  width: 350px;
+  font-size: 15px;
+  padding-left: 9px;
+  height: 239px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.pViewaddress1 {
+  position: relative;
+  top: -9px;
+}
+.pViewaddress {
+  font-size: 18px;
+}
+.fa-map-pin {
+  margin-top: 12px;
+}
+.fa-home {
+  margin-top: 5px;
+}
+.fa-city {
+  margin-top: 5px;
+}
+.iconWard {
+  margin-top: -6px;
+}
+.paymentMethod {
+  margin-left: 80px;
+  margin-top: 10px;
+  width: 350px;
+  font-size: 15px;
+  padding-left: 9px;
+  height: 140px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.pPaymentMethod1 {
+  position: relative;
+  top: -9px;
+}
+.fa-clock {
+  margin-top: 7px;
+}
+.fa-check-circle {
+  margin-top: 7px;
+}
+.fa-truck {
+  margin-top: 7px;
+}
+.fa-box-open {
+  margin-top: 7px;
+}
+.fa-thumbs-up {
+  margin-top: 7px;
+}
+.fa-clipboard-check {
+  margin-top: 7px;
+}
+.fa-times-circle {
+  margin-top: 7px;
+}
+.fa-6 {
+  margin-top: 15px;
+}
+.fa-phone {
+  margin-top: -90px;
+}
+.fa-cart-shopping {
+  margin-top: 10px;
+}
+.fa-5 {
+  margin-top: 10px;
+}
+.statusOrder {
+  position: relative;
+  left: 450px;
+  top: 80px;
+}
 /* ****phóng to ảnh  *************** */
 #myImg {
   border-radius: 9px;
@@ -2176,7 +2331,6 @@ ul li:hover {
   pointer-events: none;
 }
 
-
 /* nút thanh trượt của min */
 .slider-input::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -2190,7 +2344,6 @@ ul li:hover {
   border: 2px solid #007bff;
   transition: transform 0.3s ease, background-color 0.3s ease;
 }
-
 
 /* nút thanh trượt max  */
 .slider-input::-moz-range-thumb {
@@ -2248,7 +2401,6 @@ ul li:hover {
 .slider-input::-moz-range-thumb:active {
   transform: scale(1.1);
 }
-
 
 .range-label {
   font-size: 1rem;
@@ -2679,10 +2831,6 @@ ul.progressbar li.active + li.active::after {
   bottom: -30px;
 }
 
-.Orderstatus {
-  position: relative;
-}
-
 .code_Order::after {
   content: "";
   position: absolute;
@@ -2691,19 +2839,6 @@ ul.progressbar li.active + li.active::after {
   height: 1px;
   background-color: #b5b0b0;
   bottom: 37px;
-}
-
-.orderStatus {
-  position: absolute;
-  background-color: #39ac31;
-  bottom: -15px;
-  left: 240px;
-  border-radius: 50px;
-  width: 160px;
-  text-align: center;
-  color: white;
-  height: 29px;
-  padding-top: 2px;
 }
 
 .iconFilter {

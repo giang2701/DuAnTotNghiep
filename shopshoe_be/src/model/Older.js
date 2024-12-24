@@ -75,6 +75,8 @@ const orderSchema = new Schema(
         comment: { type: String, required: false },
       },
     ],
+    BookingDate: { type: Date, default: Date.now },
+    updatedAtDate: { type: Date, default: Date.now },
   },
   { versionKey: false, timestamps: true }
 );

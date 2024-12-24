@@ -30,4 +30,6 @@ export interface Order {
   email: string;
   imgCategory: string[];
   category?: Category;
+  BookingDate: Date;
+  updatedAtDate: Date;
 }
