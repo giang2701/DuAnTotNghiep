@@ -366,6 +366,21 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
                 <span className="menu-text">Kho Lưu Trữ</span>
               </Link>
             </li>
+            <li>
+              <Link to="/admin/returns">
+                <i className="fa fa-undo" style={{ fontSize: "13px" }}></i>
+                <span className="menu-text">Quản lý hoàn trả</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/admin/refunds">
+                <i
+                  className="fa fa-money-bill-wave"
+                  style={{ fontSize: "13px" }}
+                ></i>
+                <span className="menu-text">Quản lý hoàn tiền</span>
+              </Link>
+            </li>
           </ul>
           <div className="sidebar-footer">
             <Link to="/">

@@ -3,8 +3,15 @@ import cors from "cors";
 import router from "./src/router/index.js";
 import { connectDB } from "./src/utils/connectDB.js";
 import Cart from "./src/model/Cart.js";
+import { fileURLToPath } from "url";
+import path, { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
+app.use(express.static(path.join(__dirname, "src")));
+
 // cross origin resource sharing
 app.use(cors());
 app.use(express.json());

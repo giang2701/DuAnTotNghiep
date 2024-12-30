@@ -6,6 +6,7 @@ import crypto from "crypto";
 import axios from "axios";
 import mongoose from "mongoose";
 import Comment from "../model/Comments.js";
+import Return from "../model/Return.js";
 export const createOrder = async (req, res, next) => {
   try {
     const {
@@ -646,6 +647,7 @@ export const updateOrderStatus = async (req, res, next) => {
       "Completed", //hoan thành
       "Cancelled", // hủy
       "Delivered", // Đã giao hàng
+      "Returning",
     ];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ message: "Trạng thái không hợp lệ." });
@@ -696,10 +698,14 @@ export const getOrderDetailById = async (req, res, next) => {
             };
           })
         );
-
+        const returnData = await Return.findOne({
+          orderId: it._id,
+        });
         return {
           ...it.toJSON(),
           products,
+          isReturning: !!returnData,
+          return: returnData,
         };
       })
     );

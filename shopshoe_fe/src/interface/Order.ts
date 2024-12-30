@@ -32,4 +32,7 @@ export interface Order {
   category?: Category;
   BookingDate: Date;
   updatedAtDate: Date;
+  return?: {
+    _id: string;
+  };
 }

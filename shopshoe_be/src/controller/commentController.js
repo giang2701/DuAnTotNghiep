@@ -2,7 +2,16 @@ import Comment from "../model/Comments.js";
 import { censorComment } from "../utils/censor.js";
 export const createComment = async (req, res) => {
   try {
-    const { productId, userId, rating, comment, orderId } = req.body;
+    const { productId, userId, rating, comment, orderId, size } = req.body;
+
+    console.log("Received data:", {
+      productId,
+      userId,
+      rating,
+      comment,
+      orderId,
+      size,
+    });
 
     const sanitizedComment = censorComment(comment);
 
@@ -19,6 +28,7 @@ export const createComment = async (req, res) => {
 
     res.status(201).json({ success: true, data: newComment });
   } catch (error) {
+    console.error("Error creating comment:", error);
     res.status(500).json({ success: false, message: "Có lỗi xảy ra." });
   }
 };

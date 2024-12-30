@@ -535,6 +535,42 @@ const OrderManagement = () => {
                             >
                               Đã giao hàng
                             </p>
+                          ) : order.status === "Returning" ? (
+                            <p
+                              style={{
+                                backgroundColor: "#009688",
+                                width: "100px",
+                                display: "inline-block",
+                                borderRadius: "2px",
+                                padding: "2px",
+                              }}
+                            >
+                              Đang hoan hang
+                            </p>
+                          ) : order.status === "Refunding" ? (
+                            <p
+                              style={{
+                                backgroundColor: "#009688",
+                                width: "100px",
+                                display: "inline-block",
+                                borderRadius: "2px",
+                                padding: "2px",
+                              }}
+                            >
+                              Đang hoan tiền
+                            </p>
+                          ) : order.status === "Refundsuccessful" ? (
+                            <p
+                              style={{
+                                backgroundColor: "#009688",
+                                width: "100px",
+                                display: "inline-block",
+                                borderRadius: "2px",
+                                padding: "2px",
+                              }}
+                            >
+                              Hoàn Tiền Thành Công
+                            </p>
                           ) : order.status === "Cancelled" ? (
                             <p
                               style={{
@@ -575,6 +611,10 @@ const OrderManagement = () => {
                               "Goodsreceived",
                               "Completed",
                               "Cancelled",
+                              "Refunded", //hoàn tiền
+                              "Returning", //Đang hoan hang
+                              "Refunding", //đang hoàn tiền
+                              "Refundsuccessful",
                             ].map((status, statusIndex, statusList) => (
                               <option
                                 key={status}
@@ -604,6 +644,12 @@ const OrderManagement = () => {
                                   cursor:
                                     status === "Goodsreceived"
                                       ? "not-allowed"
+                                      : status === "Returning"
+                                      ? "not-allowed"
+                                      : status === "Refunding"
+                                      ? "not-allowed"
+                                      : status === "Refundsuccessful"
+                                      ? "not-allowed"
                                       : "pointer",
                                 }}
                               >
@@ -619,6 +665,12 @@ const OrderManagement = () => {
                                   ? "Đã nhận hàng"
                                   : status === "Completed"
                                   ? "Đã hoàn thành"
+                                  : status === "Returning"
+                                  ? "Đang hoàn hàng"
+                                  : status === "Refunding"
+                                  ? "Đang hoàn tiền"
+                                  : status === "Refundsuccessful"
+                                  ? "Hoàn tiền thành công"
                                   : "Đã hủy"}
                               </option>
                             ))}

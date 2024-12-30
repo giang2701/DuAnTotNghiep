@@ -1365,6 +1365,7 @@ ul li:hover {
    |  History order
    | **********************************************************
 */
+
 .pHistory {
   position: relative;
 }
@@ -1546,7 +1547,7 @@ ul li:hover {
 }
 
 .p_Order {
-  left: 15.3%;
+  left: 150px;
   position: relative;
   top: 37px;
 }
@@ -1557,10 +1558,12 @@ ul li:hover {
   left: 160px;
 }
 .menu_historyOrder {
-  width: 1000px !important;
+  width: 1435px !important;
+  right: 260px;
 }
 .menu_HistoryOrder {
-  width: 1000px !important;
+  width: 1435px !important;
+  right: 260px;
 }
 .pending {
   background-color: #ffcc00; /* Màu nền cho "Pending" */

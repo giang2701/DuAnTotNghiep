@@ -62,6 +62,10 @@ const orderSchema = new Schema(
         "Completed", // hoan thành //admin
         "Cancelled", // hủy //client
         "Delivered", // Đã giao hàng //admin
+        "Refunded", //hoàn tiền
+        "Returning", //Đang hoan hang
+        "Refunding", //đang hoàn tiền
+        "Refundsuccessful", // hoàn thành công
       ],
       default: "Pending",
     },
@@ -73,6 +77,10 @@ const orderSchema = new Schema(
           required: true,
         },
         comment: { type: String, required: false },
+        returned: {
+          type: Boolean,
+          default: false,
+        },
       },
     ],
     BookingDate: { type: Date, default: Date.now },

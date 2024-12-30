@@ -5,6 +5,9 @@ import { Order } from "../interface/Order";
 import Swal from "sweetalert2";
 import CommentForm from "./CommentForm/CommentForm";
 import { Link } from "react-router-dom";
+import ReturnForm from "./ReturnForm/ReturnForm";
+import ProceedReturnForm from "./ProceedReturnForm/ProceedReturnForm";
+import RefundForm from "./refund/RefundForm ";
 
 const RateButton = ({ order, onClick }: { order: Order; onClick: any }) => {
   const isRateAll = order?.products?.every((it) => it.isRated);
@@ -17,7 +20,7 @@ const RateButton = ({ order, onClick }: { order: Order; onClick: any }) => {
       style={{
         position: "absolute",
         bottom: "14px",
-        right: "290px", // Đặt khoảng cách với nút "Không thể hủy"
+        right: "420px", // Đặt khoảng cách với nút "Không thể hủy"
         backgroundColor: "#4caf50", // Màu xanh cho nút đánh giá
         color: "white",
         textTransform: "none",
@@ -36,6 +39,7 @@ const RateButton = ({ order, onClick }: { order: Order; onClick: any }) => {
 const HistoryOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
+
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string>("");
@@ -45,7 +49,15 @@ const HistoryOrders = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
-  const [isFormOpen, setIsFormOpen] = useState(false); // Quản lý trạng thái form
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isReturnFormOpen, setIsReturnFormOpen] = useState(false);
+  const [isProceedReturnFormOpen, setIsProceedReturnFormOpen] = useState(false);
+  const [isRefundFormOpen, setIsRefundFormOpen] = useState(false);
+  // console.log("isProceedReturnFormOpen", isProceedReturnFormOpen);
+
+  const [isReturnRequested, setIsReturnRequested] = useState<{
+    [key: string]: boolean;
+  }>({}); // State theo dõi trạng thái yêu cầu hoàn trả
 
   const handleCopyOrderId = () => {
     const orderId = detailOrderById?._id;
@@ -103,8 +115,13 @@ const HistoryOrders = () => {
         return 0;
       });
 
+      const updatedIsReturnRequested = { ...isReturnRequested };
+      data.forEach((order: Order) => {
+        updatedIsReturnRequested[order._id] = false;
+      });
       setOrders(sortedOrders);
       setFilteredOrders(data);
+      setIsReturnRequested(updatedIsReturnRequested);
     } catch (error) {
       setError("Có lỗi khi tải đơn hàng.");
       console.error("Error fetching orders:", error);
@@ -169,6 +186,11 @@ const HistoryOrders = () => {
       Completed: "Hoàn thành",
       Cancelled: "Đã hủy đơn",
       Delivered: "Đã giao hàng",
+      Refunded: "Đã hoàn tiền",
+      Returning: "Đang hoàn hàng",
+      Refunding: "Đang hoàn tiền",
+      Refundsuccessful: "Hoàn tiền thành công",
+
       // "Pending", //đang xử lý
       //   "Confirmed", // đã Xác nhận
       //   "Shipping", // đang vận chuyển
@@ -350,6 +372,30 @@ const HistoryOrders = () => {
               Hoàn thành
             </p>
             <p
+              className={`status-link ${
+                selectedStatus === "Returning" ? "active" : ""
+              }`}
+              onClick={() => handleFilter("Returning")}
+            >
+              Hoàn hàng
+            </p>
+            <p
+              className={`status-link ${
+                selectedStatus === "Refunding" ? "active" : ""
+              }`}
+              onClick={() => handleFilter("Refunding")}
+            >
+              Hoàn tiền
+            </p>
+            <p
+              className={`status-link ${
+                selectedStatus === "Refundsuccessful" ? "active" : ""
+              }`}
+              onClick={() => handleFilter("Refundsuccessful")}
+            >
+              Hoàn tiền thành công
+            </p>
+            <p
               className={`status-link  linkAHistory ${
                 selectedStatus === "Cancelled" ? "active" : ""
               }`}
@@ -386,7 +432,7 @@ const HistoryOrders = () => {
                 fontWeight: "bold",
                 color: "#f84d2e",
                 // paddingTop: "150px",
-                // marginBottom: "500px",
+                marginBottom: "500px",
               }}
             >
               Chưa có đơn hàng nào
@@ -415,7 +461,7 @@ const HistoryOrders = () => {
                     fontSize: "18px",
                     fontWeight: "bold",
                     color: "red",
-                    paddingLeft: "800px",
+                    paddingLeft: "1200px",
                   }}
                   className="pStatus"
                 >
@@ -542,7 +588,31 @@ const HistoryOrders = () => {
                   </button>
                 ) : item.status === "Completed" ? (
                   <>
-                    {" "}
+                    {item.return && item.return.status === "Bị từ chối" && (
+                      <button
+                        style={{
+                          position: "absolute",
+                          bottom: "14px",
+                          right: "550px", // Điều chỉnh vị trí cho phù hợp
+                          backgroundColor: "orange", // Màu sắc cho nút
+                          color: "white",
+                          border: "none",
+                          padding: "10px 20px",
+                          borderRadius: "5px",
+                          fontSize: "12px",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          Swal.fire({
+                            icon: "info",
+                            title: "Thông báo",
+                            text: "Đơn hàng hoàn trả của bạn không đủ điều kiện để hoàn trả. Vui lòng liên hệ với cửa hàng để biết thêm chi tiết.",
+                          });
+                        }}
+                      >
+                        Hoàn trả bị từ chối
+                      </button>
+                    )}{" "}
                     <RateButton
                       onClick={() => {
                         setIsFormOpen(true);
@@ -550,6 +620,160 @@ const HistoryOrders = () => {
                       }}
                       order={item}
                     />
+                    <button
+                      style={{
+                        position: "absolute",
+                        bottom: "14px",
+                        left: "1025px", // Đặt vị trí bên trái nút Đánh giá
+                        backgroundColor: item.isReturning ? "grey" : "#f44336", // Màu đỏ cho nút hoàn trả
+                        color: "white",
+                        border: "none",
+                        padding: "10px 20px",
+                        borderRadius: "5px",
+                        fontSize: "12px",
+                        cursor: item.isReturning ? "not-allowed" : "pointer", // Đổi con trỏ chuột
+                        width: "120px",
+                      }}
+                      disabled={item.isReturning} // Disable nút nếu đã yêu cầu hoàn trả
+                      onClick={() => {
+                        setIsReturnFormOpen(true);
+                        setSelectedOrder(item);
+                      }}
+                    >
+                      Hoàn trả
+                    </button>
+                    <button
+                      style={{
+                        position: "absolute",
+                        bottom: "15px",
+                        right: "10px",
+                        backgroundColor: "#817876", // Màu khi vận chuyển
+                        color: "white",
+                        border: "none",
+                        padding: "10px 20px",
+                        borderRadius: "5px",
+                        fontSize: "12px",
+                        cursor: "not-allowed", // Ngăn không cho nút nhấn
+                        width: "129px",
+                      }}
+                    >
+                      {" "}
+                      Không thể hủy
+                    </button>
+                  </>
+                ) : item.status === "Returning" ? (
+                  <>
+                    {item.return.status === "Đã được phê duyệt" && (
+                      <button
+                        style={{
+                          position: "absolute",
+                          bottom: "14px",
+                          right: "290px",
+                          backgroundColor: "#4caf50",
+                          color: "white",
+                          textTransform: "none",
+                          border: "none",
+                          padding: "10px 20px",
+                          borderRadius: "5px",
+                          fontSize: "12px",
+                          cursor: "pointer",
+                          width: "130px",
+                        }}
+                        onClick={() => {
+                          setIsProceedReturnFormOpen(true);
+                          setSelectedOrder(item);
+                        }}
+                      >
+                        Tiến hành hoàn
+                      </button>
+                    )}
+
+                    <button
+                      style={{
+                        position: "absolute",
+                        bottom: "15px",
+                        right: "10px",
+                        backgroundColor: "#817876", // Màu khi vận chuyển
+                        color: "white",
+                        border: "none",
+                        padding: "10px 20px",
+                        borderRadius: "5px",
+                        fontSize: "12px",
+                        cursor: "not-allowed", // Ngăn không cho nút nhấn
+                        width: "129px",
+                      }}
+                    >
+                      {" "}
+                      Không thể hủy
+                    </button>
+                  </>
+                ) : item.status === "Refunding" ? (
+                  <>
+                    <button
+                      style={{
+                        position: "absolute",
+                        bottom: "14px",
+                        right: "290px",
+                        backgroundColor: item.isrefund ? "grey" : "#f44336",
+                        color: "white",
+                        textTransform: "none",
+                        border: "none",
+                        padding: "10px 20px",
+                        borderRadius: "5px",
+                        fontSize: "12px",
+                        cursor: item.isrefund ? "not-allowed" : "pointer",
+                        width: "130px",
+                      }}
+                      disabled={item.isRefundRequested}
+                      onClick={() => {
+                        setIsRefundFormOpen(true);
+                        setSelectedOrder(item);
+                      }}
+                    >
+                      Hoàn tiền
+                    </button>
+                    <button
+                      style={{
+                        position: "absolute",
+                        bottom: "15px",
+                        right: "10px",
+                        backgroundColor: "#817876", // Màu khi vận chuyển
+                        color: "white",
+                        border: "none",
+                        padding: "10px 20px",
+                        borderRadius: "5px",
+                        fontSize: "12px",
+                        cursor: "not-allowed", // Ngăn không cho nút nhấn
+                        width: "129px",
+                      }}
+                    >
+                      {" "}
+                      Không thể hủy
+                    </button>
+                  </>
+                ) : item.status === "Refunding" ? (
+                  <>
+                    <button
+                      style={{
+                        position: "absolute",
+                        bottom: "15px",
+                        right: "10px",
+                        backgroundColor: "#817876", // Màu khi vận chuyển
+                        color: "white",
+                        border: "none",
+                        padding: "10px 20px",
+                        borderRadius: "5px",
+                        fontSize: "12px",
+                        cursor: "not-allowed", // Ngăn không cho nút nhấn
+                        width: "129px",
+                      }}
+                    >
+                      {" "}
+                      Không thể hủy
+                    </button>
+                  </>
+                ) : item.stauts === "Refundsuccessful" ? (
+                  <>
                     <button
                       style={{
                         position: "absolute",
@@ -631,15 +855,34 @@ const HistoryOrders = () => {
                 </button>
               </div>
             ))}
+            <RefundForm
+              open={isRefundFormOpen}
+              onClose={() => setIsRefundFormOpen(false)}
+              order={selectedOrder}
+              refreshAfterRefund={getOrderByid} // Hàm refresh danh sách đơn hàng
+            />
+            <ProceedReturnForm
+              open={isProceedReturnFormOpen}
+              onClose={() => setIsProceedReturnFormOpen(false)}
+              order={selectedOrder}
+              refreshAfterProceedReturn={getOrderByid}
+            />
             <CommentForm
               open={isFormOpen}
               onClose={() => setIsFormOpen(false)}
               selectedOrder={selectedOrder}
               refreshAfterComment={refreshAfterComment}
             />
+            <ReturnForm
+              open={isReturnFormOpen}
+              onClose={() => setIsReturnFormOpen(false)}
+              order={selectedOrder}
+              refreshAfterReturn={getOrderByid}
+            />
           </>
         )}
       </div>
+
       {/* Overlay */}
       <div
         className={`overlayOrderDetail ${isModalOpen ? "show" : ""}`}

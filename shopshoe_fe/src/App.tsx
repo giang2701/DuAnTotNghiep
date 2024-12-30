@@ -43,6 +43,9 @@ import UserList from "./page/admin/user/UserList";
 import CreateVoucher from "./page/admin/voucher/CreateVoucher";
 import Voucher from "./page/admin/voucher/Voucher";
 import ViewProductDetails from "./page/admin/Order management/ViewProductDetails.tsx";
+import ReturnManagement from "./page/admin/Return/ReturnManagement.tsx";
+import RefundManagement from "./page/admin/Refund/RefundManagement.tsx";
+
 function App() {
   const { mappedPermissions } = useAuth();
   return (
@@ -164,6 +167,13 @@ function App() {
             <Route path="/admin/comments" element={<ListComments />} />
             {/* >>Order management */}
             <Route path="/admin/orders" element={<OrderManagement />} />
+            {/* hoàn trả */}
+            <Route
+              path="/admin/returns"
+              element={<ReturnManagement onReturnApproved={(orderId) => {}} />}
+            />
+            {/* hoàn tiền */}
+            <Route path="/admin/refunds" element={<RefundManagement />} />
             {/* >>Voucher*/}
             <Route path="/admin/voucher" element={<Voucher />} />
             <Route
