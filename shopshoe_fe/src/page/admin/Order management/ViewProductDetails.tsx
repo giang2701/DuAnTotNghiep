@@ -15,6 +15,10 @@ const ViewProductDetails = () => {
     "Delivered",
     "Goodsreceived",
     "Completed",
+    // "Refunded", //hoàn tiền
+    "Returning", //Đang hoan hang
+    "Refunding", //đang hoàn tiền
+    "Refundsuccessful",
     "Cancelled",
   ];
 
@@ -229,6 +233,10 @@ const ViewProductDetails = () => {
                       {status === "Delivered" && "Đang giao hàng"}
                       {status === "Goodsreceived" && "Đơn hàng đã được nhận"}
                       {status === "Completed" && "Đơn hàng đã hoàn tất"}
+                      {status === "Returning" && "Đơn hàng đang hoàn hàng"}
+                      {status === "Refunding" && "Đơn hàng đang hoàn tiền"}
+                      {status === "Refundsuccessful" &&
+                        "Đơn hàng đã hoàn tiền thành công"}
                       {status === "Cancelled" && "Đơn hàng đã bị hủy"}
                     </p>
                   )}
@@ -500,6 +508,57 @@ const ViewProductDetails = () => {
                       }}
                     ></i>{" "}
                     Cancelled
+                  </>
+                )}
+                {selectedOrder.status === "Returning" && (
+                  <>
+                    <i
+                      className="fa fa-undo"
+                      style={{
+                        border: "1px solid black",
+                        width: "40px",
+                        height: "40px",
+                        borderRadius: "50px",
+                        paddingLeft: "10px",
+                        fontSize: "20px",
+                        paddingTop: "10px",
+                      }}
+                    ></i>{" "}
+                    Returning
+                  </>
+                )}
+                {selectedOrder.status === "Refunding" && (
+                  <>
+                    <i
+                      className="fa fa-dollar-sign "
+                      style={{
+                        border: "1px solid black",
+                        width: "40px",
+                        height: "40px",
+                        borderRadius: "50px",
+                        paddingLeft: "10px",
+                        fontSize: "20px",
+                        paddingTop: "10px",
+                      }}
+                    ></i>{" "}
+                    Refunding
+                  </>
+                )}
+                {selectedOrder.status === "Refundsuccessful" && (
+                  <>
+                    <i
+                      className="fa fa-check-circle"
+                      style={{
+                        border: "1px solid black",
+                        width: "40px",
+                        height: "40px",
+                        borderRadius: "50px",
+                        paddingLeft: "10px",
+                        fontSize: "20px",
+                        paddingTop: "10px",
+                      }}
+                    ></i>{" "}
+                    Refundsuccessful
                   </>
                 )}
               </span>

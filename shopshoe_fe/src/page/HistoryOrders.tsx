@@ -411,7 +411,7 @@ const HistoryOrders = () => {
             style={{
               border: "2px solid #ccc",
               width: "798px",
-              marginLeft: "293px",
+              marginLeft: "29px",
               borderRadius: "5px",
               marginBottom: "10px",
               padding: "20px",
@@ -772,7 +772,7 @@ const HistoryOrders = () => {
                       Không thể hủy
                     </button>
                   </>
-                ) : item.stauts === "Refundsuccessful" ? (
+                ) : item.status === "Refundsuccessful" ? (
                   <>
                     <button
                       style={{
@@ -945,8 +945,6 @@ const HistoryOrders = () => {
                   ,&nbsp;&nbsp;
                   {detailOrderById?.shippingAddress.district}
                   ,&nbsp;&nbsp;
-                  {detailOrderById?.shippingAddress.city}
-                  &nbsp;&nbsp;
                   {detailOrderById?.shippingAddress.city}
                   &nbsp;&nbsp;
                 </p>

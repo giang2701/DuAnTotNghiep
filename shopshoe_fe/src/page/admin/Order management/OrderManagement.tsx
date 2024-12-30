@@ -128,11 +128,15 @@ const OrderManagement = () => {
 
     // Hàm loại bỏ dấu
     const removeAccents = (str: any) => {
+      // Kiểm tra nếu str không phải là chuỗi thì chuyển đổi thành chuỗi
+      if (typeof str !== "string") {
+        str = String(str); // Ép kiểu về string
+      }
       return str
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/đ/g, "d")
-        .replace(/Đ/g, "D");
+        .normalize("NFD") // Chuẩn hóa Unicode
+        .replace(/[\u0300-\u036f]/g, "") // Loại bỏ dấu
+        .replace(/đ/g, "d") // Thay thế ký tự đ
+        .replace(/Đ/g, "D"); // Thay thế ký tự Đ
     };
 
     // Thông tin đơn hàng
@@ -557,7 +561,7 @@ const OrderManagement = () => {
                                 padding: "2px",
                               }}
                             >
-                              Đang hoan tiền
+                              Đang hoàn tiền
                             </p>
                           ) : order.status === "Refundsuccessful" ? (
                             <p
@@ -610,16 +614,17 @@ const OrderManagement = () => {
                               "Delivered",
                               "Goodsreceived",
                               "Completed",
-                              "Cancelled",
-                              "Refunded", //hoàn tiền
+                              // "Refunded", //hoàn tiền
                               "Returning", //Đang hoan hang
                               "Refunding", //đang hoàn tiền
                               "Refundsuccessful",
+                              "Cancelled",
                             ].map((status, statusIndex, statusList) => (
                               <option
                                 key={status}
                                 value={status}
                                 disabled={
+                                  status === "Returning" ||
                                   statusIndex <
                                     statusList.indexOf(order.status) || // Không cho phép quay lại trạng thái trước đó
                                   (status !== "Cancelled" && // Loại trừ "Đã hủy" khỏi điều kiện nhảy cóc
@@ -683,26 +688,26 @@ const OrderManagement = () => {
                           }).format(order.totalPrice)}
                         </td>
                         <td className="d-flex  justify-content-center">
-                          <button
-                            title="Xem chi tiết"
-                            // onClick={() => openOrderDetails(order)}
-                            style={{
-                              borderRadius: "5px",
-                              width: "30px",
-                              height: "30px",
-                              backgroundColor: "black",
-                              color: "white",
-                              border: "none",
-                              paddingTop: "2px",
-                            }}
+                          <Link
+                            to={`/admin/viewproductdetails/${order._id}`}
+                            style={{ color: "white" }}
                           >
-                            <Link
-                              to={`/admin/viewproductdetails/${order._id}`}
-                              style={{ color: "white" }}
+                            <button
+                              title="Xem chi tiết"
+                              // onClick={() => openOrderDetails(order)}
+                              style={{
+                                borderRadius: "5px",
+                                width: "30px",
+                                height: "30px",
+                                backgroundColor: "black",
+                                color: "white",
+                                border: "none",
+                                paddingTop: "2px",
+                              }}
                             >
                               <i className="fa-regular fa-eye"></i>
-                            </Link>
-                          </button>
+                            </button>
+                          </Link>
                           <button
                             onClick={() => exportOrderDetailsToPDF(order)}
                             style={{
