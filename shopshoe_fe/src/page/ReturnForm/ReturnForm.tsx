@@ -44,6 +44,13 @@ const ReturnForm: React.FC<ReturnFormProps> = ({
   const [userPhone, setUserPhone] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
 
+  // State cho lỗi validate
+  const [reasonError, setReasonError] = useState<string | null>(null);
+  const [imagesError, setImagesError] = useState<string | null>(null);
+  const [videosError, setVideosError] = useState<string | null>(null);
+  const [userNameError, setUserNameError] = useState<string | null>(null);
+  const [userPhoneError, setUserPhoneError] = useState<string | null>(null);
+
   const handleReasonChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setReason(event.target.value);
   };
@@ -71,6 +78,57 @@ const ReturnForm: React.FC<ReturnFormProps> = ({
 
   const handleSubmit = async () => {
     if (!order) return;
+
+    // Validate lý do
+    if (reason.trim() === "") {
+      setReasonError("Vui lòng nhập lý do hoàn trả.");
+    } else {
+      setReasonError(null);
+    }
+    // Validate hình ảnh (nếu có)
+    if (images.length === 0) {
+      setImagesError("Vui lòng chọn ít nhất một hình ảnh.");
+    } else if (images.length > 5) {
+      setImagesError("Chỉ được chọn tối đa 5 hình ảnh.");
+    } else {
+      setImagesError(null);
+    }
+
+    // Validate video (nếu có)
+    if (videos.length === 0) {
+      setVideosError("Vui lòng chọn ít nhất một video.");
+    } else if (videos.length > 2) {
+      setVideosError("Chỉ được chọn tối đa 2 video.");
+    } else {
+      setVideosError(null);
+    }
+
+    // Validate tên người dùng
+    if (userName.trim() === "") {
+      setUserNameError("Vui lòng nhập tên người dùng.");
+    } else {
+      setUserNameError(null);
+    }
+
+    // Validate số điện thoại
+    if (userPhone.trim() === "" || !/^\d{10}$/.test(userPhone)) {
+      // Kiểm tra số điện thoại có 10 chữ số
+      setUserPhoneError("Vui lòng nhập số điện thoại hợp lệ.");
+    } else {
+      setUserPhoneError(null);
+    }
+
+    // Kiểm tra nếu có bất kỳ lỗi nào
+    if (
+      reasonError ||
+      imagesError ||
+      videosError ||
+      userNameError ||
+      userPhoneError
+    ) {
+      return; // Dừng gửi yêu cầu nếu có lỗi
+    }
+
     setLoading(true);
     try {
       const formData = new FormData();
@@ -123,6 +181,12 @@ const ReturnForm: React.FC<ReturnFormProps> = ({
       setError(null);
       setUserName("");
       setUserPhone("");
+      // Reset lỗi validate khi đóng form
+      setReasonError(null);
+      setImagesError(null);
+      setVideosError(null);
+      setUserNameError(null);
+      setUserPhoneError(null);
     } else {
       setUserName(order?.userId.name || "");
       setUserPhone(order?.userId.phone || "");
@@ -140,6 +204,12 @@ const ReturnForm: React.FC<ReturnFormProps> = ({
         {error && (
           <Typography color="error" paragraph>
             {error}
+          </Typography>
+        )}
+        {/* Hiển thị lỗi tên người dùng */}
+        {userNameError && (
+          <Typography color="error" paragraph>
+            {userNameError}
           </Typography>
         )}
         <TextField
@@ -162,7 +232,15 @@ const ReturnForm: React.FC<ReturnFormProps> = ({
           variant="outlined"
           value={userName}
           onChange={handleNameChange}
+          error={!!userNameError} // Thêm error prop cho TextField
+          helperText={userNameError} // Hiển thị thông báo lỗi
         />
+        {/* Hiển thị lỗi số điện thoại */}
+        {userPhoneError && (
+          <Typography color="error" paragraph>
+            {userPhoneError}
+          </Typography>
+        )}
         <TextField
           margin="dense"
           id="userPhone"
@@ -172,7 +250,15 @@ const ReturnForm: React.FC<ReturnFormProps> = ({
           variant="outlined"
           value={userPhone}
           onChange={handlePhoneChange}
+          error={!!userPhoneError} // Thêm error prop cho TextField
+          helperText={userPhoneError} // Hiển thị thông báo lỗi
         />
+        {/* Hiển thị lỗi lý do */}
+        {reasonError && (
+          <Typography color="error" paragraph>
+            {reasonError}
+          </Typography>
+        )}
         <TextField
           margin="dense"
           id="reason"
@@ -184,6 +270,8 @@ const ReturnForm: React.FC<ReturnFormProps> = ({
           rows={7}
           value={reason}
           onChange={handleReasonChange}
+          error={!!reasonError} // Thêm error prop cho TextField
+          helperText={reasonError} // Hiển thị thông báo lỗi
         />
 
         <Box mt={2}>
@@ -210,6 +298,12 @@ const ReturnForm: React.FC<ReturnFormProps> = ({
           <Typography variant="caption" display="inline">
             {images.length > 0 ? `${images.length} ảnh đã chọn` : "Chọn ảnh"}
           </Typography>
+          {/* Hiển thị lỗi hình ảnh */}
+          {imagesError && (
+            <Typography color="error" variant="caption" display="block">
+              {imagesError}
+            </Typography>
+          )}
         </Box>
         <Box mt={2}>
           <Typography variant="subtitle2" gutterBottom>
@@ -237,6 +331,12 @@ const ReturnForm: React.FC<ReturnFormProps> = ({
               ? `${videos.length} video đã chọn`
               : "Chọn video"}
           </Typography>
+          {/* Hiển thị lỗi video */}
+          {videosError && (
+            <Typography color="error" variant="caption" display="block">
+              {videosError}
+            </Typography>
+          )}
         </Box>
       </DialogContent>
       <DialogActions>

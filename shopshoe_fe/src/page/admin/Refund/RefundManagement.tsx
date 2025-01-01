@@ -11,9 +11,10 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Pagination,
 } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
-
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { toast } from "react-toastify";
 import instance from "../../../api/index";
@@ -41,11 +42,19 @@ const RefundManagement = () => {
   const [selectedRefund, setSelectedRefund] = useState<RefundRequest | null>(
     null
   );
+  const [currentPage, setCurrentPage] = useState(1);
+  const refundsPerPage = 15;
 
   const fetchRefunds = async () => {
     try {
       const response = await instance.get("/refunds");
-      setRefunds(response.data);
+      // Sắp xếp danh sách hoàn tiền theo ngày tạo, mới nhất lên đầu
+      const sortedRefunds = [...response.data].sort((a, b) => {
+        const dateA = new Date(a.createdAt).getTime();
+        const dateB = new Date(b.createdAt).getTime();
+        return dateB - dateA;
+      });
+      setRefunds(sortedRefunds);
     } catch (error) {
       toast.error("Lỗi khi tải danh sách yêu cầu hoàn tiền.");
     } finally {
@@ -79,8 +88,31 @@ const RefundManagement = () => {
 
   const filteredRefunds = refunds.filter((item) => {
     if (filter === "all") return true;
-    return item.status === filter;
+    // Chuẩn hóa giá trị của filter
+    const normalizedFilter =
+      filter === "Pending"
+        ? "Đang chờ xử lý"
+        : filter === "Approved"
+        ? "Đã được phê duyệt"
+        : filter === "Rejected"
+        ? "Bị từ chối"
+        : filter; // Nếu không khớp thì giữ nguyên giá trị
+
+    return item.status === normalizedFilter;
   });
+
+  // Logic phân trang
+  const indexOfLastRefund = currentPage * refundsPerPage;
+  const indexOfFirstRefund = indexOfLastRefund - refundsPerPage;
+  const currentRefunds = filteredRefunds.slice(
+    indexOfFirstRefund,
+    indexOfLastRefund
+  );
+
+  // Hàm xử lý khi thay đổi trang
+  const handlePageChange = (event: any, value: number) => {
+    setCurrentPage(value);
+  };
 
   const handleClickMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -89,6 +121,12 @@ const RefundManagement = () => {
   const handleCloseMenu = (filter: string) => {
     setFilter(filter);
     setAnchorEl(null);
+    setCurrentPage(1); // Reset trang hiện tại khi thay đổi filter
+  };
+
+  const handleOpenDialog = (refundRequest: RefundRequest) => {
+    setSelectedRefund(refundRequest);
+    setOpenDialog(true);
   };
 
   const handleCloseDialog = () => {
@@ -171,12 +209,12 @@ const RefundManagement = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredRefunds.length === 0 ? (
+              {currentRefunds.length === 0 ? (
                 <tr>
                   <td colSpan={10}>Không có yêu cầu hoàn tiền phù hợp.</td>
                 </tr>
               ) : (
-                filteredRefunds.map((item, index) => (
+                currentRefunds.map((item, index) => (
                   <tr key={item._id}>
                     <td>{index + 1}</td>
                     <td>{item.orderId._id}</td>
@@ -203,24 +241,10 @@ const RefundManagement = () => {
                         gap: "5px",
                       }}
                     >
-                      {/* Nút xóa */}
+                      {/* Nút xem chi tiết */}
                       <IconButton
-                        color="error"
-                        onClick={() => {
-                          Swal.fire({
-                            title: "Xác nhận xóa?",
-                            text: "Bạn có chắc chắn muốn xóa yêu cầu hoàn tiền này?",
-                            icon: "warning",
-                            showCancelButton: true,
-                            confirmButtonColor: "#d33",
-                            cancelButtonColor: "#3085d6",
-                            confirmButtonText: "Xóa",
-                          }).then((result) => {
-                            if (result.isConfirmed) {
-                              deleteRefund(item._id);
-                            }
-                          });
-                        }}
+                        onClick={() => handleOpenDialog(item)}
+                        aria-label="view"
                         style={{
                           borderRadius: "5px",
                           width: "30px",
@@ -231,8 +255,9 @@ const RefundManagement = () => {
                           padding: "0",
                         }}
                       >
-                        <DeleteIcon style={{ fontSize: "16px" }} />
+                        <VisibilityIcon />
                       </IconButton>
+
                       {/* Nút phê duyệt */}
                       <Button
                         variant="contained"
@@ -244,23 +269,27 @@ const RefundManagement = () => {
                       >
                         Phê Duyệt
                       </Button>
-                      {/* Nút từ chối */}
-                      <Button
-                        variant="contained"
-                        color="error"
-                        onClick={() =>
-                          updateRefundStatus(item._id, "Bị từ chối")
-                        }
-                        disabled={item.status !== "Đang chờ xử lý"}
-                      >
-                        Từ Chối
-                      </Button>
                     </td>
                   </tr>
                 ))
               )}
             </tbody>
           </table>
+          {/* Pagination */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "20px",
+            }}
+          >
+            <Pagination
+              count={Math.ceil(filteredRefunds.length / refundsPerPage)}
+              page={currentPage}
+              onChange={handlePageChange}
+              color="primary"
+            />
+          </Box>
         </Box>
       </Box>
 
@@ -287,11 +316,13 @@ const RefundManagement = () => {
               {selectedRefund.qrCodeImage && (
                 <Box mt={2}>
                   <Typography variant="h6">Ảnh QR Code:</Typography>
-                  <img
-                    src={`http://localhost:8080/${selectedRefund.qrCodeImage}`}
-                    alt="QR Code"
-                    style={{ width: "200px", height: "auto" }}
-                  />
+                  {selectedRefund.qrCodeImage && (
+                    <img
+                      src={`http://localhost:8000/${selectedRefund.qrCodeImage}`}
+                      alt="QR Code"
+                      style={{ width: "300px", height: "auto" }}
+                    />
+                  )}
                 </Box>
               )}
             </Box>

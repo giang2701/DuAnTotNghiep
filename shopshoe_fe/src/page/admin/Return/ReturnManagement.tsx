@@ -11,6 +11,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Pagination,
 } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -47,11 +48,19 @@ const ReturnManagement: React.FC<ReturnManagementProps> = ({
   const [selectedReturn, setSelectedReturn] = useState<ReturnRequest | null>(
     null
   );
+  const [currentPage, setCurrentPage] = useState(1); // State cho trang hiện tại
+  const returnsPerPage = 15; // Số lượng returns trên mỗi trang
 
   const fetchReturns = async () => {
     try {
       const response = await instance.get("/returns");
-      setReturns(response.data);
+      // Sắp xếp danh sách returns theo ngày tạo, mới nhất lên đầu
+      const sortedReturns = [...response.data].sort((a, b) => {
+        const dateA = new Date(a.createdAt).getTime();
+        const dateB = new Date(b.createdAt).getTime();
+        return dateB - dateA; // Sắp xếp giảm dần
+      });
+      setReturns(sortedReturns);
     } catch (error) {
       toast.error("Lỗi khi tải danh sách hoàn trả.");
     } finally {
@@ -74,7 +83,7 @@ const ReturnManagement: React.FC<ReturnManagementProps> = ({
       await fetchReturns();
       if (status === "Đang hoàn tiền") {
         // await instance.patch(`/orders/${orderId}/status`, {
-        //   status: "Refunding",
+        //  status: "Refunding",
         // });
       }
       if (status === "Đã được phê duyệt") {
@@ -97,10 +106,27 @@ const ReturnManagement: React.FC<ReturnManagementProps> = ({
 
   const filteredReturns = returns.filter((item) => {
     if (filter === "all") return true;
-    return filter === "Đã được phê duyệt"
-      ? item.status === "Đã được phê duyệt"
-      : item.status === "Đang chờ xử lý";
+
+    // Chuẩn hóa giá trị của filter
+    const normalizedFilter =
+      filter === "Đang chờ xử lý"
+        ? "Đang chờ xử lý"
+        : filter === "Đã được phê duyệt"
+        ? "Đã được phê duyệt"
+        : filter === "Bị từ chốí" // Typo: "Bị từ chốí" should be "Bị từ chối"
+        ? "Bị từ chối"
+        : filter; // Nếu không khớp thì giữ nguyên giá trị
+
+    return item.status === normalizedFilter;
   });
+
+  // Logic phân trang
+  const indexOfLastReturn = currentPage * returnsPerPage;
+  const indexOfFirstReturn = indexOfLastReturn - returnsPerPage;
+  const currentReturns = filteredReturns.slice(
+    indexOfFirstReturn,
+    indexOfLastReturn
+  );
 
   const handleClickMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -109,6 +135,7 @@ const ReturnManagement: React.FC<ReturnManagementProps> = ({
   const handleCloseMenu = (filter: string) => {
     setFilter(filter);
     setAnchorEl(null);
+    setCurrentPage(1); // Reset về trang đầu tiên sau khi thay đổi bộ lọc
   };
 
   const handleOpenDialog = (returnRequest: ReturnRequest) => {
@@ -119,6 +146,13 @@ const ReturnManagement: React.FC<ReturnManagementProps> = ({
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setSelectedReturn(null);
+  };
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    page: number
+  ) => {
+    setCurrentPage(page);
   };
 
   if (loading) {
@@ -188,12 +222,12 @@ const ReturnManagement: React.FC<ReturnManagementProps> = ({
               </tr>
             </thead>
             <tbody>
-              {filteredReturns.length === 0 ? (
+              {currentReturns.length === 0 ? (
                 <tr>
                   <td colSpan={8}>Không có yêu cầu hoàn trả phù hợp.</td>
                 </tr>
               ) : (
-                filteredReturns.map((item, index) => (
+                currentReturns.map((item, index) => (
                   <tr key={item._id}>
                     <td>{index + 1}</td>
                     <td>{item.orderId._id}</td>
@@ -302,6 +336,20 @@ const ReturnManagement: React.FC<ReturnManagementProps> = ({
               )}
             </tbody>
           </table>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          <Pagination
+            count={Math.ceil(filteredReturns.length / returnsPerPage)}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+          />
         </Box>
       </Box>
 

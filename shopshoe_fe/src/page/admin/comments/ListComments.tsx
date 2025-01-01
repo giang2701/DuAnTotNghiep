@@ -136,41 +136,52 @@ const ListComments: React.FC = () => {
       className="container"
       sx={{ marginTop: "15px", marginLeft: "15px", width: "100%" }}
     >
-      <Box>
-        <Typography variant="h6" sx={{ marginBottom: "10px" }}>
-          Danh Sách Bình Luận
-        </Typography>
-        <Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "20px",
-            }}
-          >
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <IconButton onClick={handleClickMenu}>
-                <FilterListIcon />
-              </IconButton>
-              <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={() => setAnchorEl(null)}
-              >
-                <MenuItem onClick={() => handleCloseMenu("all")}>
-                  Tất cả
-                </MenuItem>
-                <MenuItem onClick={() => handleCloseMenu("hidden")}>
-                  Bình luận ẩn
-                </MenuItem>
-                <MenuItem onClick={() => handleCloseMenu("visible")}>
-                  Bình luận hiện
-                </MenuItem>
-                <MenuItem onClick={() => handleCloseMenu("***")}>
-                  Bình luận vi phạm
-                </MenuItem>
-              </Menu>
+      <Box sx={{ width: "100%" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "10px 20px",
+            backgroundColor: "black",
+            color: "white",
+          }}
+        >
+          <Typography variant="h6" sx={{ marginBottom: "10px" }}>
+            Danh Sách Bình Luận
+          </Typography>
+          <Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "20px",
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <IconButton onClick={handleClickMenu}>
+                  <FilterListIcon style={{ color: "white" }} />
+                </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={() => setAnchorEl(null)}
+                >
+                  <MenuItem onClick={() => handleCloseMenu("all")}>
+                    Tất cả
+                  </MenuItem>
+                  <MenuItem onClick={() => handleCloseMenu("hidden")}>
+                    Bình luận ẩn
+                  </MenuItem>
+                  <MenuItem onClick={() => handleCloseMenu("visible")}>
+                    Bình luận hiện
+                  </MenuItem>
+                  <MenuItem onClick={() => handleCloseMenu("***")}>
+                    Bình luận vi phạm
+                  </MenuItem>
+                </Menu>
+              </Box>
             </Box>
           </Box>
         </Box>

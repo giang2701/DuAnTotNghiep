@@ -20,7 +20,7 @@ const RateButton = ({ order, onClick }: { order: Order; onClick: any }) => {
       style={{
         position: "absolute",
         bottom: "14px",
-        right: "420px", // Đặt khoảng cách với nút "Không thể hủy"
+        right: "1300px", // Đặt khoảng cách với nút "Không thể hủy"
         backgroundColor: "#4caf50", // Màu xanh cho nút đánh giá
         color: "white",
         textTransform: "none",
@@ -593,7 +593,7 @@ const HistoryOrders = () => {
                         style={{
                           position: "absolute",
                           bottom: "14px",
-                          right: "550px", // Điều chỉnh vị trí cho phù hợp
+                          right: "420px", // Điều chỉnh vị trí cho phù hợp
                           backgroundColor: "orange", // Màu sắc cho nút
                           color: "white",
                           border: "none",
