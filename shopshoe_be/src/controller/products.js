@@ -116,7 +116,8 @@ export const getProductById = async (req, res, next) => {
     try {
         const data = await Products.findById(req.params.id)
             .populate("category")
-            .populate("brand");
+            .populate("brand")
+            .populate("flashSale");
         // console.log(data);
         if (data) {
             return res.status(200).json({

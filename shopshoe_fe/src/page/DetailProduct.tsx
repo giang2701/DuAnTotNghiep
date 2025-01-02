@@ -23,8 +23,9 @@ import { Size } from "../interface/Size";
 // import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import ProductComments from "./ProductComments";
 import ProductItem from "./ProductItem";
+import ProductComments from "./ProductComments";
+import CountdownTimer from "./FlashSaleTime";
 const DetailProduct = () => {
   const { id } = useParams();
   const userArray = localStorage.getItem("user");
@@ -42,11 +43,11 @@ const DetailProduct = () => {
   }, []);
   const [product, setProduct] = useState<Product | null>(null); //đổ sản phẩm chi tiết
   const [sizeNames, setSizeNames] = useState<
-    { id: string; name: number; price: number; stock: number }[]
+    { id: string; name: number; price: number; stock: number, salePrice: number }[]
   >([]);
   // cart
   // setCart
-  const { fetchCart } = useCart();
+  const { cart, fetchCart } = useCart();
   // const { user } = useAuth(); // Gọi useAuth ở đây
 
   // console.log(cart);
@@ -59,6 +60,8 @@ const DetailProduct = () => {
 
   // const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
   const [price, setPrice] = useState<number | null>(null); //xét giá mặc định cho sản phẩm
+  console.log(price);
+
   const [quantity, setQuantity] = useState<number>(1); //so luong cua san pham theo size
   const [stockLimit, setStockLimit] = useState<number>(0); //để đảm bảo rằng số lượng mua không vượt quá số tồn kho của kích thước được chọn
 
@@ -160,6 +163,7 @@ const DetailProduct = () => {
                 name: sizeResponse.data.data.nameSize,
                 price: sizeStock.price,
                 stock: sizeStock.stock,
+                salePrice: sizeStock.salePrice
               };
             } catch (error) {
               console.error("Error fetching size:", error);
@@ -179,7 +183,12 @@ const DetailProduct = () => {
     const selected = sizeNames.find((size) => size.id === sizeId);
     if (selected) {
       setSelectedSize(selected as any); // Lưu toàn bộ đối tượng size đã chọn
-      setPrice(selected.price); // Cập nhật giá theo size
+      if (product?.flashSale) {
+        setPrice(selected.salePrice); // Cập nhật giá theo size
+      } else {
+        setPrice(selected.price);
+
+      }
       setStockLimit(selected.stock); // Cập nhật giới hạn stock
       setQuantity(1); // Reset số lượng mua về 1
     }
@@ -276,6 +285,9 @@ const DetailProduct = () => {
       quantity: quantity, // Đảm bảo quantity được định nghĩa
       price: product?.price || 0,
     };
+    console.log("cartItem", cartItem);
+    console.log("cartItem", cartItem.price);
+
 
     try {
       await instance.post("/cart", cartItem);
@@ -288,15 +300,8 @@ const DetailProduct = () => {
         text: "Thêm Sản Phẩm Thành Công!",
         icon: "success",
       });
-    } catch (error: any) {
-      // console.error("Lỗi khi thêm vào giỏ hàng:", error);
-      const errorMessage =
-        error.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại sau.";
-      Swal.fire({
-        icon: "error",
-        title: "Lỗi khi thêm vào giỏ hàng",
-        text: errorMessage, // Hiển thị nội dung của message
-      });
+    } catch (error) {
+      console.error("Lỗi khi thêm vào giỏ hàng:", error);
     }
   };
 
@@ -363,6 +368,9 @@ const DetailProduct = () => {
       Array.isArray(favorites) && favorites.some((fav) => fav._id === item._id)
     );
   };
+
+
+
   return (
     <div className="container">
       <div className="row row__detail">
@@ -408,6 +416,10 @@ const DetailProduct = () => {
               src={selectedImage || ""}
               alt={product.title}
             />
+            {product.flashSale && (
+              <div className="discount-badge mt-3">-{product.flashSale.discountPercent}%</div>
+            )}
+
 
             {/* Nút Next */}
             <IconButton
@@ -499,9 +511,54 @@ const DetailProduct = () => {
               {/* {value !== null && <Box>Đánh giá: {value} sao</Box>} */}
             </Box>
           </div>
-          <p className="p-1 fw-bolder mt-2 price_detail">
-            {price !== null ? formatPrice(price) : "Price not available"}
+          <p className=" p-1 fw-bolder mt-2 price_detail">
+            {product.flashSale ? (
+              <div style={{ width: "320px", color: "white", background: "", marginTop: "5px", borderRadius: "5px", display: "inline-block" }}>
+                {!selectedSize ? (
+                  <>
+                    {/* Hiển thị giá sản phẩm chung nếu chưa chọn size */}
+                    <span className="text-danger" style={{ fontSize: "18px", padding: "15px" }}>
+                      Chỉ còn: {formatPrice(product.salePrice)} {/* Giá sale */}
+                    </span>
+                    <br />
+                    <span className="text-muted" style={{ fontSize: "18px", padding: "15px" }}>
+                      Giá gốc: <span className="text-decoration-line-through">{formatPrice(product.price)}</span> {/* Giá gốc */}
+                    </span>
+                    <br />
+                    <span className="text-muted" style={{ fontSize: "18px", padding: "15px" }}>
+                      Tiết kiệm:<span className="textYellow"> {formatPrice(product.price - product.salePrice)} {/* Tiết kiệm theo size */}</span>
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    {/* Hiển thị giá theo size nếu đã chọn size */}
+                    <span className="text-danger" style={{ fontSize: "18px", padding: "15px" }}>
+                      Chỉ còn: {selectedSize.size} {formatPrice(selectedSize.salePrice)} {/* Giá sale theo size */}
+                    </span>
+                    <br />
+                    <span className="text-muted " style={{ fontSize: "18px", padding: "15px" }}>
+                      Giá gốc: <span className="text-decoration-line-through">{selectedSize.size}{formatPrice(selectedSize.price)}</span>   {/* Giá gốc theo size */}
+                    </span>
+                    <br />
+                    <span className="text-muted" style={{ fontSize: "18px", padding: "15px" }}>
+                      Tiết kiệm:<span className="textYellow"> {formatPrice(selectedSize.price - selectedSize.salePrice)} {/* Tiết kiệm theo size */}</span>
+                    </span>
+                  </>
+                )}
+                <br />
+                <span style={{ fontSize: "15px", }}>
+                  <CountdownTimer endDate={product.flashSale.endDate} />
+                </span>
+              </div>
+            ) : (
+              <span>
+                {!selectedSize
+                  ? formatPrice(product.price) // Giá chung nếu chưa chọn size
+                  : formatPrice(selectedSize.price)}
+              </span>
+            )}
           </p>
+
           <Box mt={1} marginLeft={-1} marginBottom={1}>
             <Button onClick={() => setModalOpen(true)}>
               Hướng dẫn đo size
@@ -649,10 +706,7 @@ const DetailProduct = () => {
               <>
                 <button
                   className="btn btn-black me-4 btn_buy"
-                  style={{
-                    cursor: "not-allowed",
-                    opacity: "0.3",
-                  }}
+                  style={{ cursor: "not-allowed", opacity: "0.3" }}
                   onClick={() => {
                     Swal.fire({
                       icon: "error",
@@ -685,10 +739,7 @@ const DetailProduct = () => {
             ) : (
               <button
                 className="btn btn-outline btn_buy"
-                style={{
-                  cursor: "not-allowed",
-                  opacity: "0.3",
-                }}
+                style={{ cursor: "not-allowed", opacity: "0.3" }}
                 onClick={() => {
                   Swal.fire({
                     icon: "error",

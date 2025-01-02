@@ -15,6 +15,7 @@ import instance from "../api";
 import { Heart } from "../interface/Heart";
 import { toast } from "react-toastify";
 
+
 const ProductsLiked = () => {
     const [favorites, setFavorites] = useState<Product[]>([]); // Khởi tạo favorites là một mảng rỗng
     const [favorites2, setFavorites2] = useState<Heart[]>([]); // Khởi tạo favorites là một mảng rỗng

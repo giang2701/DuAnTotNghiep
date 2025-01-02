@@ -170,103 +170,104 @@ const CartPage = () => {
                     </div>
                     {cart
                         ? cart.map((item: any) => {
-                              const sizeProducts = item.product.sizeStock;
-                              const key = `${item.product._id}-${item.size}`;
-                              const sizeData = sizes[item.size]; // Lấy dữ liệu size từ state
-                              const IdSize = sizeData?._id;
+                            console.log(item);
+                            const sizeProducts = item.product.sizeStock;
+                            const key = `${item.product._id}-${item.size}`;
+                            const sizeData = sizes[item.size]; // Lấy dữ liệu size từ state
+                            const IdSize = sizeData?._id;
 
-                              // Lọc sản phẩm theo IdSize
-                              const stockBySize = sizeProducts.filter(
-                                  (size: any) => size.size === IdSize
-                              );
-                              // Lấy giá trị stock từ sản phẩm đã lọc
-                              const stockValue =
-                                  stockBySize.length > 0
-                                      ? stockBySize[0].stock
-                                      : 0; // Nếu không có sản phẩm nào thì trả về 0
+                            // Lọc sản phẩm theo IdSize
+                            const stockBySize = sizeProducts.filter(
+                                (size: any) => size.size === IdSize
+                            );
+                            // Lấy giá trị stock từ sản phẩm đã lọc
+                            const stockValue =
+                                stockBySize.length > 0
+                                    ? stockBySize[0].stock
+                                    : 0; // Nếu không có sản phẩm nào thì trả về 0
 
-                              // Kiểm tra xem sản phẩm có active không
-                              const isActive = item.product.isActive;
+                            // Kiểm tra xem sản phẩm có active không
+                            const isActive = item.product.isActive;
 
-                              return (
-                                  <div key={key} className="cart-item">
-                                      <div
-                                          className="cart-item-info"
-                                          style={{
-                                              opacity: isActive ? 1 : 0.3,
-                                          }} // Thêm điều kiện opacity
-                                      >
-                                          <img
-                                              src={item.product.images}
-                                              alt={item.product.title}
-                                              className="product-image"
-                                          />
-                                          <div className="cart-item-details">
-                                              <p>{item.product.title}</p>
-                                              <p>
-                                                  Size:{" "}
-                                                  {sizeData
-                                                      ? sizeData.nameSize
-                                                      : "Đang tải..."}
-                                              </p>
-                                              <p className="text-danger">
-                                                  Số lượng còn lại {stockValue}
-                                              </p>
-                                          </div>
-                                      </div>
-                                      <div
-                                          className="cart-item-quantity"
-                                          style={{
-                                              opacity: isActive ? 1 : 0.3,
-                                          }} // Thêm điều kiện opacity
-                                      >
-                                          <button
-                                              onClick={() =>
-                                                  handleQuantityChange(
-                                                      item.product
-                                                          ._id as string,
-                                                      item.size as string,
-                                                      false
-                                                  )
-                                              }
-                                              disabled={!isActive} // Vô hiệu hóa nút nếu sản phẩm không active
-                                          >
-                                              -
-                                          </button>
-                                          <span>{tempQuantities[key]}</span>
-                                          <button
-                                              onClick={() =>
-                                                  handleQuantityChange(
-                                                      item.product._id,
-                                                      item.size,
-                                                      true
-                                                  )
-                                              }
-                                              disabled={!isActive} // Vô hiệu hóa nút nếu sản phẩm không active
-                                          >
-                                              +
-                                          </button>
-                                      </div>
-                                      <div className="cart-item-total">
-                                          {formatPrice(
-                                              item.price * tempQuantities[key]
-                                          )}
-                                      </div>
-                                      <div>
-                                          <button
-                                              onClick={() =>
-                                                  removeFromCart(
-                                                      item.product._id
-                                                  )
-                                              }
-                                              className="remove-item"
-                                          >
-                                              🗑️
-                                          </button>
-                                      </div>
-                                  </div>
-                              );
-                          })
+                            return (
+                                <div key={key} className="cart-item">
+                                    <div
+                                        className="cart-item-info"
+                                        style={{
+                                            opacity: isActive ? 1 : 0.3,
+                                        }} // Thêm điều kiện opacity
+                                    >
+                                        <img
+                                            src={item.product.images}
+                                            alt={item.product.title}
+                                            className="product-image"
+                                        />
+                                        <div className="cart-item-details">
+                                            <p>{item.product.title}</p>
+                                            <p>
+                                                Size:{" "}
+                                                {sizeData
+                                                    ? sizeData.nameSize
+                                                    : "Đang tải..."}
+                                            </p>
+                                            <p className="text-danger">
+                                                Số lượng còn lại {stockValue}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div
+                                        className="cart-item-quantity"
+                                        style={{
+                                            opacity: isActive ? 1 : 0.3,
+                                        }} // Thêm điều kiện opacity
+                                    >
+                                        <button
+                                            onClick={() =>
+                                                handleQuantityChange(
+                                                    item.product
+                                                        ._id as string,
+                                                    item.size as string,
+                                                    false
+                                                )
+                                            }
+                                            disabled={!isActive} // Vô hiệu hóa nút nếu sản phẩm không active
+                                        >
+                                            -
+                                        </button>
+                                        <span>{tempQuantities[key]}</span>
+                                        <button
+                                            onClick={() =>
+                                                handleQuantityChange(
+                                                    item.product._id,
+                                                    item.size,
+                                                    true
+                                                )
+                                            }
+                                            disabled={!isActive} // Vô hiệu hóa nút nếu sản phẩm không active
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+                                    <div className="cart-item-total">
+                                        {formatPrice(
+                                            item.price * tempQuantities[key]
+                                        )}
+                                    </div>
+                                    <div>
+                                        <button
+                                            onClick={() =>
+                                                removeFromCart(
+                                                    item.product._id
+                                                )
+                                            }
+                                            className="remove-item"
+                                        >
+                                            🗑️
+                                        </button>
+                                    </div>
+                                </div>
+                            );
+                        })
                         : ""}
                 </div>
                 <div className="cart-table-mobile">
@@ -365,7 +366,7 @@ const CartPage = () => {
                                             >
                                                 {formatPrice(
                                                     item.price *
-                                                        tempQuantities[key]
+                                                    tempQuantities[key]
                                                 )}
                                             </td>
                                             <td>
@@ -456,14 +457,14 @@ const CartPage = () => {
                             ? cart.some((item) => !item.product.isActive)
                                 ? "Vui Lòng Kiêm Tra Lại Sản Phẩm"
                                 : !cart.every(
-                                      (item: any) =>
-                                          item.quantity <=
-                                          item.product.sizeStock?.find(
-                                              (s: any) => s.size === item.size
-                                          )?.stock
-                                  )
-                                ? "Vui Lòng Kiêm Tra Lại Sản Phẩm"
-                                : "Đặt hàng"
+                                    (item: any) =>
+                                        item.quantity <=
+                                        item.product.sizeStock?.find(
+                                            (s: any) => s.size === item.size
+                                        )?.stock
+                                )
+                                    ? "Vui Lòng Kiêm Tra Lại Sản Phẩm"
+                                    : "Đặt hàng"
                             : "Vui Lòng Thêm Sản Phẩm Vào Giỏ Hàng"}
                     </Link>
                 </div>

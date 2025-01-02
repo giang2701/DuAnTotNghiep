@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import ProductItem from "./ProductItem";
 import { useLoading } from "../context/Loading";
 import Loading from "../component/Loading";
+import FlashSaleSection from "./FlashSaleSection";
 
 const Hompage = () => {
   const { state } = useContext(ProductContext) as ProductContextType;
@@ -681,6 +682,10 @@ const Hompage = () => {
                 <p>Deichmann - Graceland Chunky tenisky</p>
               </Link>
             </div>
+          </div>
+
+          <div>
+            <FlashSaleSection />
           </div>
           {/* ==========================NEW ARRIVAL================================ */}
           <div className="title__products__new_arrival">

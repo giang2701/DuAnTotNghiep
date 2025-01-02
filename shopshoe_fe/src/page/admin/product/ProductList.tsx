@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
     ProductContext,
     ProductContextType,
@@ -11,7 +11,7 @@ import Pagination from "@mui/material/Pagination";
 const ProductList = () => {
     const { state, removeProduct, confirm, setConfirm, setIdDelete } =
         useContext(ProductContext) as ProductContextType;
-
+    const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     const [sortOption, setSortOption] = useState("titleAsc"); // Thay đổi trạng thái sắp xếp
@@ -21,6 +21,11 @@ const ProductList = () => {
         setConfirm(true);
         setIdDelete(_id);
     };
+
+    const handleApplyFlashSale = (productId: string) => {
+        navigate(`/admin/applyFlashSale/${productId}`);
+    };
+
 
     const handlePageChange = (
         event: React.ChangeEvent<unknown>,
@@ -167,22 +172,41 @@ const ProductList = () => {
                 <div className="box_table_products">
                     <div className="header_table_products bg-black text-white fs-5 fw-medium py-3 ps-3 d-flex justify-content-between">
                         <span>Danh Sách</span>
-                        <Link
-                            to="/admin/add"
-                            className="bg-primary"
-                            style={{
-                                width: "20px",
-                                height: "20px",
-                                borderRadius: "50%",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                marginRight: "20px",
-                                paddingTop: "2px",
-                            }}
-                        >
-                            <i className="fa-solid fa-plus text-white fs-9"></i>
-                        </Link>
+                        <div className="d-flex align-items-center">
+                            <Link
+                                to="/admin/add"
+                                className="bg-primary"
+                                style={{
+                                    width: "20px",
+                                    height: "20px",
+                                    borderRadius: "50%",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    marginRight: "20px", // Giảm khoảng cách
+                                    paddingTop: "2px",
+                                }}
+                            >
+                                <i className="fa-solid fa-plus text-white fs-9"></i>
+                            </Link>
+
+                            <Link
+                                to="/admin/applyFlashSaleAll"
+                                className="flash-sale-btn"
+                                style={{
+                                    width: "20px",
+                                    height: "20px",
+                                    borderRadius: "50%",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    marginRight: "20px",
+                                    paddingTop: "2px",
+                                }}
+                            >
+                                <i className="fa-solid fa-bolt text-white fs-9"></i>
+                            </Link>
+                        </div>
                     </div>
                     <div className="body_table_products p-3 bg-white">
                         <table className="table table-bordered table-striped">
@@ -247,6 +271,22 @@ const ProductList = () => {
                                                     >
                                                         <i className="fa-solid fa-trash"></i>
                                                     </button>
+                                                    <button
+                                                        className="me-3"
+                                                        onClick={() => handleApplyFlashSale(item._id!)}
+                                                        style={{
+                                                            borderRadius: "5px",
+                                                            width: "30px",
+                                                            height: "30px",
+                                                            backgroundColor:
+                                                                "yellow",
+                                                            color: "white",
+                                                            border: "none",
+                                                        }}
+                                                    >
+                                                        <i className="fa-solid fa-bolt"></i>
+                                                    </button>
+
                                                     <Link
                                                         to={`/admin/edit/${item._id}`}
                                                         style={{

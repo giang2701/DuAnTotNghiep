@@ -261,16 +261,14 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
                 <i className="fa-solid fa-book icon"></i>
                 <span className="menu-text">QL Sản Phẩm</span>
                 <i
-                  className={`fa-solid fa-chevron-down ${
-                    messageProducts ? "rotateMProduct" : ""
-                  }`}
+                  className={`fa-solid fa-chevron-down ${messageProducts ? "rotateMProduct" : ""
+                    }`}
                 ></i>
               </p>
             </li>
             <div
-              className={`sub_menu ${
-                messageProducts ? "show_sub_menu_MProduct" : ""
-              }`}
+              className={`sub_menu ${messageProducts ? "show_sub_menu_MProduct" : ""
+                }`}
             >
               <Link
                 to="/admin/products"
@@ -313,6 +311,14 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
               >
                 Voucher
               </Link>
+              <Link
+                to="/admin/flashSale"
+                style={{
+                  textDecoration: "none",
+                }}
+              >
+                FlashSale
+              </Link>
             </div>
             {/* QL User */}
             <li>
@@ -320,16 +326,14 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
                 <i className="fa-solid fa-user icon"></i>
                 <span className="menu-text">QL User</span>
                 <i
-                  className={`fa-solid fa-chevron-down ${
-                    messageUser ? "rotateMUser" : ""
-                  }`}
+                  className={`fa-solid fa-chevron-down ${messageUser ? "rotateMUser" : ""
+                    }`}
                 ></i>
               </p>
             </li>
             <div
-              className={`sub_menu_MUser ${
-                messageUser ? "show_sub_menu_MUser" : ""
-              }`}
+              className={`sub_menu_MUser ${messageUser ? "show_sub_menu_MUser" : ""
+                }`}
             >
               <Link
                 to="/admin/user"

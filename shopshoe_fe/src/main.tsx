@@ -12,6 +12,7 @@ import { UserProvider } from "./context/user.tsx";
 import { VoucherProvider } from "./context/Voucher.tsx";
 import BrandProvider from "./context/Brand.tsx";
 import { LoadingProvider } from "./context/Loading.tsx";
+import { FlashSaleProvider } from "./context/FlashSale.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
@@ -25,7 +26,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                                     <UserProvider>
                                         <VoucherProvider>
                                             <BrandProvider>
-                                                <App />
+                                                <FlashSaleProvider>
+                                                    <App />
+                                                </FlashSaleProvider>
                                             </BrandProvider>
                                         </VoucherProvider>
                                     </UserProvider>

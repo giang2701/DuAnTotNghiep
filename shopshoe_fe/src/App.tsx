@@ -45,6 +45,10 @@ import Voucher from "./page/admin/voucher/Voucher";
 import ViewProductDetails from "./page/admin/Order management/ViewProductDetails.tsx";
 import ReturnManagement from "./page/admin/Return/ReturnManagement.tsx";
 import RefundManagement from "./page/admin/Refund/RefundManagement.tsx";
+import FlashSale from "./page/admin/flashsale/FlashSale.tsx";
+import CreateFlashSale from "./page/admin/flashsale/CreateFlashSale.tsx";
+import ApplyFlashSale from "./page/admin/flashsale/ApplyFlashSale.tsx";
+import ApplyFlashSaleToMultipleProducts from "./page/admin/flashsale/ApplyFlashSaleToMultipleProducts.tsx";
 
 function App() {
   const { mappedPermissions } = useAuth();
@@ -157,6 +161,12 @@ function App() {
                 )
               }
             />
+            {/* >>flashSale */}
+            <Route path="/admin/flashsale" element={<FlashSale />} />
+            <Route path="/admin/flashSaleAdd" element={<CreateFlashSale />} />
+            {/* <Route path="/admin/flashSaleUpdate/:id" element={<UpdateFlashSale />} /> */}
+            <Route path="/admin/applyFlashSale/:id" element={<ApplyFlashSale />} />
+            <Route path="/admin/applyFlashSaleAll" element={<ApplyFlashSaleToMultipleProducts />} />
             {/* >>Usser*/}
             <Route path="/admin/user" element={<UserList />} />
             <Route
@@ -170,7 +180,7 @@ function App() {
             {/* hoàn trả */}
             <Route
               path="/admin/returns"
-              element={<ReturnManagement onReturnApproved={(orderId) => {}} />}
+              element={<ReturnManagement onReturnApproved={(orderId) => { }} />}
             />
             {/* hoàn tiền */}
             <Route path="/admin/refunds" element={<RefundManagement />} />

@@ -201,15 +201,15 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   // hàm tính số lượng hiển thị lên icon
   const totalItems = Array.isArray(cart)
     ? cart.reduce((acc, item, index) => {
-        if (
-          cart.findIndex(
-            (i) => i.product._id === item.product._id && i.size === item.size
-          ) === index
-        ) {
-          return acc + 1;
-        }
-        return acc;
-      }, 0)
+      if (
+        cart.findIndex(
+          (i) => i.product._id === item.product._id && i.size === item.size
+        ) === index
+      ) {
+        return acc + 1;
+      }
+      return acc;
+    }, 0)
     : 0;
   const clearCart = async () => {
     try {
@@ -222,7 +222,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       } else {
         alert("");
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   return (

@@ -20,6 +20,7 @@ const productSchema = new mongoose.Schema(
         size: { type: mongoose.Schema.Types.ObjectId, ref: "Size" }, // Đảm bảo ref là "Size"
         stock: { type: Number, required: true },
         price: { type: Number, required: true },
+        salePrice: { type: Number },
       },
     ],
     description: {
@@ -39,6 +40,14 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    flashSale: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "FlashSale",
+      default: null,
+    },
+    salePrice: {
+      type: Number
+    }
   },
   { versionKey: false, timestamps: true }
 );
