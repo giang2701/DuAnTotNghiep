@@ -14,6 +14,7 @@ import commentRouter from "./commentRoutes.js";
 import RouterCheckPermission from "./checkPermission.js";
 import returnRouter from "./return.js";
 import refundRouter from "./refund.js";
+import RouterFlashSale from "./FlashSale.js";
 
 const router = Router();
 router.use("/products", productRouter);
@@ -31,4 +32,5 @@ router.use("/comments", commentRouter);
 router.use("/permissions", RouterCheckPermission);
 router.use("/returns", returnRouter);
 router.use("/refunds", refundRouter);
+router.use("/flashsale", RouterFlashSale);
 export default router;

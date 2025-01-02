@@ -1,12 +1,16 @@
 import { Router } from "express";
 import {
+    applyFlashSaleToMultipleProducts,
     createProduct,
     getAllProducts,
+    getFlashSaleProducts,
     getProductById,
     getProductByIdSize,
     removeProductById,
+    updateExpiredFlashSales,
     updateProductById,
     updateProductsStatus,
+    updateProductWithFlashSale,
 } from "../controller/products.js";
 import { validBodyRequest } from "../middlewares/validBodyRequest.js";
 import productSchema from "../validSchema/productSchema.js";
@@ -41,4 +45,9 @@ productRouter.delete(
     removeProductById
 );
 
+
+productRouter.put("/flashSale/:id", updateProductWithFlashSale)
+productRouter.get("/flashSale/:id", updateExpiredFlashSales)
+productRouter.get("/flashSale", getFlashSaleProducts)
+productRouter.post("/flashSaleAll", applyFlashSaleToMultipleProducts)
 export default productRouter;
