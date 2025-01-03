@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useVoucher } from "../../../context/Voucher";
 import type { Voucher } from "../../../interface/Voucher";
 import { toast } from "react-toastify";
@@ -9,10 +9,15 @@ const Voucher = () => {
   const { voucher, Delete, toggleActiveStatus } = useVoucher();
   const [selectedVoucher, setSelectedVoucher] = useState<Voucher | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   const handleViewDetails = (voucher: any) => {
     setSelectedVoucher(voucher);
     setShowModal(true);
+  };
+
+  const handleEditVoucher = (voucher: Voucher) => {
+    navigate(`/admin/voucherEdit/${voucher._id}`, { state: { voucher } });
   };
 
   // Hàm sao chép mã voucher
@@ -34,7 +39,7 @@ const Voucher = () => {
       <div className="container">
         <div className="box_table_size my-3" style={{ width: "700px" }}>
           <div className="header_table_Size bg-black text-white fs-5 fw-medium py-3 ps-3 d-flex justify-content-between">
-            <span>Danh Sách Size</span>
+            <span>Danh Sách Voucher</span>
             <Link
               to="/admin/voucherAdd"
               className="bg-primary"
@@ -102,6 +107,22 @@ const Voucher = () => {
                           }}
                         >
                           <i className="fa-regular fa-eye"></i>
+                        </button>
+
+                        <button
+                          className="me-3"
+                          title="Chỉnh sửa"
+                          onClick={() => handleEditVoucher(item)}
+                          style={{
+                            borderRadius: "5px",
+                            width: "30px",
+                            height: "30px",
+                            backgroundColor: "black",
+                            color: "white",
+                            border: "none",
+                          }}
+                        >
+                          <i className="fa-solid fa-pen"></i>
                         </button>
 
                         <button
@@ -233,7 +254,6 @@ const Voucher = () => {
                           style={{
                             marginTop: "-5px",
                             textTransform: "capitalize",
-                            // fontWeight: "bold",
                           }}
                         >
                           Đơn Tối Thiểu:&nbsp;
@@ -250,7 +270,6 @@ const Voucher = () => {
                         >
                           <strong>Mã:</strong>
                           {selectedVoucher.code}
-                          {/* Nút Copy Voucher */}
                           <i className="fa-regular fa-copy text-dark ms-2"></i>
                         </p>
                         <p
@@ -260,8 +279,7 @@ const Voucher = () => {
                         >
                           <i className="fa-regular fa-clock me-2"></i>
                           <span>
-                            Ngày hết hạn:{" "}
-                            {
+                            Ngày hết hạn: {
                               new Date(selectedVoucher.expiryDate)
                                 .toISOString()
                                 .split("T")[0]

@@ -49,6 +49,11 @@ import FlashSale from "./page/admin/flashsale/FlashSale.tsx";
 import CreateFlashSale from "./page/admin/flashsale/CreateFlashSale.tsx";
 import ApplyFlashSale from "./page/admin/flashsale/ApplyFlashSale.tsx";
 import ApplyFlashSaleToMultipleProducts from "./page/admin/flashsale/ApplyFlashSaleToMultipleProducts.tsx";
+import BaivietList from "./page/admin/baiviet/BaivietList.tsx";
+import BaivietForm from "./page/admin/baiviet/BaivietForm.tsx";
+import BaivietPage from "./page/Baiviet.tsx";
+import BaivietChitiet from "./page/BaivietChitiet.tsx";
+import EditVoucher from "./page/admin/voucher/EditVoucher.tsx";
 
 function App() {
   const { mappedPermissions } = useAuth();
@@ -76,6 +81,9 @@ function App() {
 
             <Route path="/productLike" element={<ProductsLiked />} />
             <Route path="/contact" element={<Contact />} />
+
+            <Route path="/baiviet" element={<BaivietPage />} />
+            <Route path="/baiviet/:id" element={<BaivietChitiet />} />
           </Route>
           <Route path="/loginAdmin" element={<LoginAdmin />} />
           <Route path="/loading" element={<Loading />} />
@@ -165,8 +173,14 @@ function App() {
             <Route path="/admin/flashsale" element={<FlashSale />} />
             <Route path="/admin/flashSaleAdd" element={<CreateFlashSale />} />
             {/* <Route path="/admin/flashSaleUpdate/:id" element={<UpdateFlashSale />} /> */}
-            <Route path="/admin/applyFlashSale/:id" element={<ApplyFlashSale />} />
-            <Route path="/admin/applyFlashSaleAll" element={<ApplyFlashSaleToMultipleProducts />} />
+            <Route
+              path="/admin/applyFlashSale/:id"
+              element={<ApplyFlashSale />}
+            />
+            <Route
+              path="/admin/applyFlashSaleAll"
+              element={<ApplyFlashSaleToMultipleProducts />}
+            />
             {/* >>Usser*/}
             <Route path="/admin/user" element={<UserList />} />
             <Route
@@ -180,7 +194,7 @@ function App() {
             {/* hoàn trả */}
             <Route
               path="/admin/returns"
-              element={<ReturnManagement onReturnApproved={(orderId) => { }} />}
+              element={<ReturnManagement onReturnApproved={(orderId) => {}} />}
             />
             {/* hoàn tiền */}
             <Route path="/admin/refunds" element={<RefundManagement />} />
@@ -196,12 +210,17 @@ function App() {
                 )
               }
             />
+            <Route path="/admin/voucherEdit/:id" element={<EditVoucher />} />
             <Route path="/admin/trashCan" element={<TrashCan />} />
             {/* >>Xem chi tiết sản phẩm  */}
             <Route
               path="/admin/viewproductdetails/:id"
               element={<ViewProductDetails />}
             />
+            {/* >>Bài viết */}
+            <Route path="/admin/baiviet" element={<BaivietList />} />
+            <Route path="/admin/baiviet/add" element={<BaivietForm />} />
+            <Route path="/admin/baiviet/edit/:id" element={<BaivietForm />} />
           </Route>
           <Route path="*" element={<Page404 />} />
         </Routes>

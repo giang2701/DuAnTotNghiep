@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import instance from "../api";
 // import TymButton from "../component/Btn__tym";
 import { ProductContext, ProductContextType } from "../context/ProductContext";
@@ -9,6 +9,7 @@ import ProductItem from "./ProductItem";
 import { useLoading } from "../context/Loading";
 import Loading from "../component/Loading";
 import FlashSaleSection from "./FlashSaleSection";
+import { Baiviet } from "../interface/Baiviet";
 
 const Hompage = () => {
   const { state } = useContext(ProductContext) as ProductContextType;
@@ -114,6 +115,25 @@ const Hompage = () => {
       Array.isArray(favorites) && favorites.some((fav) => fav._id === item._id)
     );
   };
+
+  const [relatedPosts, setRelatedPosts] = useState<Baiviet[]>([]);
+  const { id } = useParams<{ id: string }>();
+  useEffect(() => {
+    const fetchRelatedPosts = async () => {
+      try {
+        const { data } = await instance.get("/baiviet");
+        // Lọc bỏ bài viết hiện tại
+        const filteredPosts = data.data.filter(
+          (post: Baiviet) => post._id !== id
+        );
+        setRelatedPosts(filteredPosts);
+      } catch (error) {
+        console.error("Không thể tải danh sách bài viết:", error);
+      }
+    };
+
+    fetchRelatedPosts();
+  }, [id]);
 
   return (
     <>
@@ -912,6 +932,45 @@ const Hompage = () => {
                     <p>Giày sneakers unisex cổ thấp Fenty Creepe</p>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+
+            {/* bài viết tiêu biểu  */}
+            <div className="container">
+            <div className="title__products__company">bài viết tiêu biểu</div>
+            {/* đổ bài viết */}
+            <div className="related-posts mt-5">
+              <div className="scroll d-flex overflow-auto">
+                {relatedPosts.slice(0, 6).map((post) => (
+                  <div
+                    className="card shadow-sm border-0 rounded-3 me-3 card-img-container position-relative"
+                    key={post._id}
+                    style={{ width: "300px", flex: "0 0 auto" }}
+                  >
+                    <Link to={`/baiviet/${post._id}`}>
+                      <img
+                        src={`${post.images}`}
+                        alt={post.title}
+                        className="card-img-top"
+                        style={{ height: "180px", objectFit: "cover" }}
+                      />
+                    </Link>
+                    <div className="card-body text-center">
+                      <Link
+                        className="text-decoration-none  text-black font-weight-bold"
+                        to={`/baiviet/${post._id}`}
+                      >
+                        <h4 className="card-title ">{post.title}</h4>
+                      </Link>
+
+                      <p className="card-text text-muted">
+                        Về Zokong |{" "}
+                        {new Date(post.publishDate).toLocaleDateString("vi-VN")}
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

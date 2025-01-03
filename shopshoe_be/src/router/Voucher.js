@@ -4,6 +4,7 @@ import {
     DeleteVoucher,
     GetVoucher,
     GetVoucherDetail,
+    updateVoucher,
     updateVoucherStatus,
     verify,
 } from "../controller/Voucher.js";
@@ -19,7 +20,13 @@ RouterVoucher.post(
     validBodyRequest(voucherSchema),
     CreateVoucher
 );
-RouterVoucher.post("/verify", validBodyRequest(voucherSchema), verify);
+RouterVoucher.post("/verify", verify);
 RouterVoucher.put("/:id", checkPermission("edit-voucher"), updateVoucherStatus);
 RouterVoucher.delete("/:id", checkPermission("delete-voucher"), DeleteVoucher);
+RouterVoucher.put(
+    "/edit/:id",
+    // checkPermission("update-voucher")
+    updateVoucher
+  );
+  
 export default RouterVoucher;

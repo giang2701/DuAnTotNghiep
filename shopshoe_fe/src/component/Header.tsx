@@ -306,6 +306,9 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
             <Link to="/contact" className="nav-link">
               <p>Liên hệ</p>
             </Link>
+            <Link to="/baiviet" className="nav-link">
+              <p>Bài viết</p>
+            </Link>
           </div>
           <div className="action_sub__header">
             {/* icon search */}
@@ -931,6 +934,11 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
                 <Link to="/aboutus" className="link__home nav-link">
                   VỀ CHÚNG TÔI
                 </Link>
+              </p>
+              <p>
+              <Link to="/baiviet" className="link__home nav-link">
+              Bài viết
+            </Link>
               </p>
               {user ? (
                 <>

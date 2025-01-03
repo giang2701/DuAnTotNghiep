@@ -14,15 +14,23 @@ const LayoutAdmin = () => {
     }
     return (
         <div
-            className="admin-layout"
-            style={{ backgroundColor: "#EEEEEE", height: "980px" }}
-        >
+        className="admin-layout"
+        style={{
+            backgroundColor: "#EEEEEE",
+            minHeight: "100vh", // Đảm bảo ít nhất bằng chiều cao viewport
+            display: "flex", // Flexbox giúp layout gọn hơn
+            flexDirection: "column", // Đặt các phần tử theo cột
+        }}
+    >
             <NavBar ClickSideBar={toggleSidebar} collapsed={collapsed} />
             {/* <HeaderAdmin /> */}
             <div
                 className={`content__layoutAdmin ${
                     collapsed ? "collapsed" : ""
                 }`}
+                style={{
+                    flex: 1, // Đảm bảo phần nội dung chiếm tối đa không gian còn lại
+                }}
             >
                 <Outlet />
             </div>

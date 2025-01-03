@@ -1,3 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+@media print {
+	body {
+		margin: 0 !important;
+	}
+}
+
 * {
   margin: 0px;
   padding: 0px;
@@ -6785,4 +6793,189 @@ label {
   to {
     opacity: 1;
   }
+}
+
+
+  /*|**********************************************************
+   ***|  BAIVIET
+   ***| *********************************************************
+*****/
+/* chỉnh img trong content bài viết  */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  /* margin: 0 auto; */
+}
+/*  */
+.ck-content {
+	font-family: 'Lato';
+	line-height: 1.6;
+	word-break: break-word;
+}
+
+
+.editor-container_classic-editor .editor-container__editor {
+	min-width: 795px;
+	max-width: 795px;
+}
+
+/* App.css hoặc file CSS của bạn */
+
+/* Căn chỉnh container của CKEditor */
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px; /* Đảm bảo khoảng cách dưới CKEditor */
+}
+
+/* Căn chỉnh viền và padding cho phần nội dung của CKEditor */
+.ck-editor__editable {
+  min-height: 200px; /* Đảm bảo chiều cao của CKEditor đủ lớn */
+  border: 1px solid #ccc; /* Đặt viền cho CKEditor giống các trường khác */
+  border-radius: 4px; /* Viền tròn giống với các trường nhập liệu */
+  padding: 10px; /* Đảm bảo padding đều bên trong */
+  font-size: 14px; /* Đặt font size cho CKEditor */
+  text-align: left; /* Căn chỉnh nội dung về phía trái */
+  width: 100%; /* Đảm bảo CKEditor chiếm toàn bộ chiều rộng */
+}
+
+/* Căn chỉnh label cho CKEditor như các trường khác */
+.editor-container label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+/* Đảm bảo các trường nhập liệu khác và CKEditor đều có style đồng nhất */
+input.form-control {
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+
+
+/* bài viết */
+.danhsachbaivietpage {
+  margin-top: 155px;
+}
+
+.gray-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 10%; /* 1/10th of the image height */
+  background-color: rgb(220, 218, 218);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #000;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.overlay-text {
+  text-transform: uppercase;
+}
+
+.date-box {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 45px; /* Reduce the size of the box */
+  height: 45px; /* Reduce the size of the box */
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  display: flex;
+  flex-direction: column; /* Split into two lines */
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem; /* Increase font size */
+  border-radius: 5px; /* Rounded corners */
+  font-weight: 1000;
+}
+
+.title-overflow {
+  font-size: 1.5rem; /* Increase font size */
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 1.2em; /* Restrict to one line */
+}
+
+.card-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limit content to 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.875rem; /* Keep font size reasonable */
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #333;
+  white-space: pre-wrap; /* Đảm bảo nội dung không bị cắt khi có xuống dòng */
+  margin-bottom: -10px;
+
+}
+
+/* Date Box */
+
+.card-img-container {
+  position: relative;
+  overflow: hidden;
+  height: 250px;
+}
+
+.card-img-top {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+  border-radius: 3px;
+
+}
+
+/* Đảm bảo phần nội dung không bị giới hạn chiều cao */
+.card-body {
+  padding: 20px;
+  max-height: none; /* Đảm bảo không có chiều cao giới hạn */
+  overflow: visible; /* Cho phép nội dung tràn ra ngoài nếu cần */
+}
+
+.baivietchitiet{
+  margin-top: 155px;
+}
+/* Đảm bảo hình ảnh từ CKEditor được căn giữa */
+.baiviet-content img {
+  display: block;
+  margin: 0 auto; /* Căn giữa hình ảnh */
+  max-width: 100%; /* Đảm bảo ảnh không vượt quá chiều ngang container */
+  height: auto;
+}
+
+/* Định dạng đoạn văn */
+.baiviet-content p {
+  margin: 1em 0;
+  line-height: 1.6; /* Giãn dòng hợp lý */
+}
+
+/* Định dạng tiêu đề */
+.baiviet-content h1, .baiviet-content h2, .baiviet-content h3 {
+  margin: 1.5em 0 1em;
+  font-weight: bold;
+}
+
+/* Đảm bảo bảng không tràn container */
+.baiviet-content table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.baiviet-content table td, .baiviet-content table th {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: left;
 }

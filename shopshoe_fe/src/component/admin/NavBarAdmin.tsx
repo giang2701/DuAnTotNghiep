@@ -385,6 +385,19 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
                 <span className="menu-text">Quản lý hoàn tiền</span>
               </Link>
             </li>
+            <li>
+              <Link to="/admin/baiviet">
+                <i
+                  className="fa-regular fa-newspaper"
+                  style={{
+                    fontSize: "13px",
+                    marginRight: "8px",
+                    verticalAlign: "middle",
+                  }}
+                ></i>
+                <span className="menu-text">QL bài viết</span>
+              </Link>
+            </li>
           </ul>
           <div className="sidebar-footer">
             <Link to="/">

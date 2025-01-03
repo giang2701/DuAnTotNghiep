@@ -120,3 +120,32 @@ export const DeleteVoucher = async (req, res, next) => {
     next(error);
   }
 };
+
+export const updateVoucher = async (req, res, next) => {
+  try {
+    const { id } = req.params; // Lấy ID voucher từ params
+    const { name, code, discount, expiryDate, type, minPrice, isActive } = req.body;
+
+    // Kiểm tra nếu voucher tồn tại
+    const existingVoucher = await Voucher.findById(id);
+    if (!existingVoucher) {
+      return res.status(404).json({ message: "Voucher không tồn tại!" });
+    }
+
+    // Cập nhật voucher
+    existingVoucher.name = name || existingVoucher.name;
+    existingVoucher.code = code || existingVoucher.code;
+    existingVoucher.discount = discount || existingVoucher.discount;
+    existingVoucher.expiryDate = expiryDate || existingVoucher.expiryDate;
+    existingVoucher.type = type || existingVoucher.type;
+    existingVoucher.minPrice = minPrice || existingVoucher.minPrice;
+
+    const updatedVoucher = await existingVoucher.save();
+    return res.status(200).json({
+      message: "Cập nhật voucher thành công!",
+      voucher: updatedVoucher,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
