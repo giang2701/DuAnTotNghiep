@@ -51,11 +51,13 @@ const OrderManagement = () => {
     }
     if (
       (selectedOrder?.status === "Shipping" || // Đang vận chuyển
-        selectedOrder?.status === "Delivered") && // Đã giao hàng
+        selectedOrder?.status === "Delivered" ||
+        selectedOrder?.status === "Refundsuccessful" ||
+        selectedOrder?.status === "Refunding") && // Đã giao hàng
       newStatus === "Cancelled" // Muốn hủy
     ) {
       toast.warning(
-        "Không thể hủy đơn hàng khi đang vận chuyển hoặc đã giao hàng."
+        "Không thể hủy đơn hàng khi đang vận chuyển hoặc đã giao hàng hoặc hoàn tiền thành công hoặc đang hoàn tiền."
       );
       return;
     }
