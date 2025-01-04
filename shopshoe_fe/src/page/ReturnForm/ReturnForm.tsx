@@ -124,7 +124,9 @@ const ReturnForm: React.FC<ReturnFormProps> = ({
       imagesError ||
       videosError ||
       userNameError ||
-      userPhoneError
+      userPhoneError ||
+      images.length === 0 ||
+      videos.length === 0
     ) {
       return; // Dừng gửi yêu cầu nếu có lỗi
     }

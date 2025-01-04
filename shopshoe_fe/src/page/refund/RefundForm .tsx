@@ -36,7 +36,6 @@ const RefundForm: React.FC<RefundFormProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // State cho lỗi validate
   const [bankNameError, setBankNameError] = useState<string | null>(null);
   const [accountNumberError, setAccountNumberError] = useState<string | null>(
     null
@@ -45,7 +44,6 @@ const RefundForm: React.FC<RefundFormProps> = ({
   const [phoneNumberError, setPhoneNumberError] = useState<string | null>(null);
   const [qrCodeImageError, setQrCodeImageError] = useState<string | null>(null);
 
-  // Các hàm xử lý sự kiện cho các trường input
   const handleBankNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setBankName(event.target.value);
   };
@@ -72,57 +70,62 @@ const RefundForm: React.FC<RefundFormProps> = ({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (event.target.files && event.target.files[0]) {
-      setQrCodeImage(event.target.files[0]);
+      const file = event.target.files[0];
+      const allowedTypes = ["image/jpeg", "image/png", "video/mp4"];
+
+      if (allowedTypes.includes(file.type)) {
+        setQrCodeImage(file);
+        setQrCodeImageError(null);
+      } else {
+        setQrCodeImage(null);
+        setQrCodeImageError(
+          "Vui lòng chọn file ảnh (JPEG, PNG) hoặc video (MP4)."
+        );
+      }
     }
   };
 
   const handleSubmit = async () => {
     if (!order) return;
 
-    // Validate tên ngân hàng
     if (bankName.trim() === "") {
       setBankNameError("Vui lòng nhập tên ngân hàng.");
     } else {
       setBankNameError(null);
     }
 
-    // Validate số tài khoản
     if (accountNumber.trim() === "") {
       setAccountNumberError("Vui lòng nhập số tài khoản.");
     } else {
       setAccountNumberError(null);
     }
 
-    // Validate tên tài khoản
     if (accountName.trim() === "") {
       setAccountNameError("Vui lòng nhập tên tài khoản.");
     } else {
       setAccountNameError(null);
     }
 
-    // Validate số điện thoại
     if (phoneNumber.trim() === "" || !/^\d{10}$/.test(phoneNumber)) {
       setPhoneNumberError("Vui lòng nhập số điện thoại hợp lệ.");
     } else {
       setPhoneNumberError(null);
     }
 
-    // Validate ảnh QR code
     if (!qrCodeImage) {
       setQrCodeImageError("Vui lòng chọn ảnh QR code.");
     } else {
       setQrCodeImageError(null);
     }
 
-    // Kiểm tra nếu có bất kỳ lỗi nào
     if (
       bankNameError ||
       accountNumberError ||
       accountNameError ||
       phoneNumberError ||
-      qrCodeImageError
+      !qrCodeImage
     ) {
-      return; // Dừng gửi yêu cầu nếu có lỗi
+      return;
     }
 
     setLoading(true);
@@ -162,21 +165,19 @@ const RefundForm: React.FC<RefundFormProps> = ({
 
   useEffect(() => {
     if (!open) {
-      // Reset form fields khi đóng dialog
       setBankName("");
       setAccountNumber("");
       setAccountName("");
       setPhoneNumber("");
       setQrCodeImage(null);
       setError(null);
-      // Reset lỗi validate khi đóng form
+
       setBankNameError(null);
       setAccountNumberError(null);
       setAccountNameError(null);
       setPhoneNumberError(null);
       setQrCodeImageError(null);
     } else {
-      // Có thể lấy thông tin user từ order để điền sẵn vào form
       setAccountName(order?.userId.name || "");
       setPhoneNumber(order?.userId.phone || "");
     }
@@ -195,12 +196,6 @@ const RefundForm: React.FC<RefundFormProps> = ({
             {error}
           </Typography>
         )}
-        {/* Hiển thị lỗi tên ngân hàng */}
-        {bankNameError && (
-          <Typography color="error" paragraph>
-            {bankNameError}
-          </Typography>
-        )}
         <TextField
           autoFocus
           margin="dense"
@@ -211,15 +206,9 @@ const RefundForm: React.FC<RefundFormProps> = ({
           variant="outlined"
           value={bankName}
           onChange={handleBankNameChange}
-          error={!!bankNameError} // Thêm error prop cho TextField
-          helperText={bankNameError} // Hiển thị thông báo lỗi
+          error={!!bankNameError}
+          helperText={bankNameError}
         />
-        {/* Hiển thị lỗi số tài khoản */}
-        {accountNumberError && (
-          <Typography color="error" paragraph>
-            {accountNumberError}
-          </Typography>
-        )}
         <TextField
           margin="dense"
           id="accountNumber"
@@ -232,12 +221,6 @@ const RefundForm: React.FC<RefundFormProps> = ({
           error={!!accountNumberError}
           helperText={accountNumberError}
         />
-        {/* Hiển thị lỗi tên tài khoản */}
-        {accountNameError && (
-          <Typography color="error" paragraph>
-            {accountNameError}
-          </Typography>
-        )}
         <TextField
           margin="dense"
           id="accountName"
@@ -250,12 +233,6 @@ const RefundForm: React.FC<RefundFormProps> = ({
           error={!!accountNameError}
           helperText={accountNameError}
         />
-        {/* Hiển thị lỗi số điện thoại */}
-        {phoneNumberError && (
-          <Typography color="error" paragraph>
-            {phoneNumberError}
-          </Typography>
-        )}
         <TextField
           margin="dense"
           id="phoneNumber"
@@ -293,7 +270,6 @@ const RefundForm: React.FC<RefundFormProps> = ({
               {qrCodeImage.name}
             </Typography>
           )}
-          {/* Hiển thị lỗi ảnh QR code */}
           {qrCodeImageError && (
             <Typography color="error" variant="caption" display="block">
               {qrCodeImageError}

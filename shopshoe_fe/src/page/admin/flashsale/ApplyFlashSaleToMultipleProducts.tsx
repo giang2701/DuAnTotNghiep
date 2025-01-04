@@ -3,6 +3,7 @@ import { useFlashSale } from "../../../context/FlashSale";
 import instance from "../../../api";
 import { toast } from "react-toastify";
 import { Product } from "../../../interface/Products";
+import { useNavigate } from "react-router-dom";
 
 const ApplyFlashSaleToMultipleProducts = () => {
     const { flashSale } = useFlashSale();
@@ -13,6 +14,7 @@ const ApplyFlashSaleToMultipleProducts = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8; // Số sản phẩm mỗi trang
+    const nav = useNavigate();
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -48,6 +50,7 @@ const ApplyFlashSaleToMultipleProducts = () => {
                 flashSaleId: selectedFlashSale,
             });
             toast.success("Áp dụng Flash Sale thành công!");
+            nav("/admin/products");
         } catch (error) {
             console.error("Error applying Flash Sale:", error);
             toast.error("Lỗi khi áp dụng Flash Sale!");
@@ -67,6 +70,9 @@ const ApplyFlashSaleToMultipleProducts = () => {
     // Lọc Flash Sale còn hiệu lực
     const currentDate = new Date();
     const activeFlashSales = flashSale.filter(fs => new Date(fs.startDate) <= currentDate && new Date(fs.endDate) > currentDate);
+
+    // Lấy danh sách ID sản phẩm đã có Flash Sale
+    const productsWithFlashSale = products.filter(product => product.flashSale?._id).map(product => product._id);
 
     return (
         <div className="flash-sale-container">
@@ -100,37 +106,28 @@ const ApplyFlashSaleToMultipleProducts = () => {
                 </select>
             </div>
 
-            {/* Thanh tìm kiếm
-            <div className="search-bar my-5">
-                <h2>Tìm kiếm sản phẩm</h2>
-                <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => handleSearch(e.target.value)}
-                    placeholder="Tìm kiếm sản phẩm theo tên..."
-                    className="search-input"
-                    style={{ width: "100%", padding: "10px", fontSize: "16px", marginTop: "10px" }}
-                />
-            </div> */}
-
             <div className="product-list">
                 <h1 className="product-list-title mt-5">Danh sách sản phẩm:</h1>
                 <ul className="product-list-items">
                     {currentProducts.map((product) => (
                         <li key={product._id} className="product-list-item">
-                            <input
-                                type="checkbox"
-                                value={product._id}
-                                onChange={(e) => {
-                                    const productId = e.target.value;
-                                    setSelectedProducts((prev) =>
-                                        e.target.checked
-                                            ? [...prev, productId]
-                                            : prev.filter((id) => id !== productId)
-                                    );
-                                }}
-                                className="product-checkbox"
-                            />
+                            {productsWithFlashSale.includes(product._id) ? (
+                                <span className="product-checkbox" style={{ color: "red", marginRight: "10px" }}>X</span>
+                            ) : (
+                                <input
+                                    type="checkbox"
+                                    value={product._id}
+                                    onChange={(e) => {
+                                        const productId = e.target.value;
+                                        setSelectedProducts((prev) =>
+                                            e.target.checked
+                                                ? [...prev, productId]
+                                                : prev.filter((id) => id !== productId)
+                                        );
+                                    }}
+                                    className="product-checkbox"
+                                />
+                            )}
                             <span className="product-title">{product.title}</span>
                         </li>
                     ))}
