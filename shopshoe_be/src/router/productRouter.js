@@ -45,9 +45,12 @@ productRouter.delete(
     removeProductById
 );
 
-
-productRouter.put("/flashSale/:id", updateProductWithFlashSale)
-productRouter.get("/flashSale/:id", updateExpiredFlashSales)
-productRouter.get("/flashSale", getFlashSaleProducts)
-productRouter.post("/flashSaleAll", applyFlashSaleToMultipleProducts)
+productRouter.put("/flashSale/:id", updateProductWithFlashSale);
+productRouter.get("/flashSale/:id", updateExpiredFlashSales);
+productRouter.get("/flashSale", getFlashSaleProducts);
+productRouter.post(
+    "/flashSaleAll",
+    checkPermission("add-discount"),
+    applyFlashSaleToMultipleProducts
+);
 export default productRouter;

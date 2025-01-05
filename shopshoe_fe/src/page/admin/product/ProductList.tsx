@@ -26,7 +26,6 @@ const ProductList = () => {
         navigate(`/admin/applyFlashSale/${productId}`);
     };
 
-
     const handlePageChange = (
         event: React.ChangeEvent<unknown>,
         value: number
@@ -271,7 +270,7 @@ const ProductList = () => {
                                                     >
                                                         <i className="fa-solid fa-trash"></i>
                                                     </button>
-                                                    <button
+                                                    {/* <button
                                                         className="me-3"
                                                         onClick={() => handleApplyFlashSale(item._id!)}
                                                         style={{
@@ -285,7 +284,7 @@ const ProductList = () => {
                                                         }}
                                                     >
                                                         <i className="fa-solid fa-bolt"></i>
-                                                    </button>
+                                                    </button> */}
 
                                                     <Link
                                                         to={`/admin/edit/${item._id}`}

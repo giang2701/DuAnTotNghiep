@@ -23,10 +23,6 @@ RouterVoucher.post(
 RouterVoucher.post("/verify", verify);
 RouterVoucher.put("/:id", checkPermission("edit-voucher"), updateVoucherStatus);
 RouterVoucher.delete("/:id", checkPermission("delete-voucher"), DeleteVoucher);
-RouterVoucher.put(
-    "/edit/:id",
-    // checkPermission("update-voucher")
-    updateVoucher
-  );
-  
+RouterVoucher.put("/edit/:id", checkPermission("edit-voucher"), updateVoucher);
+
 export default RouterVoucher;

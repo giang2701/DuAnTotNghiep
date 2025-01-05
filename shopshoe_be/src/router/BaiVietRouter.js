@@ -8,6 +8,7 @@ import {
     updateBaiVietStatus,
     // updateBaiVietsStatus,
 } from "../controller/BaiViet.js";
+import checkPermission from "../middlewares/checkPermission.js";
 
 const baivietRouter = express.Router();
 
@@ -19,15 +20,27 @@ baivietRouter.get("/:id", getBaiVietById);
 
 // Tạo bài viết mới
 
-baivietRouter.post("/", createBaiViet);
+baivietRouter.post("/", checkPermission("add-newspaperArticle"), createBaiViet);
 
 // Cập nhật bài viết theo ID
-baivietRouter.put("/:id", updateBaiVietById);
+baivietRouter.put(
+    "/:id",
+    checkPermission("edit-newspaperArticle"),
+    updateBaiVietById
+);
 
 // Xóa bài viết theo ID
-baivietRouter.delete("/:id", removeBaiVietById);
+baivietRouter.delete(
+    "/:id",
+    checkPermission("delete-newspaperArticle"),
+    removeBaiVietById
+);
 
 // Cập nhật trạng thái bài viết (active/deactive)
-baivietRouter.patch("/:id/status", updateBaiVietStatus);
+baivietRouter.patch(
+    "/:id/status",
+    checkPermission("edit-newspaperArticle"),
+    updateBaiVietStatus
+);
 
 export default baivietRouter;

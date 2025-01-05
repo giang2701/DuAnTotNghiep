@@ -12,11 +12,13 @@ type FlashSaleContextType = {
     DeleteFlashSale: (_id: string) => void;
     handleFlashSale: (flashSale: FlashSale) => void;
     toggleFlashSaleStatus: (flashSaleId: string, isActive: boolean) => void;
-    getFlashSaleById: (_id: string) => void
+    getFlashSaleById: (_id: string) => void;
     // updateFlashSale: (_id: string, updatedData: boolean) => void,
 };
 
-export const contextFlashSale = createContext<FlashSaleContextType | undefined>(undefined);
+export const contextFlashSale = createContext<FlashSaleContextType | undefined>(
+    undefined
+);
 
 export const useFlashSale = (): FlashSaleContextType => {
     const flashSale = useContext(contextFlashSale);
@@ -26,8 +28,11 @@ export const useFlashSale = (): FlashSaleContextType => {
     return flashSale;
 };
 
-
-export const FlashSaleProvider = ({ children }: { children: React.ReactNode }) => {
+export const FlashSaleProvider = ({
+    children,
+}: {
+    children: React.ReactNode;
+}) => {
     const [flashSale, setFlashSale] = useState<FlashSale[]>([]);
     const nav = useNavigate();
 
@@ -52,7 +57,9 @@ export const FlashSaleProvider = ({ children }: { children: React.ReactNode }) =
 
                 // Kiểm tra nếu không có sản phẩm
                 if (!productsData || productsData.length === 0) {
-                    console.warn(`Không có sản phẩm nào thuộc Flash Sale ID: ${flashSale._id}`);
+                    console.warn(
+                        `Không có sản phẩm nào thuộc Flash Sale ID: ${flashSale._id}`
+                    );
                     continue;
                 }
 
@@ -65,9 +72,15 @@ export const FlashSaleProvider = ({ children }: { children: React.ReactNode }) =
 
                     try {
                         // Gửi yêu cầu cập nhật
-                        await instance.put(`/products/${product._id}`, updatedProduct);
+                        await instance.put(
+                            `/products/${product._id}`,
+                            updatedProduct
+                        );
                     } catch (error) {
-                        console.error(`Lỗi khi cập nhật sản phẩm ID: ${product._id}`, error);
+                        console.error(
+                            `Lỗi khi cập nhật sản phẩm ID: ${product._id}`,
+                            error
+                        );
                     }
                 }
 
@@ -79,16 +92,18 @@ export const FlashSaleProvider = ({ children }: { children: React.ReactNode }) =
                 // }
             }
 
-            toast.success("Cập nhật sản phẩm có Flash Sale hết hạn thành công.");
+            toast.success(
+                "Cập nhật sản phẩm có Flash Sale hết hạn thành công."
+            );
         } catch (error) {
-            console.error("Lỗi trong hàm checkExpiredFlashSales:", error);
-            toast.error("Cập nhật sản phẩm có Flash Sale hết hạn thất bại.");
+            // console.error("Lỗi trong hàm checkExpiredFlashSales:", error);
+            // toast.error("Cập nhật sản phẩm có Flash Sale hết hạn thất bại.");
         }
     };
 
     useEffect(() => {
         GetAllFlashSale();
-        checkExpiredFlashSales()
+        checkExpiredFlashSales();
     }, []);
 
     const getFlashSaleById = async (id: string): Promise<FlashSale | null> => {
@@ -126,7 +141,6 @@ export const FlashSaleProvider = ({ children }: { children: React.ReactNode }) =
 
     //             // Cập nhật sản phẩm liên quan đến Flash Sale
     //             // await updateProductsByFlashSale(id);
-
 
     //             GetAllFlashSale(); // Làm mới danh sách Flash Sale sau khi cập nhật
     //             return true;
@@ -183,8 +197,6 @@ export const FlashSaleProvider = ({ children }: { children: React.ReactNode }) =
     //     }
     // };
 
-
-
     const DeleteFlashSale = async (_id: string) => {
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
@@ -228,7 +240,6 @@ export const FlashSaleProvider = ({ children }: { children: React.ReactNode }) =
 
     const handleFlashSale = async (flashSale: FlashSale) => {
         try {
-
             const formattedFlashSale = {
                 ...flashSale,
                 startDate: flashSale.startDate
@@ -248,7 +259,8 @@ export const FlashSaleProvider = ({ children }: { children: React.ReactNode }) =
             GetAllFlashSale();
         } catch (error: any) {
             const errorMessage =
-                error.response?.data?.errors || "Đã xảy ra lỗi, vui lòng thử lại sau.";
+                error.response?.data?.errors ||
+                "Đã xảy ra lỗi, vui lòng thử lại sau.";
             console.log(error);
 
             Swal.fire({
@@ -273,18 +285,28 @@ export const FlashSaleProvider = ({ children }: { children: React.ReactNode }) =
     //     }
     // };
     // Nếu có Flash sale đang hoạt động thì các flash sale khác sẽ không được sử dụng
-    const toggleFlashSaleStatus = async (flashSaleId: string, isActive: boolean) => {
+    const toggleFlashSaleStatus = async (
+        flashSaleId: string,
+        isActive: boolean
+    ) => {
         console.log("flashSaleId", flashSaleId);
         console.log("isActive", isActive);
 
         try {
             // Kiểm tra xem có Flash Sale nào đang hoạt động không
             const activeFlashSale = flashSale.find(
-                (fs) => fs.isActive && moment(fs.startDate).isBefore(moment()) && moment(fs.endDate).isAfter(moment())
+                (fs) =>
+                    fs.isActive &&
+                    moment(fs.startDate).isBefore(moment()) &&
+                    moment(fs.endDate).isAfter(moment())
             );
 
             // Nếu có Flash Sale đang hoạt động và người dùng muốn kích hoạt một Flash Sale khác
-            if (activeFlashSale && isActive && activeFlashSale._id !== flashSaleId) {
+            if (
+                activeFlashSale &&
+                isActive &&
+                activeFlashSale._id !== flashSaleId
+            ) {
                 toast.error(
                     `Không thể kích hoạt Flash Sale này vì Flash Sale "${activeFlashSale.title}" đang hoạt động.`,
                     { autoClose: 3000 }
@@ -293,31 +315,40 @@ export const FlashSaleProvider = ({ children }: { children: React.ReactNode }) =
             }
 
             // Cập nhật trạng thái của Flash Sale
-            await instance.put(`/flashsale/status/${flashSaleId}`, { isActive });
+            await instance.put(`/flashsale/status/${flashSaleId}`, {
+                isActive,
+            });
 
             if (isActive) {
                 // Vô hiệu hóa các Flash Sale khác nếu Flash Sale này được kích hoạt
                 const updates = flashSale
                     .filter((fs) => fs._id !== flashSaleId && fs.isActive)
                     .map(async (fs) => {
-                        await instance.put(`/flashsale/status/${fs._id}`, { isActive: false });
+                        await instance.put(`/flashsale/status/${fs._id}`, {
+                            isActive: false,
+                        });
                     });
 
                 // Chờ hoàn tất việc cập nhật
                 await Promise.all(updates);
             }
 
-            toast.success("Trạng thái Flash Sale được cập nhật thành công!", { autoClose: 2000 });
+            toast.success("Trạng thái Flash Sale được cập nhật thành công!", {
+                autoClose: 2000,
+            });
             GetAllFlashSale();
-        } catch (error) {
-            console.error("Lỗi khi cập nhật trạng thái Flash Sale:", error);
-            toast.error("Cập nhật trạng thái Flash Sale thất bại!");
+        } catch (error: any) {
+            // console.error("Lỗi khi thêm vào giỏ hàng:", error);
+            const errorMessage =
+                error.response?.data?.message ||
+                "Đã xảy ra lỗi, vui lòng thử lại sau.";
+            Swal.fire({
+                icon: "error",
+                title: "Lỗi khi thêm vào giỏ hàng",
+                text: errorMessage, // Hiển thị nội dung của message
+            });
         }
     };
-
-
-
-
 
     return (
         <contextFlashSale.Provider

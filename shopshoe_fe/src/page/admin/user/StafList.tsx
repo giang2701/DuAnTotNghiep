@@ -5,7 +5,7 @@ import { useAuth } from "../../../context/AuthContext";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
-const UserList = () => {
+const StafList = () => {
     const [user, setUser] = useState<User[]>([]); // Danh sách người dùng
     const UserLocal = localStorage.getItem("user");
     const level = UserLocal ? JSON.parse(UserLocal).level : null;
@@ -13,8 +13,8 @@ const UserList = () => {
     const [editingUserId, setEditingUserId] = useState<string | null>(null); // ID người dùng đang chỉnh sửa
     const [editedRole, setEditedRole] = useState<string>(""); // Vai trò người dùng đang chỉnh sửa
     const [searchTerm, setSearchTerm] = useState<string>(""); // Từ khóa tìm kiếm
-    // const [isSortedAsc, setIsSortedAsc] = useState<boolean>(true); // Trạng thái sắp xếp
-    // const [showRoleFilter, setShowRoleFilter] = useState(false); // Trạng thái hiển thị bộ lọc vai trò
+    const [isSortedAsc, setIsSortedAsc] = useState<boolean>(true); // Trạng thái sắp xếp
+    const [showRoleFilter, setShowRoleFilter] = useState(false); // Trạng thái hiển thị bộ lọc vai trò
     const [filterRole, setFilterRole] = useState<string>(""); // Bộ lọc vai trò
     // const [showInactive, setShowInactive] = useState(false);
     useEffect(() => {
@@ -22,32 +22,30 @@ const UserList = () => {
             const { data } = await instance.get("/user");
             // setUser(data.data);
             // setFilteredUsers(data.data);
-            setUser(data.data.filter((user: User) => user.role === "member")); // Lưu toàn bộ dữ liệu gốc
-            // console.log(data.data);
+            setUser(data.data.filter((user: User) => user.role === "admin"));
+            console.log(data.data);
             setFilteredUsers(
-                data.data.filter((user: User) => user.level !== "boss")
+                data.data.filter((user: User) => {
+                    user.level !== "boss", user.role === "member";
+                })
             ); // Lọc bỏ 'boss'
-            console.log("setFilteredUsers", filteredUsers);
-            console.log(
-                "useruser",
-                user.map((user) => user.role)
-            );
+            console.log(setFilteredUsers);
         })();
     }, []);
 
-    // const handleDelete = async (_id: string) => {
-    //     if (window.confirm("Bạn có chắc muốn xóa người dùng này không?")) {
-    //         await instance.delete(`/user/${_id}`);
-    //         const updatedUsers = user.filter((item) => item._id !== _id);
-    //         setUser(updatedUsers);
-    //         setFilteredUsers(updatedUsers);
-    //     }
-    // };
+    const handleDelete = async (_id: string) => {
+        if (window.confirm("Bạn có chắc muốn xóa người dùng này không?")) {
+            await instance.delete(`/user/${_id}`);
+            const updatedUsers = user.filter((item) => item._id !== _id);
+            setUser(updatedUsers);
+            setFilteredUsers(updatedUsers);
+        }
+    };
 
-    // const handleEditClick = (user: User) => {
-    //     setEditingUserId(user._id?.toString() ?? null);
-    //     setEditedRole(user.role ?? "member");
-    // };
+    const handleEditClick = (user: User) => {
+        setEditingUserId(user._id?.toString() ?? null);
+        setEditedRole(user.role ?? "member");
+    };
 
     const handleSaveEdit = async () => {
         if (!editingUserId) return;
@@ -143,22 +141,22 @@ const UserList = () => {
         setFilteredUsers(filtered);
     }, [searchTerm, user, filterRole]);
 
-    // const handleSort = () => {
-    //     const sortedUsers = [...filteredUsers].sort((a, b) =>
-    //         isSortedAsc
-    //             ? a.username?.localeCompare(b.username ?? "") || 0
-    //             : b.username?.localeCompare(a.username ?? "") || 0
-    //     );
-    //     setFilteredUsers(sortedUsers);
-    //     setIsSortedAsc(!isSortedAsc);
-    // };
-    // const toggleRoleFilter = () => {
-    //     setShowRoleFilter(!showRoleFilter);
-    // };
-    // const applyRoleFilter = (role: string) => {
-    //     setFilterRole(role);
-    //     setShowRoleFilter(false);
-    // };
+    const handleSort = () => {
+        const sortedUsers = [...filteredUsers].sort((a, b) =>
+            isSortedAsc
+                ? a.username?.localeCompare(b.username ?? "") || 0
+                : b.username?.localeCompare(a.username ?? "") || 0
+        );
+        setFilteredUsers(sortedUsers);
+        setIsSortedAsc(!isSortedAsc);
+    };
+    const toggleRoleFilter = () => {
+        setShowRoleFilter(!showRoleFilter);
+    };
+    const applyRoleFilter = (role: string) => {
+        setFilterRole(role);
+        setShowRoleFilter(false);
+    };
     return (
         <div>
             <div className="container" style={{ paddingTop: "5px" }}>
@@ -299,11 +297,11 @@ const UserList = () => {
                                     <th>Tên người dùng</th>
                                     <th>Email người dùng</th>
                                     <th>Quyền truy cập</th>
-                                    {/* {level === "boss" && (
+                                    {level === "boss" && (
                                         <th>Quyền truy cập</th>
-                                    )} */}
+                                    )}
                                     <th> Active/ deactive</th>
-                                    {/* {level === "boss" && <th>Quyền Hạn</th>} */}
+                                    {level === "boss" && <th>Quyền Hạn</th>}
                                 </tr>
                             </thead>
                             <tbody>
@@ -319,12 +317,30 @@ const UserList = () => {
                                             <td className="text-center">
                                                 {item.role}
                                             </td>
-                                            {/* {level === "boss" && (
+                                            {level === "boss" && (
                                                 <td>
                                                     <div
                                                         className="d-flex justify-content-center"
                                                         style={{ gap: "10px" }}
                                                     >
+                                                        {/* <button
+                              className="me-3"
+                              onClick={() =>
+                                handleDelete(item._id?.toString() ?? "")
+                              }
+                              style={{
+                                borderRadius: "5px",
+                                width: "30px",
+                                height: "30px",
+                                backgroundColor: "black",
+                                color: "white",
+                                border: "none",
+                              }}
+                            >
+                              {" "}
+                              <i className="fa-solid fa-trash"></i>
+                            </button> */}
+
                                                         <button
                                                             onClick={() =>
                                                                 handleEditClick(
@@ -346,7 +362,7 @@ const UserList = () => {
                                                         </button>
                                                     </div>
                                                 </td>
-                                            )} */}
+                                            )}
 
                                             <td className="d-flex justify-content-center">
                                                 <button
@@ -376,7 +392,7 @@ const UserList = () => {
                                                         : "Kích Hoạt"}
                                                 </button>
                                             </td>
-                                            {/* {level === "boss" && (
+                                            {level === "boss" && (
                                                 <td className="text-center">
                                                     <Link
                                                         to={`/admin/user/permission/${item._id}`}
@@ -398,7 +414,7 @@ const UserList = () => {
                                                         </button>
                                                     </Link>
                                                 </td>
-                                            )} */}
+                                            )}
                                         </tr>
                                     ))
                                 ) : (
@@ -449,4 +465,4 @@ const UserList = () => {
     );
 };
 
-export default UserList;
+export default StafList;

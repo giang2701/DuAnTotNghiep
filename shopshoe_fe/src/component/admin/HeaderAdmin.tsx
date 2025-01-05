@@ -8,9 +8,7 @@ const HeaderAdmin = (props: Props) => {
             <div
                 className="container bg-danger"
                 style={{ marginLeft: "210px" }}
-            >
-                d
-            </div>
+            ></div>
         </>
     );
 };

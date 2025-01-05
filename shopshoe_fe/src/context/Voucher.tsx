@@ -4,7 +4,7 @@ import { Voucher } from "../interface/Voucher";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { AxiosResponse } from 'axios'; // Đảm bảo import AxiosResponse
+import { AxiosResponse } from "axios"; // Đảm bảo import AxiosResponse
 
 type VoucherContextType = {
     voucher: Voucher[] | null;
@@ -12,8 +12,11 @@ type VoucherContextType = {
     Delete: (_id: string) => void;
     handleVoucher: (voucher: Voucher) => void;
     toggleActiveStatus: (voucherId: string, isActive: boolean) => void;
-    updateVoucher: (id: string, data: Voucher) => Promise<AxiosResponse<any, any>>; // Cập nhật kiểu trả về
-  };
+    updateVoucher: (
+        id: string,
+        data: Voucher
+    ) => Promise<AxiosResponse<any, any>>; // Cập nhật kiểu trả về
+};
 
 export const contextVoucher = createContext<VoucherContextType | undefined>(
     undefined
@@ -75,8 +78,15 @@ export const VoucherProvider = ({
             }
 
             await GetAllVoucher();
-        } catch (error) {
-            toast.error("Không thể xóa");
+        } catch (error: any) {
+            const errorMessage =
+                error.response?.data?.message ||
+                "Đã xảy ra lỗi, vui lòng thử lại sau.";
+            Swal.fire({
+                icon: "error",
+                title: "Có lỗi xảy ra",
+                text: errorMessage, // Hiển thị nội dung của message
+            });
         }
     };
 
@@ -112,36 +122,41 @@ export const VoucherProvider = ({
                 autoClose: 2000, // Tự động đóng sau 3 giây
             });
             GetAllVoucher();
-        } catch (error) {
-            toast.error("Failed to update voucher status!");
+        } catch (error: any) {
+            const errorMessage =
+                error.response?.data?.message ||
+                "Đã xảy ra lỗi, vui lòng thử lại sau.";
+            Swal.fire({
+                icon: "error",
+                title: "Có lỗi xảy ra",
+                text: errorMessage, // Hiển thị nội dung của message
+            });
         }
     };
     //edit
     const updateVoucher = async (id: string, data: Voucher) => {
         try {
-          const response = await instance.put(`/voucher/edit/${id}`, data); // Gọi API
-     
-          return response; // Trả về phản hồi từ API
+            const response = await instance.put(`/voucher/edit/${id}`, data); // Gọi API
+
+            return response; // Trả về phản hồi từ API
         } catch (error) {
-          console.error("Cập nhật voucher thất bại", error);
-          throw error;
+            console.error("Cập nhật voucher thất bại", error);
+            throw error;
         }
-      };
-    
-    
+    };
+
     return (
         <contextVoucher.Provider
-        value={{
-            voucher,
-            setVoucher,
-            Delete,
-            handleVoucher,
-            toggleActiveStatus,
-            updateVoucher,
-        }}
-    >
-        {children}
-    </contextVoucher.Provider>
-    
+            value={{
+                voucher,
+                setVoucher,
+                Delete,
+                handleVoucher,
+                toggleActiveStatus,
+                updateVoucher,
+            }}
+        >
+            {children}
+        </contextVoucher.Provider>
     );
 };

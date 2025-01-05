@@ -140,6 +140,9 @@ const PermissionDenied = () => {
                                     <th className="py-4 text-center">Thêm</th>
                                     <th className="py-4 text-center">Sửa</th>
                                     <th className="py-4 text-center">Xóa</th>
+                                    <th className="py-4 text-center">
+                                        Giảm Giá
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -151,6 +154,7 @@ const PermissionDenied = () => {
                                             "67677468977b2d90715a723d", // Thêm
                                             "67677464977b2d90715a723b", // Sửa
                                             "6767746f977b2d90715a723f", // Xóa
+                                            "677a2370439720e13f9e3d56", // giảm giá
                                         ],
                                     },
                                     {
@@ -159,6 +163,7 @@ const PermissionDenied = () => {
                                             "6767913e17d173ba48ab9558", // Thêm
                                             null, // Sửa ko có
                                             "6767913417d173ba48ab9554", // Xóa
+                                            null, // giảm giá ko có
                                         ],
                                     },
                                     {
@@ -167,6 +172,7 @@ const PermissionDenied = () => {
                                             "676790bd719ba0030d5234f3", // Thêm
                                             "676790b7719ba0030d5234f1", // Sửa
                                             "676790c4719ba0030d5234f5", // Xóa
+                                            null, // giảm giá ko có
                                         ],
                                     },
                                     {
@@ -175,6 +181,7 @@ const PermissionDenied = () => {
                                             "6767908a4c43995efdfe21ba", // Thêm
                                             "676790934c43995efdfe21bc", // Sửa
                                             "676790854c43995efdfe21b8", // Xóa
+                                            null, // giảm giá ko có
                                         ],
                                     },
                                     {
@@ -183,6 +190,7 @@ const PermissionDenied = () => {
                                             null, // Thêm không có
                                             "676791154628a5e0d6bea916", // Sửa
                                             null, // Xóa không có
+                                            null, // giảm giá ko có
                                         ],
                                     },
                                     {
@@ -191,14 +199,16 @@ const PermissionDenied = () => {
                                             "676791827bb8c246e8ce7775", // Thêm
                                             "6767917f7bb8c246e8ce7773", // Sửa
                                             "6767917b7bb8c246e8ce7771", // Xóa
+                                            null, // giảm giá ko có
                                         ],
                                     },
                                     {
-                                        name: "Quản Lý Bình Luận",
+                                        name: "Quản Lý Đánh Giá",
                                         ids: [
                                             null, // Thêm không có
                                             "676790dd3a8a9c257431d348", // Sửa
                                             null, // Xóa không có
+                                            null, // giảm giá ko có
                                         ],
                                     },
                                     {
@@ -207,6 +217,16 @@ const PermissionDenied = () => {
                                             null, // Thêm không có
                                             "6767915fabc2de264978c17d", // Sửa
                                             null, // Xóa không có
+                                            null, // giảm giá ko có
+                                        ],
+                                    },
+                                    {
+                                        name: "Quản Lý Bài Viết",
+                                        ids: [
+                                            "677a1de4ef53133450ce4c7a", // Thêm
+                                            "677a1e13ef53133450ce4c7c", // Sửa
+                                            "677a1e28ef53133450ce4c7e", // Xóa
+                                            null, // giảm giá ko có
                                         ],
                                     },
                                 ].map((permission) => (

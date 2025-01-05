@@ -180,7 +180,8 @@ export const AddToCart = async (req, res, next) => {
             });
         }
         if (product.flashSale) {
-            const price = sizeInfo.salePrice
+            const price = sizeInfo.salePrice;
+            const availableStock = sizeInfo.stock; 
             let cart = await Cart.findOne({
                 user: userId
             });
@@ -200,6 +201,18 @@ export const AddToCart = async (req, res, next) => {
                     item.size.toString() === size
             );
 
+            let currentQuantity = 0;
+            if (existingItemIndex > -1) {
+                // Nếu sản phẩm đã tồn tại, lấy số lượng hiện tại
+                currentQuantity = cart.items[existingItemIndex].quantity;
+            }
+    
+            // Kiểm tra xem số lượng yêu cầu có vượt quá số lượng tồn kho không
+            if (currentQuantity + quantity > availableStock) {
+                return res.status(400).json({
+                    message: "Sản phẩm đã quá số lượng tồn kho.",
+                });
+            }
             if (existingItemIndex > -1) {
                 // Sản phẩm đã tồn tại, tăng số lượng
                 cart.items[existingItemIndex].quantity += quantity;
@@ -227,6 +240,7 @@ export const AddToCart = async (req, res, next) => {
             });
         } else {
             const price = sizeInfo.price; // Lấy giá từ size cụ thể
+            const availableStock = sizeInfo.stock; 
             let cart = await Cart.findOne({
                 user: userId
             });
@@ -246,6 +260,18 @@ export const AddToCart = async (req, res, next) => {
                     item.size.toString() === size
             );
 
+            let currentQuantity = 0;
+            if (existingItemIndex > -1) {
+                // Nếu sản phẩm đã tồn tại, lấy số lượng hiện tại
+                currentQuantity = cart.items[existingItemIndex].quantity;
+            }
+    
+            // Kiểm tra xem số lượng yêu cầu có vượt quá số lượng tồn kho không
+            if (currentQuantity + quantity > availableStock) {
+                return res.status(400).json({
+                    message: "Sản phẩm đã quá số lượng tồn kho.",
+                });
+            }
             if (existingItemIndex > -1) {
                 // Sản phẩm đã tồn tại, tăng số lượng
                 cart.items[existingItemIndex].quantity += quantity;

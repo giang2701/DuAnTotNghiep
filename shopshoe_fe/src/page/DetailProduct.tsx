@@ -300,9 +300,17 @@ const DetailProduct = () => {
         text: "Thêm Sản Phẩm Thành Công!",
         icon: "success",
       });
-    } catch (error) {
-      console.error("Lỗi khi thêm vào giỏ hàng:", error);
-    }
+    } catch (error: any) {
+      // console.error("Lỗi khi thêm vào giỏ hàng:", error);
+      const errorMessage =
+          error.response?.data?.message ||
+          "Đã xảy ra lỗi, vui lòng thử lại sau.";
+      Swal.fire({
+          icon: "error",
+          title: "Lỗi khi thêm vào giỏ hàng",
+          text: errorMessage, // Hiển thị nội dung của message
+      });
+  }
   };
 
   // xử lý chức năng mua sản phẩm ngay
