@@ -36,15 +36,7 @@ const voucherSchema = Joi.object({
         "any.only": `"type" chỉ nhận giá trị "percent" hoặc "fixed"`,
         "any.required": `"type" là bắt buộc`,
     }),
-    expiryDate: Joi.date()
-        .iso()  // Kiểm tra định dạng ISO 8601
-        .min(new Date().toISOString().split('T')[0])  // Chỉ so sánh ngày (YYYY-MM-DD)
-        .required()
-        .messages({
-            "date.base": `"expiryDate" phải là một ngày hợp lệ`,
-            "date.min": `"expiryDate" phải lớn hơn hoặc bằng ngày hiện tại`,
-            "any.required": `"expiryDate" là bắt buộc`,
-        }),
+    expiryDate: Joi.optional(),
 
     isActive: Joi.boolean().optional().messages({
         "boolean.base": `"isActive" phải là kiểu boolean`,

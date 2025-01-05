@@ -101,7 +101,7 @@ export const VoucherProvider = ({
             GetAllVoucher();
         } catch (error: any) {
             const errorMessage =
-                error.response?.data?.errors ||
+                error.response?.data?.message ||
                 "Đã xảy ra lỗi, vui lòng thử lại sau.";
             Swal.fire({
                 icon: "error",
