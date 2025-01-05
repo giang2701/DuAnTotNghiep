@@ -41,13 +41,17 @@ const FlashSaleSection = () => {
         const fetchFlashSaleProducts = async () => {
             try {
                 const { data } = await instance.get("/products");
-                const flashSaleItems = data.data.filter(
+                const activeProducts = data.data.filter(
+                    (product: Product) => product.isActive
+                );
+                const flashSaleItems = activeProducts.filter(
                     (product: Product) => product.flashSale !== null
                 );
                 setFlashSaleProducts(flashSaleItems);
 
                 if (flashSaleItems.length > 0) {
-                    const firstProductEndDate = flashSaleItems[0].flashSale.endDate;
+                    const firstProductEndDate =
+                        flashSaleItems[0].flashSale.endDate;
                     setTimeLeft(calculateTimeLeft(firstProductEndDate));
                 }
             } catch (error) {
@@ -61,7 +65,8 @@ const FlashSaleSection = () => {
     useEffect(() => {
         if (flashSaleProducts.length > 0) {
             const timer = setInterval(() => {
-                const firstProductEndDate = flashSaleProducts[0].flashSale.endDate;
+                const firstProductEndDate =
+                    flashSaleProducts[0].flashSale.endDate;
                 setTimeLeft(calculateTimeLeft(firstProductEndDate));
             }, 1000);
 
@@ -73,9 +78,7 @@ const FlashSaleSection = () => {
         <div className="py-8 bg-gray-100">
             <div className="container mx-auto px-4">
                 <div className="flex justify-between items-center bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-md mb-4">
-                    <h2 className="textSale text-muted">
-                        Giá Sốc ⚡ Hôm Nay
-                    </h2>
+                    <h2 className="textSale text-muted">Giá Sốc ⚡ Hôm Nay</h2>
                     <div className="timer-buttons flex items-center mt-3">
                         <button className="bg-blue-700 text-white py-1 px-3 rounded mr-2">
                             {timeLeft.hours} Giờ
@@ -95,7 +98,8 @@ const FlashSaleSection = () => {
                                 <div className="product-img relative ">
                                     {product.flashSale?.isActive && (
                                         <div className="discount-badge absolute top-0 left-0 bg-red-600 text-white py-1 px-2 rounded-br-md">
-                                            -{product.flashSale.discountPercent}%
+                                            -{product.flashSale.discountPercent}
+                                            %
                                         </div>
                                     )}
                                     <img
@@ -115,7 +119,9 @@ const FlashSaleSection = () => {
                                         {product.flashSale?.isActive ? (
                                             <>
                                                 <p className="discounted-price text-red-600 font-bold">
-                                                    {formatPrice(product.salePrice)}
+                                                    {formatPrice(
+                                                        product.salePrice
+                                                    )}
                                                 </p>
                                                 <p className="original-price text-gray-500 line-through">
                                                     {formatPrice(product.price)}
@@ -131,7 +137,8 @@ const FlashSaleSection = () => {
                     </div>
                 ) : (
                     <div className="no-flashsale text-center mt-8">
-                        Chương trình Flash Sale chưa có, xin vui lòng đợi chương trình mới.
+                        Chương trình Flash Sale chưa có, xin vui lòng đợi chương
+                        trình mới.
                     </div>
                 )}
             </div>

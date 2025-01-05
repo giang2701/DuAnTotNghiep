@@ -19,15 +19,18 @@ const ApplyFlashSaleToMultipleProducts = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             const { data } = await instance.get("/products");
-            setProducts(data.data);
-            setFilteredProducts(data.data);
+            const activeProducts = data.data.filter(
+                (product: Product) => product.isActive
+            );
+            setProducts(activeProducts);
+            setFilteredProducts(activeProducts);
         };
         fetchProducts();
     }, []);
 
     const handleSearch = (query: string) => {
         setSearchQuery(query);
-        const filtered = products.filter(product =>
+        const filtered = products.filter((product) =>
             product.title.toLowerCase().includes(query.toLowerCase())
         );
         setFilteredProducts(filtered);
@@ -61,7 +64,10 @@ const ApplyFlashSaleToMultipleProducts = () => {
     const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
     // Lấy sản phẩm cho trang hiện tại
-    const currentProducts = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+    const currentProducts = filteredProducts.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
 
     const handlePageChange = (pageNumber: any) => {
         setCurrentPage(pageNumber);
@@ -69,14 +75,22 @@ const ApplyFlashSaleToMultipleProducts = () => {
 
     // Lọc Flash Sale còn hiệu lực
     const currentDate = new Date();
-    const activeFlashSales = flashSale.filter(fs => new Date(fs.startDate) <= currentDate && new Date(fs.endDate) > currentDate);
+    const activeFlashSales = flashSale.filter(
+        (fs) =>
+            new Date(fs.startDate) <= currentDate &&
+            new Date(fs.endDate) > currentDate
+    );
 
     // Lấy danh sách ID sản phẩm đã có Flash Sale
-    const productsWithFlashSale = products.filter(product => product.flashSale?._id).map(product => product._id);
+    const productsWithFlashSale = products
+        .filter((product) => product.flashSale?._id)
+        .map((product) => product._id);
 
     return (
         <div className="flash-sale-container">
-            <h2 className="flash-sale-title">Áp dụng Flash Sale cho nhiều sản phẩm</h2>
+            <h2 className="flash-sale-title">
+                Áp dụng Flash Sale cho nhiều sản phẩm
+            </h2>
             {/* Thanh tìm kiếm */}
             <div className="search-bar my-5">
                 <h2>Tìm kiếm sản phẩm</h2>
@@ -86,7 +100,12 @@ const ApplyFlashSaleToMultipleProducts = () => {
                     onChange={(e) => handleSearch(e.target.value)}
                     placeholder="Tìm kiếm sản phẩm theo tên..."
                     className="search-input"
-                    style={{ width: "100%", padding: "10px", fontSize: "16px", marginTop: "10px" }}
+                    style={{
+                        width: "100%",
+                        padding: "10px",
+                        fontSize: "16px",
+                        marginTop: "10px",
+                    }}
                 />
             </div>
 
@@ -112,7 +131,15 @@ const ApplyFlashSaleToMultipleProducts = () => {
                     {currentProducts.map((product) => (
                         <li key={product._id} className="product-list-item">
                             {productsWithFlashSale.includes(product._id) ? (
-                                <span className="product-checkbox" style={{ color: "red", marginRight: "10px" }}>X</span>
+                                <span
+                                    className="product-checkbox"
+                                    style={{
+                                        color: "red",
+                                        marginRight: "10px",
+                                    }}
+                                >
+                                    X
+                                </span>
                             ) : (
                                 <input
                                     type="checkbox"
@@ -122,13 +149,17 @@ const ApplyFlashSaleToMultipleProducts = () => {
                                         setSelectedProducts((prev) =>
                                             e.target.checked
                                                 ? [...prev, productId]
-                                                : prev.filter((id) => id !== productId)
+                                                : prev.filter(
+                                                      (id) => id !== productId
+                                                  )
                                         );
                                     }}
                                     className="product-checkbox"
                                 />
                             )}
-                            <span className="product-title">{product.title}</span>
+                            <span className="product-title">
+                                {product.title}
+                            </span>
                         </li>
                     ))}
                 </ul>
@@ -138,13 +169,17 @@ const ApplyFlashSaleToMultipleProducts = () => {
                     <button
                         key={index + 1}
                         onClick={() => handlePageChange(index + 1)}
-                        className={`page-button ${currentPage === index + 1 ? 'active' : ''}`}
+                        className={`page-button ${
+                            currentPage === index + 1 ? "active" : ""
+                        }`}
                     >
                         {index + 1}
                     </button>
                 ))}
             </div>
-            <button onClick={handleApplyFlashSale} className="apply-button">Áp dụng Flash Sale</button>
+            <button onClick={handleApplyFlashSale} className="apply-button">
+                Áp dụng Flash Sale
+            </button>
         </div>
     );
 };

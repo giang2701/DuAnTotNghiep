@@ -24,24 +24,24 @@ const ProductItem = ({
 }) => {
     const discountedPrice =
         product.flashSale && product.flashSale.isActive
-            ? product.price - (product.price * product.flashSale.salePrice) / 100
+            ? product.price -
+              (product.price * product.flashSale.salePrice) / 100
             : null;
 
     return (
         <div className="product" key={product._id}>
-            <div className="flash-sale-header">
-                {/* Hiển thị đồng hồ đếm ngược Flash Sale */}
+            {product.flashSale && product.flashSale.isActive && (
+                <div className="discount-badge">
+                    -{product.flashSale.discountPercent}%
+                </div>
+            )}
+            {/* <div className="flash-sale-header">
+                Hiển thị đồng hồ đếm ngược Flash Sale
                 {product.flashSale?.isActive && (
                     <CountdownTimer endDate={product.flashSale.endDate} />
                 )}
-            </div>
-
+            </div> */}
             <div className="product-img">
-                {product.flashSale && product.flashSale.isActive && (
-                    <div className="discount-badge">
-                        -{product.flashSale.discountPercent}%
-                    </div>
-                )}
                 <img
                     src={`${product.images}`}
                     alt={product.title}
@@ -50,10 +50,7 @@ const ProductItem = ({
             </div>
 
             <div className="product-name">
-                <Link
-                    to={`/detail/${product._id}`}
-                    className="product-title"
-                >
+                <Link to={`/detail/${product._id}`} className="product-title">
                     {product.title}
                 </Link>
                 {discountedPrice !== null ? (
@@ -71,7 +68,10 @@ const ProductItem = ({
             </div>
 
             {/* Nút yêu thích */}
-            <IconButton sx={{ marginLeft: 14 }} onClick={() => toggleFavorite(product)}>
+            <IconButton
+                sx={{ marginLeft: 14 }}
+                onClick={() => toggleFavorite(product)}
+            >
                 {isFavorite ? (
                     <AiFillHeart color="red" size={30} />
                 ) : (
@@ -79,7 +79,6 @@ const ProductItem = ({
                 )}
             </IconButton>
         </div>
-
     );
 };
 
