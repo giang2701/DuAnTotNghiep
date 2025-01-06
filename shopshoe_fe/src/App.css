@@ -2821,6 +2821,215 @@ input[type="radio"]:checked {
     cursor: not-allowed;
     opacity: 0.5;
 }
+/* Style trang quên mật khẩu */
+
+/* Container */
+.password-setup-container {
+    margin-top: 230px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    background-color: #f6f9fc;
+}
+
+/* Card */
+.password-setup-card {
+    background: linear-gradient(145deg, #ffffff, #f1f2f4);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    width: 380px;
+    text-align: center;
+    position: relative;
+}
+
+/* Back button */
+.back-button {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #ff6f61;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.back-button:hover {
+    transform: scale(1.2);
+}
+
+/* Title */
+.password-setup-title {
+    font-size: 22px;
+    color: #222;
+    font-weight: bold;
+    margin-bottom: 12px;
+    font-family: "Roboto", sans-serif;
+}
+
+/* Subtitle */
+.password-setup-subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+    font-family: "Roboto", sans-serif;
+}
+
+.password-setup-subtitle span {
+    font-weight: bold;
+    color: #ff6f61;
+}
+
+/* Input Container */
+.password-input-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    transition: border-color 0.3s;
+}
+
+.password-input-container:hover {
+    border-color: #ff6f61;
+}
+
+.password-input {
+    border: none;
+    outline: none;
+    flex: 1;
+    padding: 12px;
+    font-size: 15px;
+    font-family: "Roboto", sans-serif;
+}
+
+.password-input::placeholder {
+    color: #bbb;
+}
+
+/* Toggle Password Visibility */
+.toggle-visibility {
+    background: none;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #666;
+    transition: color 0.3s;
+}
+
+.toggle-visibility:hover {
+    color: #ff6f61;
+}
+
+/* Password Rules */
+.password-rules {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.password-rules li {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 6px;
+}
+
+/* Submit Button */
+.submit-button {
+    background-color: #ff6f61;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s, transform 0.2s;
+    font-family: "Roboto", sans-serif;
+}
+
+.submit-button:hover {
+    background-color: #e65a50;
+    transform: translateY(-2px);
+}
+
+.submit-button:active {
+    transform: translateY(0);
+}
+/* ForgotPassword */
+
+.forgot-password-container {
+    max-width: 450px;
+    margin: 200px auto 200px auto;
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-family: "Arial", sans-serif;
+}
+
+.forgot-password-container h2 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+.forgot-password-container input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+    background-color: #f4f4f4;
+    transition: all 0.3s ease;
+}
+
+.forgot-password-container input:focus {
+    border-color: #007bff;
+    background-color: #fff;
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+}
+
+.forgot-password-container button {
+    width: 100%;
+    padding: 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.forgot-password-container button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.forgot-password-container button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.forgot-password-container .toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
 
 /* |*************************************************************************************************
    |  Admin
@@ -6854,6 +7063,34 @@ label {
     .aboutus-container {
         padding-bottom: 80px;
         /* Đảm bảo nội dung không đè footer */
+    }
+    .password-setup-card {
+        padding: 20px;
+    }
+
+    .password-setup-title {
+        font-size: 20px;
+    }
+
+    .password-setup-subtitle {
+        font-size: 14px;
+    }
+
+    .password-input {
+        font-size: 14px;
+    }
+
+    .submit-button {
+        font-size: 14px;
+    }
+    /* forgot passWord */
+    .forgot-password-container {
+        padding: 20px;
+        width: 100%;
+    }
+
+    .forgot-password-container h2 {
+        font-size: 24px;
     }
 }
 

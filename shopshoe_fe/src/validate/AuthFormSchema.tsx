@@ -35,3 +35,16 @@ export const RegisterSchema = Joi.object({
         "string.empty": "Confirm password cannot be empty",
     }),
 });
+export const ResetSchema = Joi.object({
+    email: Joi.string().required().messages({
+        "string.base": "Email must be a string",
+        "string.empty": "Email cannot be empty",
+        "string.email": "Email must be a valid email",
+    }),
+    password: Joi.string().min(6).max(18).messages({
+        "string.base": "Password must be a string",
+        "string.empty": "Password cannot be empty",
+        "string.min": "Password must have at least 6 characters",
+        "string.max": "Password must have at most 18 characters",
+    }),
+});

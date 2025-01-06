@@ -9,6 +9,8 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import useProductCart from "../../hook/useProductCart";
 import Swal from "sweetalert2";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 const Login = () => {
     const {
         register,
@@ -59,6 +61,45 @@ const Login = () => {
         }
     };
 
+    const handleGoogleLogin = async (decodedToken: any) => {
+        try {
+            console.log(decodedToken.name, decodedToken.email);
+
+            const res = await instance.post(
+                `/auth/google`,
+                {
+                    name: decodedToken.name,
+                    email: decodedToken.email,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "accessToken"
+                        )}`, // Gửi token trong header
+                    },
+                }
+            );
+            // Lấy giỏ hàng của người dùng
+            if (res.data.user.role !== "admin") {
+                await getCartUser(res.data.user._id);
+            }
+            // Xử lý kết quả đăng nhập
+            contextLogin(res.data.accessToken, res.data.user);
+            localStorage.setItem("user", JSON.stringify(res.data.user));
+            Swal.fire({
+                title: "Good job!",
+                text: "Đăng nhập Google thành công",
+                icon: "success",
+            });
+            setTimeout(() => {
+                nav("/");
+                window.location.reload();
+            }, 0);
+        } catch (error) {
+            toast.error("Đăng nhập Google không thành công.");
+            console.log(error);
+        }
+    };
     return (
         <>
             <div className="container">
@@ -104,6 +145,13 @@ const Login = () => {
                             <button className="btn btn-success">
                                 ĐĂNG NHẬP
                             </button>
+                            <Link
+                                to="/forgot-password"
+                                className="btn btn-danger btn_link_register"
+                            >
+                                Quên mật khẩu ?
+                            </Link>
+
                             {error && (
                                 <p
                                     className="error-message"
@@ -120,6 +168,20 @@ const Login = () => {
                                 ĐĂNG KÝ
                             </Link>
                         </form>
+                        <div className="mt-3">
+                            <GoogleLogin
+                                onSuccess={(response: any) => {
+                                    const decoded = jwtDecode(
+                                        response?.credential
+                                    );
+                                    console.log(decoded);
+                                    handleGoogleLogin(decoded);
+                                }}
+                                onError={() =>
+                                    toast.error("Google Login thất bại!")
+                                }
+                            />
+                        </div>
                     </div>
                     <div className="col-xl-6 col-lg-6 col-md-12 col-ms-12 box__link__register ">
                         <p>Khách hàng mới của Zokong</p>
