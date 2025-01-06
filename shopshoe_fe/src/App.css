@@ -66,12 +66,15 @@ html {
     color: red;
     font-weight: bold;
     font-size: 16px;
+    margin-left: 10px;
 }
 
 .original-price {
     text-decoration: line-through;
-    font-size: 14px;
+    font-size: 13px;
     color: gray;
+    margin-top: 3.5px;
+    margin-left: 10px;
 }
 .product-title {
     color: #57585a;
@@ -1067,7 +1070,7 @@ ul li:hover {
     text-align: center;
     font-size: 3rem;
     font-weight: 600;
-    margin-top: 20px;
+    margin-top: -30px;
     margin-bottom: 20px;
     letter-spacing: 3.5px;
 }
@@ -1371,7 +1374,8 @@ ul li:hover {
 }
 
 .title__products__company {
-    font-size: 4.5rem;
+    font-family: "Roboto", serif;   
+    font-size: 4rem;
     text-transform: uppercase;
     font-weight: 400;
     text-align: center;

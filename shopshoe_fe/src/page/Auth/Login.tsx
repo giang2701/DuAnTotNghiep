@@ -145,13 +145,15 @@ const Login = () => {
                             <button className="btn btn-success">
                                 ĐĂNG NHẬP
                             </button>
+                            <p className="text-center fs-3">---</p>
                             <Link
                                 to="/forgot-password"
-                                className="btn btn-danger btn_link_register"
+                                className="nav-link text-center fs-3 text-primary"
+                                style={{ margin: "-10px 0px 0px 10px" }}
                             >
                                 Quên mật khẩu ?
                             </Link>
-
+                            <p className="text-center fs-3">---</p>
                             {error && (
                                 <p
                                     className="error-message"

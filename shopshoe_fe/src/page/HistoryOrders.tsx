@@ -59,7 +59,9 @@ const HistoryOrders = () => {
     const [isReturnRequested, setIsReturnRequested] = useState<{
         [key: string]: boolean;
     }>({}); // State theo dõi trạng thái yêu cầu hoàn trả
-
+    const [isRefundRequested, setIsRefundRequested] = useState<{
+        [key: string]: boolean;
+    }>({});
     const handleCopyOrderId = () => {
         const orderId = detailOrderById?._id;
         if (orderId) {
@@ -115,7 +117,12 @@ const HistoryOrders = () => {
                 return dateB - dateA; // Đảm bảo đơn hàng mới nhất lên đầu
                 return 0;
             });
-
+            const updatedIsRefundRequested = { ...isRefundRequested };
+            data.forEach((order: Order) => {
+                updatedIsRefundRequested[order._id] =
+                    order.isRefundRequested ?? false; // Gán giá trị từ API
+            });
+            setIsRefundRequested(updatedIsRefundRequested);
             const updatedIsReturnRequested = { ...isReturnRequested };
             data.forEach((order: Order) => {
                 updatedIsReturnRequested[order._id] = false;
@@ -754,18 +761,21 @@ const HistoryOrders = () => {
                                                 position: "absolute",
                                                 bottom: "14px",
                                                 right: "290px",
-                                                backgroundColor: item.isrefund
-                                                    ? "grey"
-                                                    : "#f44336",
+
                                                 color: "white",
                                                 textTransform: "none",
                                                 border: "none",
                                                 padding: "10px 20px",
                                                 borderRadius: "5px",
                                                 fontSize: "12px",
-                                                cursor: item.isrefund
+                                                backgroundColor:
+                                                    item.isRefundRequested
+                                                        ? "grey"
+                                                        : "#f44336",
+                                                cursor: item.isRefundRequested
                                                     ? "not-allowed"
                                                     : "pointer",
+
                                                 width: "130px",
                                             }}
                                             disabled={item.isRefundRequested}
@@ -905,7 +915,10 @@ const HistoryOrders = () => {
                             open={isRefundFormOpen}
                             onClose={() => setIsRefundFormOpen(false)}
                             order={selectedOrder}
-                            refreshAfterRefund={getOrderByid} // Hàm refresh danh sách đơn hàng
+                            refreshAfterRefund={getOrderByid}
+                            // Hàm refresh danh sách đơn hàng
+                            isRefundRequested={isRefundRequested} // Truyền state
+                            setIsRefundRequested={setIsRefundRequested} // Truyền hàm cập nhật state// Hàm refresh danh sách đơn hàng
                         />
                         <ProceedReturnForm
                             open={isProceedReturnFormOpen}

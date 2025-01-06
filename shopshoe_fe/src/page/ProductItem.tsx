@@ -29,7 +29,11 @@ const ProductItem = ({
             : null;
 
     return (
-        <div className="product" key={product._id}>
+        <div
+            className="product"
+            key={product._id}
+            style={{ position: "relative" }}
+        >
             {product.flashSale && product.flashSale.isActive && (
                 <div className="discount-badge">
                     -{product.flashSale.discountPercent}%
@@ -54,13 +58,13 @@ const ProductItem = ({
                     {product.title}
                 </Link>
                 {discountedPrice !== null ? (
-                    <div className="price-info">
-                        <p className="discounted-price">
+                    <div className=" d-flex">
+                        <span className="discounted-price">
                             {formatPrice(product.salePrice)}
-                        </p>
-                        <p className="original-price">
+                        </span>
+                        <span className="original-price">
                             {formatPrice(product.price)}
-                        </p>
+                        </span>
                     </div>
                 ) : (
                     <p>{formatPrice(product.price)}</p>
@@ -68,8 +72,14 @@ const ProductItem = ({
             </div>
 
             {/* Nút yêu thích */}
+
             <IconButton
-                sx={{ marginLeft: 14 }}
+                sx={{
+                    marginLeft: 14,
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                }}
                 onClick={() => toggleFavorite(product)}
             >
                 {isFavorite ? (
