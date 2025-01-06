@@ -593,7 +593,8 @@ const DetailProduct = () => {
                                                 width: "60px",
                                                 height: "30px",
                                                 backgroundColor: "red",
-                                                padding: "-1px 5px 3px",
+                                                paddingLeft: "5px",
+                                                paddingBottom: "33px",
                                                 borderRadius: "5px",
                                             }}
                                         >
