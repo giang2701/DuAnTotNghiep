@@ -627,25 +627,24 @@ const DetailProduct = () => {
                                         <span
                                             className="text-danger"
                                             style={{
-                                                fontSize: "18px",
-                                                padding: "15px",
+                                                fontSize: "28px",
+                                                padding: "15px 0px",
                                             }}
                                         >
-                                            Chỉ còn: {selectedSize.size}{" "}
+                                            {selectedSize.size}
                                             {formatPrice(
                                                 selectedSize.salePrice
                                             )}{" "}
                                             {/* Giá sale theo size */}
                                         </span>
-                                        <br />
+                                        {/* <br /> */}
                                         <span
                                             className="text-muted "
                                             style={{
                                                 fontSize: "18px",
-                                                padding: "15px",
+                                                padding: "15px 0px",
                                             }}
                                         >
-                                            Giá gốc:{" "}
                                             <span className="text-decoration-line-through">
                                                 {selectedSize.size}
                                                 {formatPrice(
@@ -653,6 +652,21 @@ const DetailProduct = () => {
                                                 )}
                                             </span>{" "}
                                             {/* Giá gốc theo size */}
+                                        </span>
+                                        <span
+                                            className="text-white"
+                                            style={{
+                                                display: "inline-block",
+                                                width: "60px",
+                                                height: "30px",
+                                                backgroundColor: "red",
+                                                paddingLeft: "5px",
+                                                paddingBottom: "33px",
+                                                borderRadius: "5px",
+                                            }}
+                                        >
+                                            -{product.flashSale.discountPercent}
+                                            %
                                         </span>
                                         <br />
                                         <span
