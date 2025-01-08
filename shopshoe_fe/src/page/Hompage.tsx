@@ -1060,7 +1060,7 @@ const Hompage = () => {
                     {/* bài viết tiêu biểu  */}
                     <div className="container">
                         <div className="title__products__company">
-                            bài viết tiêu biểu
+                            Featured Articles
                         </div>
                         {/* đổ bài viết */}
                         <div className="related-posts mt-5">

@@ -4,6 +4,7 @@ import { User } from "../../../interface/User";
 import { useAuth } from "../../../context/AuthContext";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { Pagination } from "@mui/material";
 
 const UserList = () => {
     const [user, setUser] = useState<User[]>([]); // Danh sách người dùng
@@ -34,7 +35,14 @@ const UserList = () => {
             );
         })();
     }, []);
-
+    const productsPerPage = 9;
+    const [currentPage, setCurrentPage] = useState(1);
+    const handlePageChange = (
+        event: React.ChangeEvent<unknown>,
+        value: number
+    ) => {
+        setCurrentPage(value);
+    };
     // const handleDelete = async (_id: string) => {
     //     if (window.confirm("Bạn có chắc muốn xóa người dùng này không?")) {
     //         await instance.delete(`/user/${_id}`);
@@ -160,31 +168,32 @@ const UserList = () => {
     //     setShowRoleFilter(false);
     // };
     return (
-        <div>
-            <div className="container" style={{ paddingTop: "5px" }}>
-                <div className="box_table_products">
-                    <div
-                        className="container"
-                        style={{
-                            paddingTop: "50px",
-                            marginBottom: "15px",
-                            marginLeft: "-8px",
-                            width: "100%",
-                        }}
-                    >
-                        <div className="box_table_products">
-                            <div className="header_table_products bg-black text-white fs-5 fw-medium py-3 ps-3 d-flex justify-content-between">
-                                <span>Tìm kiếm</span>
-                            </div>
-                            <div
-                                className="body_table_products p-3 bg-white"
-                                style={{ width: "1260px" }}
-                            >
+        <>
+            <div>
+                <div className="container" style={{ paddingTop: "5px" }}>
+                    <div className="box_table_products">
+                        <div
+                            className="container"
+                            style={{
+                                paddingTop: "50px",
+                                marginBottom: "15px",
+                                marginLeft: "-8px",
+                                width: "100%",
+                            }}
+                        >
+                            <div className="box_table_products">
+                                <div className="header_table_products bg-black text-white fs-5 fw-medium py-3 ps-3 d-flex justify-content-between">
+                                    <span>Tìm kiếm</span>
+                                </div>
                                 <div
-                                    className="d-flex align-items-center"
-                                    style={{ gap: "10px" }}
+                                    className="body_table_products p-3 bg-white"
+                                    style={{ width: "1260px" }}
                                 >
-                                    {/* <button
+                                    <div
+                                        className="d-flex align-items-center"
+                                        style={{ gap: "10px" }}
+                                    >
+                                        {/* <button
                                         className="button_sort"
                                         onClick={handleSort}
                                         style={{
@@ -245,81 +254,92 @@ const UserList = () => {
                                             </div>
                                         )}
                                     </button> */}
-                                    <div className="flex-grow-1 position-relative">
-                                        <input
-                                            type="text"
-                                            placeholder="Search......"
-                                            value={searchTerm}
-                                            onChange={(e) =>
-                                                setSearchTerm(e.target.value)
-                                            }
-                                            className="form-control"
-                                            style={{
-                                                paddingLeft: "40px",
-                                                height: "43px",
-                                                marginTop: "1px",
-                                                marginLeft: "1px",
-                                                border: "1px solid black",
-                                                fontSize: "15px",
-                                                width: "500px",
-                                            }}
-                                        />
+                                        <div className="flex-grow-1 position-relative">
+                                            <input
+                                                type="text"
+                                                placeholder="Search......"
+                                                value={searchTerm}
+                                                onChange={(e) =>
+                                                    setSearchTerm(
+                                                        e.target.value
+                                                    )
+                                                }
+                                                className="form-control"
+                                                style={{
+                                                    paddingLeft: "40px",
+                                                    height: "43px",
+                                                    marginTop: "1px",
+                                                    marginLeft: "1px",
+                                                    border: "1px solid black",
+                                                    fontSize: "15px",
+                                                    width: "500px",
+                                                }}
+                                            />
 
-                                        <span
-                                            style={{
-                                                position: "absolute",
-                                                left: "5px",
-                                                top: "50%",
-                                                transform: "translateY(-50%)",
-                                                fontSize: "16px",
-                                                color: "#aaa",
-                                                pointerEvents: "none",
-                                            }}
-                                            role="img"
-                                            aria-label="search"
-                                        >
-                                            <i
-                                                className="fa-solid fa-magnifying-glass"
-                                                style={{ paddingLeft: "10px" }}
-                                            ></i>
-                                        </span>
+                                            <span
+                                                style={{
+                                                    position: "absolute",
+                                                    left: "5px",
+                                                    top: "50%",
+                                                    transform:
+                                                        "translateY(-50%)",
+                                                    fontSize: "16px",
+                                                    color: "#aaa",
+                                                    pointerEvents: "none",
+                                                }}
+                                                role="img"
+                                                aria-label="search"
+                                            >
+                                                <i
+                                                    className="fa-solid fa-magnifying-glass"
+                                                    style={{
+                                                        paddingLeft: "10px",
+                                                    }}
+                                                ></i>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="header_table_products bg-black text-white fs-5 fw-medium py-3 ps-3 d-flex justify-content-between">
-                        <span>Danh Sách</span>
-                    </div>
-                    <div className="body_table_products p-3 bg-white">
-                        <table className="table table-bordered table-striped">
-                            <thead className="text-center">
-                                <tr>
-                                    <th>Tên người dùng</th>
-                                    <th>Email người dùng</th>
-                                    <th>Quyền truy cập</th>
-                                    {/* {level === "boss" && (
+                        <div className="header_table_products bg-black text-white fs-5 fw-medium py-3 ps-3 d-flex justify-content-between">
+                            <span>Danh Sách</span>
+                        </div>
+                        <div className="body_table_products p-3 bg-white">
+                            <table className="table table-bordered table-striped">
+                                <thead className="text-center">
+                                    <tr>
+                                        <th>Tên người dùng</th>
+                                        <th>Email người dùng</th>
+                                        <th>Quyền truy cập</th>
+                                        {/* {level === "boss" && (
                                         <th>Quyền truy cập</th>
                                     )} */}
-                                    <th> Active/ deactive</th>
-                                    {/* {level === "boss" && <th>Quyền Hạn</th>} */}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredUsers.length > 0 ? (
-                                    filteredUsers.map((item) => (
-                                        <tr key={item._id}>
-                                            <td className="text-center">
-                                                {item.username}
-                                            </td>
-                                            <td className="text-center">
-                                                {item.email}
-                                            </td>
-                                            <td className="text-center">
-                                                {item.role}
-                                            </td>
-                                            {/* {level === "boss" && (
+                                        <th> Active/ deactive</th>
+                                        {/* {level === "boss" && <th>Quyền Hạn</th>} */}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {filteredUsers.length > 0 ? (
+                                        filteredUsers
+                                            .slice(
+                                                (currentPage - 1) *
+                                                    productsPerPage,
+                                                currentPage * productsPerPage
+                                            )
+                                            .map((item) => (
+                                                <tr key={item._id}>
+                                                    <td className="text-center">
+                                                        {item.username}
+                                                    </td>
+                                                    <td className="text-center">
+                                                        {item.email}
+                                                    </td>
+                                                    <td className="text-center">
+                                                        {item.role}
+                                                    </td>
+                                                    {/* {level === "boss" && (
                                                 <td>
                                                     <div
                                                         className="d-flex justify-content-center"
@@ -348,35 +368,36 @@ const UserList = () => {
                                                 </td>
                                             )} */}
 
-                                            <td className="d-flex justify-content-center">
-                                                <button
-                                                    className="Button_admin "
-                                                    onClick={() =>
-                                                        toggleActiveStatus(
-                                                            item._id?.toString() ??
-                                                                "",
-                                                            item.isActive ??
-                                                                false
-                                                        )
-                                                    }
-                                                    style={{
-                                                        borderRadius: "5px",
-                                                        width: "90px",
-                                                        height: "30px",
-                                                        backgroundColor:
-                                                            item.isActive
-                                                                ? "green"
-                                                                : "gray",
-                                                        color: "white",
-                                                        border: "none",
-                                                    }}
-                                                >
-                                                    {item.isActive
-                                                        ? "Khóa Tài Khoản"
-                                                        : "Kích Hoạt"}
-                                                </button>
-                                            </td>
-                                            {/* {level === "boss" && (
+                                                    <td className="d-flex justify-content-center">
+                                                        <button
+                                                            className="Button_admin "
+                                                            onClick={() =>
+                                                                toggleActiveStatus(
+                                                                    item._id?.toString() ??
+                                                                        "",
+                                                                    item.isActive ??
+                                                                        false
+                                                                )
+                                                            }
+                                                            style={{
+                                                                borderRadius:
+                                                                    "5px",
+                                                                width: "90px",
+                                                                height: "30px",
+                                                                backgroundColor:
+                                                                    item.isActive
+                                                                        ? "green"
+                                                                        : "gray",
+                                                                color: "white",
+                                                                border: "none",
+                                                            }}
+                                                        >
+                                                            {item.isActive
+                                                                ? "Khóa Tài Khoản"
+                                                                : "Kích Hoạt"}
+                                                        </button>
+                                                    </td>
+                                                    {/* {level === "boss" && (
                                                 <td className="text-center">
                                                     <Link
                                                         to={`/admin/user/permission/${item._id}`}
@@ -399,53 +420,68 @@ const UserList = () => {
                                                     </Link>
                                                 </td>
                                             )} */}
+                                                </tr>
+                                            ))
+                                    ) : (
+                                        <tr>
+                                            <td
+                                                colSpan={4}
+                                                className="text-center"
+                                            >
+                                                Không tìm thấy người dùng nào
+                                            </td>
                                         </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan={4} className="text-center">
-                                            Không tìm thấy người dùng nào
-                                        </td>
-                                    </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                            <Pagination
+                                count={Math.ceil(
+                                    filteredUsers.length / productsPerPage
                                 )}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            {editingUserId && (
-                <div className="overlay__phanquyen">
-                    <div className="boxPhanQuyen">
-                        <h3>Chỉnh sửa quyền truy cập người dùng</h3>
-                        <label>
-                            Quyền truy cập:
-                            <select
-                                value={editedRole}
-                                onChange={(e) => setEditedRole(e.target.value)}
-                            >
-                                <option value="member">Member</option>
-                                <option value="admin">Admin</option>
-                            </select>
-                        </label>
-                        <div className="mt-3">
-                            <button
-                                className="btn btn-success me-2"
-                                onClick={handleSaveEdit}
-                            >
-                                Lưu
-                            </button>
-                            <button
-                                className="btn btn-secondary"
-                                onClick={() => setEditingUserId(null)}
-                            >
-                                Hủy
-                            </button>
+                                page={currentPage}
+                                onChange={handlePageChange}
+                                color="primary"
+                                className="d-flex justify-content-center mt-4"
+                            />
                         </div>
                     </div>
                 </div>
-            )}
-        </div>
+
+                {editingUserId && (
+                    <div className="overlay__phanquyen">
+                        <div className="boxPhanQuyen">
+                            <h3>Chỉnh sửa quyền truy cập người dùng</h3>
+                            <label>
+                                Quyền truy cập:
+                                <select
+                                    value={editedRole}
+                                    onChange={(e) =>
+                                        setEditedRole(e.target.value)
+                                    }
+                                >
+                                    <option value="member">Member</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </label>
+                            <div className="mt-3">
+                                <button
+                                    className="btn btn-success me-2"
+                                    onClick={handleSaveEdit}
+                                >
+                                    Lưu
+                                </button>
+                                <button
+                                    className="btn btn-secondary"
+                                    onClick={() => setEditingUserId(null)}
+                                >
+                                    Hủy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </>
     );
 };
 

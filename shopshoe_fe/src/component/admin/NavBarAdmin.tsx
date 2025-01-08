@@ -392,14 +392,27 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
                             >
                                 Quản Lý User
                             </Link>
-                            <Link
-                                to="/admin/staff"
-                                style={{
-                                    textDecoration: "none",
-                                }}
-                            >
-                                Quản Lý Nhân Viên
-                            </Link>
+                            {user?.level === "boss" ? (
+                                <Link
+                                    to="/admin/staff"
+                                    style={{
+                                        textDecoration: "none",
+                                    }}
+                                >
+                                    Quản Lý Nhân Viên
+                                </Link>
+                            ) : (
+                                <Link
+                                    to="/authorization403"
+                                    style={{
+                                        textDecoration: "none",
+                                    }}
+                                    className="disabled-link"
+                                    onClick={(e) => e.preventDefault()}
+                                >
+                                    Quản Lý Nhân Viên
+                                </Link>
+                            )}
                         </div>
                         {/* --End QL User-- */}
                         {/* QL Đơn Hàng */}

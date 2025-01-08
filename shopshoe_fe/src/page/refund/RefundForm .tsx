@@ -208,7 +208,11 @@ const RefundForm: React.FC<RefundFormProps> = ({
     return (
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
             <DialogTitle>
-                <Typography variant="h6" component="div">
+                <Typography
+                    variant="h6"
+                    component="div"
+                    sx={{ fontSize: "15px" }}
+                >
                     Yêu Cầu Hoàn Tiền
                 </Typography>
             </DialogTitle>
@@ -268,7 +272,11 @@ const RefundForm: React.FC<RefundFormProps> = ({
                     helperText={phoneNumberError}
                 />
                 <Box mt={2}>
-                    <Typography variant="subtitle2" gutterBottom>
+                    <Typography
+                        variant="subtitle2"
+                        gutterBottom
+                        sx={{ fontSize: "15px" }}
+                    >
                         Ảnh QR Code Ngân Hàng:
                     </Typography>
                     <input

@@ -4,6 +4,7 @@ import { User } from "../../../interface/User";
 import { useAuth } from "../../../context/AuthContext";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { Pagination } from "@mui/material";
 
 const StafList = () => {
     const [user, setUser] = useState<User[]>([]); // Danh sách người dùng
@@ -17,6 +18,14 @@ const StafList = () => {
     const [showRoleFilter, setShowRoleFilter] = useState(false); // Trạng thái hiển thị bộ lọc vai trò
     const [filterRole, setFilterRole] = useState<string>(""); // Bộ lọc vai trò
     // const [showInactive, setShowInactive] = useState(false);
+    const productsPerPage = 9;
+    const [currentPage, setCurrentPage] = useState(1);
+    const handlePageChange = (
+        event: React.ChangeEvent<unknown>,
+        value: number
+    ) => {
+        setCurrentPage(value);
+    };
     useEffect(() => {
         (async () => {
             const { data } = await instance.get("/user");
@@ -306,24 +315,31 @@ const StafList = () => {
                             </thead>
                             <tbody>
                                 {filteredUsers.length > 0 ? (
-                                    filteredUsers.map((item) => (
-                                        <tr key={item._id}>
-                                            <td className="text-center">
-                                                {item.username}
-                                            </td>
-                                            <td className="text-center">
-                                                {item.email}
-                                            </td>
-                                            <td className="text-center">
-                                                {item.role}
-                                            </td>
-                                            {level === "boss" && (
-                                                <td>
-                                                    <div
-                                                        className="d-flex justify-content-center"
-                                                        style={{ gap: "10px" }}
-                                                    >
-                                                        {/* <button
+                                    filteredUsers
+                                        .slice(
+                                            (currentPage - 1) * productsPerPage,
+                                            currentPage * productsPerPage
+                                        )
+                                        .map((item) => (
+                                            <tr key={item._id}>
+                                                <td className="text-center">
+                                                    {item.username}
+                                                </td>
+                                                <td className="text-center">
+                                                    {item.email}
+                                                </td>
+                                                <td className="text-center">
+                                                    {item.role}
+                                                </td>
+                                                {level === "boss" && (
+                                                    <td>
+                                                        <div
+                                                            className="d-flex justify-content-center"
+                                                            style={{
+                                                                gap: "10px",
+                                                            }}
+                                                        >
+                                                            {/* <button
                               className="me-3"
                               onClick={() =>
                                 handleDelete(item._id?.toString() ?? "")
@@ -341,82 +357,82 @@ const StafList = () => {
                               <i className="fa-solid fa-trash"></i>
                             </button> */}
 
-                                                        <button
-                                                            onClick={() =>
-                                                                handleEditClick(
-                                                                    item
-                                                                )
-                                                            }
-                                                            style={{
-                                                                borderRadius:
-                                                                    "5px",
-                                                                width: "70px",
-                                                                height: "30px",
-                                                                backgroundColor:
-                                                                    "red",
-                                                                color: "white",
-                                                                border: "none",
-                                                            }}
-                                                        >
-                                                            Cập nhật
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            )}
+                                                            <button
+                                                                onClick={() =>
+                                                                    handleEditClick(
+                                                                        item
+                                                                    )
+                                                                }
+                                                                style={{
+                                                                    borderRadius:
+                                                                        "5px",
+                                                                    width: "70px",
+                                                                    height: "30px",
+                                                                    backgroundColor:
+                                                                        "red",
+                                                                    color: "white",
+                                                                    border: "none",
+                                                                }}
+                                                            >
+                                                                Cập nhật
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                )}
 
-                                            <td className="d-flex justify-content-center">
-                                                <button
-                                                    className="Button_admin "
-                                                    onClick={() =>
-                                                        toggleActiveStatus(
-                                                            item._id?.toString() ??
-                                                                "",
-                                                            item.isActive ??
-                                                                false
-                                                        )
-                                                    }
-                                                    style={{
-                                                        borderRadius: "5px",
-                                                        width: "90px",
-                                                        height: "30px",
-                                                        backgroundColor:
-                                                            item.isActive
-                                                                ? "green"
-                                                                : "gray",
-                                                        color: "white",
-                                                        border: "none",
-                                                    }}
-                                                >
-                                                    {item.isActive
-                                                        ? "Khóa Tài Khoản"
-                                                        : "Kích Hoạt"}
-                                                </button>
-                                            </td>
-                                            {level === "boss" && (
-                                                <td className="text-center">
-                                                    <Link
-                                                        to={`/admin/user/permission/${item._id}`}
+                                                <td className="d-flex justify-content-center">
+                                                    <button
+                                                        className="Button_admin "
+                                                        onClick={() =>
+                                                            toggleActiveStatus(
+                                                                item._id?.toString() ??
+                                                                    "",
+                                                                item.isActive ??
+                                                                    false
+                                                            )
+                                                        }
+                                                        style={{
+                                                            borderRadius: "5px",
+                                                            width: "90px",
+                                                            height: "30px",
+                                                            backgroundColor:
+                                                                item.isActive
+                                                                    ? "green"
+                                                                    : "gray",
+                                                            color: "white",
+                                                            border: "none",
+                                                        }}
                                                     >
-                                                        <button
-                                                            className="Button_admin"
-                                                            style={{
-                                                                borderRadius:
-                                                                    "5px",
-                                                                width: "70px",
-                                                                height: "30px",
-                                                                backgroundColor:
-                                                                    "red",
-                                                                color: "white",
-                                                                border: "none",
-                                                            }}
-                                                        >
-                                                            Quyền
-                                                        </button>
-                                                    </Link>
+                                                        {item.isActive
+                                                            ? "Khóa Tài Khoản"
+                                                            : "Kích Hoạt"}
+                                                    </button>
                                                 </td>
-                                            )}
-                                        </tr>
-                                    ))
+                                                {level === "boss" && (
+                                                    <td className="text-center">
+                                                        <Link
+                                                            to={`/admin/user/permission/${item._id}`}
+                                                        >
+                                                            <button
+                                                                className="Button_admin"
+                                                                style={{
+                                                                    borderRadius:
+                                                                        "5px",
+                                                                    width: "70px",
+                                                                    height: "30px",
+                                                                    backgroundColor:
+                                                                        "red",
+                                                                    color: "white",
+                                                                    border: "none",
+                                                                }}
+                                                            >
+                                                                Quyền
+                                                            </button>
+                                                        </Link>
+                                                    </td>
+                                                )}
+                                            </tr>
+                                        ))
                                 ) : (
                                     <tr>
                                         <td colSpan={4} className="text-center">
@@ -426,6 +442,15 @@ const StafList = () => {
                                 )}
                             </tbody>
                         </table>
+                        <Pagination
+                            count={Math.ceil(
+                                filteredUsers.length / productsPerPage
+                            )}
+                            page={currentPage}
+                            onChange={handlePageChange}
+                            color="primary"
+                            className="d-flex justify-content-center mt-4"
+                        />
                     </div>
                 </div>
             </div>
