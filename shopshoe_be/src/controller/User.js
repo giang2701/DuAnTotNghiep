@@ -81,3 +81,20 @@ export const updateUserStatus = async (req, res, next) => {
         next(error);
     }
 };
+export const updateUserAddress = async (req, res, next) => {
+    try {
+        // const { phone, address, city, district, ward } = req.body;
+        const data = await User.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+        });
+        if (data) {
+            return res.status(200).json({
+                message: "Cap nhat dia chi thanh cong",
+                success: true,
+                data,
+            });
+        }
+    } catch (error) {
+        next(error);
+    }
+};

@@ -187,7 +187,10 @@ const FlashSaleSection = () => {
                         </div>
                     </div>
                 ) : (
-                    <div className="no-flashsale text-center mt-8">
+                    <div
+                        className="no-flashsale text-center "
+                        style={{ marginBottom: "100px", marginTop: "52px" }}
+                    >
                         Chương trình Flash Sale chưa có, xin vui lòng đợi chương
                         trình mới.
                     </div>

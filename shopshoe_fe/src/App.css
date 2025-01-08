@@ -1374,7 +1374,7 @@ ul li:hover {
 }
 
 .title__products__company {
-    font-family: "Roboto", serif;   
+    font-family: "Roboto", serif;
     font-size: 4rem;
     text-transform: uppercase;
     font-weight: 400;
@@ -7288,4 +7288,23 @@ input.form-control {
     padding: 8px;
     border: 1px solid #ddd;
     text-align: left;
+}
+.overlay_userAddress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+.box_userAddress {
+    position: fixed;
+    top: 10%;
+    left: 35%;
+    width: 500px;
+    height: 570px;
+    background-color: white;
+    z-index: 999;
+    padding: 20px 20px;
 }
