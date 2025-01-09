@@ -233,8 +233,17 @@ export const FlashSaleProvider = ({
             }
 
             await GetAllFlashSale();
-        } catch (error) {
-            toast.error("Không thể xóa");
+        } catch (error: any) {
+            const errorMessage =
+                error.response?.data?.message ||
+                "Đã xảy ra lỗi, vui lòng thử lại sau.";
+            console.log(error);
+
+            Swal.fire({
+                icon: "error",
+                title: "Có lỗi xảy ra",
+                text: errorMessage,
+            });
         }
     };
 
@@ -259,7 +268,7 @@ export const FlashSaleProvider = ({
             GetAllFlashSale();
         } catch (error: any) {
             const errorMessage =
-                error.response?.data?.errors ||
+                error.response?.data?.message ||
                 "Đã xảy ra lỗi, vui lòng thử lại sau.";
             console.log(error);
 

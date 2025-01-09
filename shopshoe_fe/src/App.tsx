@@ -227,7 +227,16 @@ function App() {
                             />
                             <Route
                                 path="/admin/flashSaleAdd"
-                                element={<CreateFlashSale />}
+                                // element={<CreateFlashSale />}
+                                element={
+                                    mappedPermissions.includes(
+                                        "add-flaseSale"
+                                    ) ? (
+                                        <CreateFlashSale />
+                                    ) : (
+                                        <Authorization403 />
+                                    )
+                                }
                             />
                             {/* <Route path="/admin/flashSaleUpdate/:id" element={<UpdateFlashSale />} /> */}
                             <Route

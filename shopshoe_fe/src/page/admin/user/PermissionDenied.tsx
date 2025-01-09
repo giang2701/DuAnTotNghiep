@@ -229,6 +229,15 @@ const PermissionDenied = () => {
                                             null, // giảm giá ko có
                                         ],
                                     },
+                                    {
+                                        name: "Quản Lý Flase Sale",
+                                        ids: [
+                                            "677f81d9ac32220dadc16d01", // Thêm
+                                            null, // Sửa
+                                            "677f8237ac32220dadc16d05", // Xóa
+                                            null, // giảm giá ko có
+                                        ],
+                                    },
                                 ].map((permission) => (
                                     <tr key={permission.name}>
                                         <td>{permission.name}</td>
