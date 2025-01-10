@@ -98,14 +98,14 @@ function App() {
                             {user?.phone ? (
                                 <>
                                     <Route
-                                        path="/checkOutNow"
+                                        path="/checkOut"
                                         element={<OrderAddress />}
                                     />
                                 </>
                             ) : (
                                 <>
                                     <Route
-                                        path="/checkOutNow"
+                                        path="/checkOut"
                                         element={<Checkout />}
                                     />
                                 </>
