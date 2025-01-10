@@ -58,9 +58,11 @@ import StafList from "./page/admin/user/StafList.tsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import ForgotPassword from "./page/Auth/ForgotPassword.tsx";
 import ResetPassword from "./page/Auth/ResetPassword.tsx";
+import CheckoutNowAddress from "./page/Cart/OrderNowAddress.tsx";
+import OrderAddress from "./page/Cart/OrderAddress.tsx";
 
 function App() {
-    const { mappedPermissions } = useAuth();
+    const { mappedPermissions, user } = useAuth();
     return (
         <>
             <GoogleOAuthProvider clientId="455804605476-ede0gpnf2dmd5hktk9hq0hjii0c4ebsn.apps.googleusercontent.com">
@@ -93,11 +95,37 @@ function App() {
                             />
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
-                            <Route path="/checkOut" element={<Checkout />} />
-                            <Route
-                                path="/checkOutNow"
-                                element={<CheckoutNow />}
-                            />
+                            {user?.phone ? (
+                                <>
+                                    <Route
+                                        path="/checkOutNow"
+                                        element={<OrderAddress />}
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <Route
+                                        path="/checkOutNow"
+                                        element={<Checkout />}
+                                    />
+                                </>
+                            )}
+                            {user?.phone ? (
+                                <>
+                                    <Route
+                                        path="/checkOutNow"
+                                        element={<CheckoutNowAddress />}
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <Route
+                                        path="/checkOutNow"
+                                        element={<CheckoutNow />}
+                                    />
+                                </>
+                            )}
+
                             <Route
                                 path="/paymentSuccess"
                                 element={<PaymentSuccessPage />}
