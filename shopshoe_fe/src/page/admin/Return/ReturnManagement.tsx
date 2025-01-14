@@ -11,6 +11,7 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions,
+    TextField,
     Pagination,
 } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
@@ -31,6 +32,7 @@ interface ReturnRequest {
     images: string[];
     videos: string[];
     createdAt: string;
+    rejectionReason?: string; // Thêm trường rejectionReason
 }
 
 interface ReturnManagementProps {
@@ -50,6 +52,9 @@ const ReturnManagement: React.FC<ReturnManagementProps> = ({
     );
     const [currentPage, setCurrentPage] = useState(1); // State cho trang hiện tại
     const returnsPerPage = 15; // Số lượng returns trên mỗi trang
+
+    const [rejectionReason, setRejectionReason] = useState<string>(""); // State cho lý do từ chối
+    const [openRejectionDialog, setOpenRejectionDialog] = useState(false); // State cho dialog từ chối
 
     const fetchReturns = async () => {
         try {
@@ -77,10 +82,14 @@ const ReturnManagement: React.FC<ReturnManagementProps> = ({
     const updateReturnStatus = async (
         id: string,
         status: string,
-        orderId: string
+        orderId: string,
+        rejectionReason?: string // Thêm rejectionReason
     ) => {
         try {
-            await instance.patch(`/returns/${id}/status`, { status });
+            await instance.patch(`/returns/${id}/status`, {
+                status,
+                rejectionReason,
+            });
             toast.success(`Trạng thái đã được cập nhật: ${status}.`);
             await fetchReturns();
             if (status === "Đang hoàn tiền") {
@@ -93,6 +102,24 @@ const ReturnManagement: React.FC<ReturnManagementProps> = ({
             }
         } catch (error) {
             toast.error("Lỗi khi cập nhật trạng thái yêu cầu.");
+        }
+    };
+
+    const handleReject = (returnRequest: ReturnRequest) => {
+        setSelectedReturn(returnRequest);
+        setOpenRejectionDialog(true);
+    };
+
+    const handleConfirmRejection = () => {
+        if (selectedReturn) {
+            updateReturnStatus(
+                selectedReturn._id,
+                "Bị từ chối",
+                selectedReturn.orderId._id,
+                rejectionReason
+            );
+            setOpenRejectionDialog(false);
+            setRejectionReason("");
         }
     };
 
@@ -242,7 +269,7 @@ const ReturnManagement: React.FC<ReturnManagementProps> = ({
                                 currentReturns.map((item, index) => (
                                     <tr key={item._id}>
                                         <td>{index + 1}</td>
-                                        <td>{item.orderId?._id}</td>
+                                        <td>{item.orderId._id}</td>
                                         <td>
                                             {new Date(
                                                 item.createdAt
@@ -277,44 +304,6 @@ const ReturnManagement: React.FC<ReturnManagementProps> = ({
                                             >
                                                 <VisibilityIcon />
                                             </IconButton>
-                                            {/* <IconButton
-                                                color="error"
-                                                onClick={() => {
-                                                    Swal.fire({
-                                                        title: "Xác nhận xóa?",
-                                                        text: "Bạn có chắc chắn muốn xóa yêu cầu hoàn trả này?",
-                                                        icon: "warning",
-                                                        showCancelButton: true,
-                                                        confirmButtonColor:
-                                                            "#d33",
-                                                        cancelButtonColor:
-                                                            "#3085d6",
-                                                        confirmButtonText:
-                                                            "Xóa",
-                                                    }).then((result) => {
-                                                        if (
-                                                            result.isConfirmed
-                                                        ) {
-                                                            deleteReturn(
-                                                                item._id
-                                                            );
-                                                        }
-                                                    });
-                                                }}
-                                                style={{
-                                                    borderRadius: "5px",
-                                                    width: "30px",
-                                                    height: "30px",
-                                                    color: "white",
-                                                    backgroundColor: "black",
-                                                    border: "none",
-                                                    padding: "0",
-                                                }}
-                                            >
-                                                <DeleteIcon
-                                                    style={{ fontSize: "16px" }}
-                                                />
-                                            </IconButton> */}
                                             <Button
                                                 variant="contained"
                                                 color="success"
@@ -336,11 +325,7 @@ const ReturnManagement: React.FC<ReturnManagementProps> = ({
                                                 variant="contained"
                                                 color="error"
                                                 onClick={() =>
-                                                    updateReturnStatus(
-                                                        item._id,
-                                                        "Bị từ chối",
-                                                        item.orderId._id
-                                                    )
+                                                    handleReject(item)
                                                 }
                                                 disabled={
                                                     item.status !==
@@ -438,6 +423,39 @@ const ReturnManagement: React.FC<ReturnManagementProps> = ({
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseDialog}>Đóng</Button>
+                </DialogActions>
+            </Dialog>
+
+            {/* Dialog to input rejection reason */}
+            <Dialog
+                open={openRejectionDialog}
+                onClose={() => setOpenRejectionDialog(false)}
+                maxWidth="sm"
+                fullWidth
+            >
+                <DialogTitle>Lý Do Từ Chối</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="rejectionReason"
+                        label="Lý Do Từ Chối"
+                        type="text"
+                        fullWidth
+                        variant="outlined"
+                        multiline
+                        rows={4}
+                        value={rejectionReason}
+                        onChange={(e) => setRejectionReason(e.target.value)}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenRejectionDialog(false)}>
+                        Hủy
+                    </Button>
+                    <Button onClick={handleConfirmRejection} color="primary">
+                        Xác nhận
+                    </Button>
                 </DialogActions>
             </Dialog>
         </Box>

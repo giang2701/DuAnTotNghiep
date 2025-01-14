@@ -645,8 +645,11 @@ const HistoryOrders = () => {
                                                     onClick={() => {
                                                         Swal.fire({
                                                             icon: "info",
-                                                            title: "Thông báo",
-                                                            text: "Đơn hàng hoàn trả của bạn không đủ điều kiện để hoàn trả. Vui lòng liên hệ với cửa hàng để biết thêm chi tiết.",
+                                                            title: "Lý do từ chối",
+                                                            text:
+                                                                item.return
+                                                                    .rejectionReason ||
+                                                                "Không có lý do từ chối.",
                                                         });
                                                     }}
                                                 >

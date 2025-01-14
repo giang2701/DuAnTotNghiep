@@ -126,7 +126,7 @@ export const getAllReturns = async (req, res) => {
 export const updateReturnStatus = async (req, res) => {
     try {
         const { id } = req.params;
-        const { status } = req.body;
+        const { status, rejectionReason } = req.body;
 
         const validStatuses = [
             "Đã được phê duyệt",
@@ -142,7 +142,7 @@ export const updateReturnStatus = async (req, res) => {
 
         const updatedReturn = await Return.findByIdAndUpdate(
             id,
-            { status },
+            { status, rejectionReason },
             { new: true }
         );
         if (!updatedReturn) {
