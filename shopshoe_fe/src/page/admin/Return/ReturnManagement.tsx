@@ -242,7 +242,7 @@ const ReturnManagement: React.FC<ReturnManagementProps> = ({
                                 currentReturns.map((item, index) => (
                                     <tr key={item._id}>
                                         <td>{index + 1}</td>
-                                        <td>{item.orderId._id}</td>
+                                        <td>{item.orderId?._id}</td>
                                         <td>
                                             {new Date(
                                                 item.createdAt

@@ -71,22 +71,50 @@ const BrandProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
     const handleBrand = async (brand: Brand) => {
+        const { _id, title } = brand;
+        const payload: any = { title };
         try {
-            // Tạo một bản sao của brand và xóa các thuộc tính không cần thiết
-            const { _id, title } = brand;
-            const payload: any = { title };
-
-            if (_id) {
-                await instance.put(`/brand/${_id}`, payload);
-                toast.success("Cập nhật thành công");
-
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: "custom-confirm-button",
+                    cancelButton: "custom-cancel-button",
+                },
+                buttonsStyling: false,
+            });
+    
+            const result = await swalWithBootstrapButtons.fire({
+                title: "Bạn có chắc chắn?",
+                text: _id
+                    ? "Bạn có chắc muốn cập nhật thương hiệu này?"
+                    : "Bạn có chắc muốn thêm thương hiệu này?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Có, tiếp tục!",
+                cancelButtonText: "Không, hủy bỏ!",
+                reverseButtons: true,
+            });
+    
+            if (result.isConfirmed) {
+                // Tạo một bản sao của brand và xóa các thuộc tính không cần thiết
+           
+    
+                if (_id) {
+                    await instance.put(`/brand/${_id}`, payload);
+                    toast.success("Cập nhật thành công");
+                } else {
+                    await instance.post(`/brand`, payload);
+                    toast.success("Thêm thành công");
+                }
+    
                 getAllBrand();
-            } else {
-                await instance.post(`/brand`, payload);
-                toast.success("Thêm thành công");
-                getAllBrand();
+                nav("/admin/brand");
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                swalWithBootstrapButtons.fire({
+                    title: "Đã hủy",
+                    text: "Thao tác đã được hủy bỏ.",
+                    icon: "error",
+                });
             }
-            nav("/admin/brand");
         } catch (error: any) {
             const errorMessage =
                 error.response?.data?.message ||
@@ -100,6 +128,7 @@ const BrandProvider = ({ children }: { children: React.ReactNode }) => {
             });
         }
     };
+    
 
     return (
         <BrandContext.Provider

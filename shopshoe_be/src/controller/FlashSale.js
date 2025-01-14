@@ -2,6 +2,88 @@ import FlashSale from "../model/FlashSale.js";
 import moment from "moment-timezone";
 import Products from "../model/Products.js";
 
+// export const createFlashSale = async (req, res, next) => {
+//     try {
+//         const { title, discountPercent, startDate, endDate, type } = req.body;
+//         console.log(req.body);
+
+//         // Lấy ngày hiện tại theo múi giờ Việt Nam
+//         const currentDate = moment.tz("Ho_Chi_Minh").startOf("day");
+
+
+//         // Kiểm tra các Flash Sale đang hoạt động
+//         const activeFlashSales = await FlashSale.find({
+//             $or: [
+//                 { endDate: { $gte: new Date() } }, // Flash Sale chưa hết hạn
+//                 { isActive: true } // Flash Sale đang hoạt động
+//             ]
+//         });
+
+//         if (activeFlashSales.length > 0) {
+//             return res.status(400).json({
+//                 message: "Không thể tạo Flash Sale mới. Vui lòng đợi Flash Sale hiện tại hết hạn hoặc bị xóa.",
+//                 success: false,
+//             });
+//         }
+
+//         // Kiểm tra và chuyển đổi ngày bắt đầu
+//         let StartDate;
+//         if (startDate) {
+//             StartDate = moment.tz(startDate, ["DD/MM/YYYY", "YYYY-MM-DDTHH:mm"], "Ho_Chi_Minh");
+//             if (!StartDate.isValid()) {
+//                 return res.status(400).json({
+//                     message: "Ngày bắt đầu không hợp lệ. Định dạng hợp lệ là DD/MM/YYYY hoặc YYYY-MM-DDTHH:mm.",
+//                 });
+//             }
+//             if (StartDate.isBefore(currentDate)) {
+//                 return res.status(400).json({
+//                     message: "Ngày bắt đầu không được nhỏ hơn ngày hiện tại.",
+//                 });
+//             }
+//             StartDate = StartDate.toDate();
+//         }
+
+
+//         // Kiểm tra và chuyển đổi ngày kết thúc
+//         let EndDate;
+//         if (endDate) {
+//             EndDate = moment.tz(endDate, ["DD/MM/YYYY", "YYYY-MM-DDTHH:mm"], "Ho_Chi_Minh");
+//             if (!EndDate.isValid()) {
+//                 return res.status(400).json({
+//                     message: "Ngày kết thúc không hợp lệ. Định dạng hợp lệ là DD/MM/YYYY hoặc YYYY-MM-DDTHH:mm.",
+//                 });
+//             }
+//             EndDate = EndDate.toDate();
+//         }
+
+//         // Kiểm tra ngày bắt đầu phải nhỏ hơn ngày kết thúc
+//         if (StartDate && EndDate && StartDate > EndDate) {
+//             return res.status(400).json({
+//                 message: "Ngày bắt đầu phải trước ngày kết thúc.",
+//             });
+//         }
+
+//         // Tạo mới flash sale
+//         const flashSale = new FlashSale({
+//             title,
+//             discountPercent,
+//             startDate: StartDate,
+//             endDate: EndDate,
+//             type,
+//         });
+
+//         // Lưu vào cơ sở dữ liệu
+//         const savedFlashSale = await flashSale.save();
+//         res.status(201).json({
+//             message: "Tạo FlashSale thành công.",
+//             success: true,
+//             data: savedFlashSale,
+//         });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+
 export const createFlashSale = async (req, res, next) => {
     try {
         const { title, discountPercent, startDate, endDate, type } = req.body;
@@ -9,22 +91,6 @@ export const createFlashSale = async (req, res, next) => {
 
         // Lấy ngày hiện tại theo múi giờ Việt Nam
         const currentDate = moment.tz("Ho_Chi_Minh").startOf("day");
-
-
-        // Kiểm tra các Flash Sale đang hoạt động
-        const activeFlashSales = await FlashSale.find({
-            $or: [
-                { endDate: { $gte: new Date() } }, // Flash Sale chưa hết hạn
-                { isActive: true } // Flash Sale đang hoạt động
-            ]
-        });
-
-        if (activeFlashSales.length > 0) {
-            return res.status(400).json({
-                message: "Không thể tạo Flash Sale mới. Vui lòng đợi Flash Sale hiện tại hết hạn hoặc bị xóa.",
-                success: false,
-            });
-        }
 
         // Kiểm tra và chuyển đổi ngày bắt đầu
         let StartDate;
@@ -42,7 +108,6 @@ export const createFlashSale = async (req, res, next) => {
             }
             StartDate = StartDate.toDate();
         }
-
 
         // Kiểm tra và chuyển đổi ngày kết thúc
         let EndDate;
@@ -63,6 +128,19 @@ export const createFlashSale = async (req, res, next) => {
             });
         }
 
+        // Kiểm tra Flash Sale trùng khoảng thời gian
+        const overlappingFlashSales = await FlashSale.find({
+            $or: [
+                { startDate: { $lte: EndDate }, endDate: { $gte: StartDate } },
+            ],
+        });
+
+        if (overlappingFlashSales.length > 0) {
+            return res.status(400).json({
+                message: "Không thể tạo Flash Sale. Có Flash Sale khác đang hoạt động trong khoảng thời gian này.",
+            });
+        }
+
         // Tạo mới flash sale
         const flashSale = new FlashSale({
             title,
@@ -75,7 +153,7 @@ export const createFlashSale = async (req, res, next) => {
         // Lưu vào cơ sở dữ liệu
         const savedFlashSale = await flashSale.save();
         res.status(201).json({
-            message: "Tạo FlashSale thành công.",
+            message: "Tạo Flash Sale thành công.",
             success: true,
             data: savedFlashSale,
         });
@@ -83,7 +161,6 @@ export const createFlashSale = async (req, res, next) => {
         next(error);
     }
 };
-
 export const getAllFlashSales = async (req, res, next) => {
     try {
         // Lấy tất cả Flash Sale

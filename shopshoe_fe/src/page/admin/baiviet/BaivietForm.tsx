@@ -82,6 +82,31 @@ const BaivietForm = () => {
     };
 
     const handleSubmitForm = async (data: any) => {
+        if (!description.trim()) {
+            Swal.fire({
+                icon: "error",
+                title: "Lỗi",
+                text: "Nội dung bài viết không được để trống.",
+            });
+            return;
+        }
+    
+        // Hiển thị hộp thoại xác nhận
+        const result = await Swal.fire({
+            title: id ? "Xác nhận cập nhật" : "Xác nhận tạo mới",
+            text: id
+                ? "Bạn có chắc chắn muốn cập nhật bài viết này?"
+                : "Bạn có chắc chắn muốn tạo mới bài viết?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: id ? "Cập nhật" : "Tạo mới",
+            cancelButtonText: "Hủy",
+        });
+    
+        if (!result.isConfirmed) {
+            return; // Người dùng hủy xác nhận
+        }
+    
         try {
             setLoading(true);
             const payload = { ...data, content: description };
@@ -90,7 +115,6 @@ const BaivietForm = () => {
                 Swal.fire("Thành công", "Bài viết đã được cập nhật", "success");
             } else {
                 await instance.post("baiviet/", payload);
-
                 Swal.fire("Thành công", "Bài viết mới đã được tạo", "success");
             }
             navigate("/admin/baiviet");
@@ -101,12 +125,13 @@ const BaivietForm = () => {
             Swal.fire({
                 icon: "error",
                 title: "Có lỗi xảy ra",
-                text: errorMessage, // Hiển thị nội dung của message
+                text: errorMessage,
             });
         } finally {
             setLoading(false);
         }
     };
+    
 
     if (loading) return <p>Đang tải...</p>;
 

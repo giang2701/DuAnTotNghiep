@@ -234,6 +234,42 @@ const Checkout = () => {
     const handleChange = (value: string) => {
         setSelectedValue(value);
     };
+    // const handleApplyVoucher = async (voucher: Voucher) => {
+    //     console.log(`Đã áp dụng voucher: ${voucher.name}`);
+    //     try {
+    //         const response = await instance.post("/voucher/verify", {
+    //             code: voucher.code,
+    //         });
+    //         console.log(response.data);
+
+    //         const { discount, type } = response.data;
+
+    //         if (type === "percent") {
+    //             setDiscount(discount); // Giảm giá theo %
+    //             setDiscountAmount(0); // Không áp dụng giảm giá theo số tiền
+    //             setFinalTotal(totalPrice - (totalPrice * discount) / 100);
+    //         } else if (type === "fixed") {
+    //             setDiscountAmount(discount); // Giảm giá theo số tiền
+    //             setDiscount(0); // Không áp dụng giảm giá theo %
+    //             setFinalTotal(totalPrice - discount);
+    //         }
+
+    //         setMessage("Áp dụng mã giảm giá thành công!");
+    //     } catch (error) {
+    //         const errorResponse = error as AxiosError<{ message: string }>;
+    //         setMessage(
+    //             errorResponse.response?.data?.message ||
+    //                 "Có lỗi xảy ra. Vui lòng thử lại!"
+    //         );
+    //         setDiscount(0);
+    //         setDiscountAmount(0);
+    //         setFinalTotal(totalPrice);
+    //     }
+    // };
+   
+    const [discountAmountText, setDiscountAmountText] = useState(0);
+    console.log("discountAmountText", discountAmountText);
+
     const handleApplyVoucher = async (voucher: Voucher) => {
         console.log(`Đã áp dụng voucher: ${voucher.name}`);
         try {
@@ -248,10 +284,14 @@ const Checkout = () => {
                 setDiscount(discount); // Giảm giá theo %
                 setDiscountAmount(0); // Không áp dụng giảm giá theo số tiền
                 setFinalTotal(totalPrice - (totalPrice * discount) / 100);
+                setDiscountAmountText(
+                    `${formatPrice((totalPrice * discount) / 100)}`
+                );
             } else if (type === "fixed") {
                 setDiscountAmount(discount); // Giảm giá theo số tiền
                 setDiscount(0); // Không áp dụng giảm giá theo %
                 setFinalTotal(totalPrice - discount);
+                setDiscountAmountText(`${formatPrice(discount)}`);
             }
 
             setMessage("Áp dụng mã giảm giá thành công!");
@@ -266,6 +306,7 @@ const Checkout = () => {
             setFinalTotal(totalPrice);
         }
     };
+
     const handleQueryPaymentStatus = async (orderId: any) => {
         try {
             const response = await axios.post(
@@ -724,14 +765,14 @@ const Checkout = () => {
                                     mb={1}
                                     sx={{ fontWeight: "bold" }}
                                 >
-                                    Tiền thanh toán
+                                   Voucher
                                 </Typography>
                                 <Typography
                                     variant="h5"
                                     color="red"
                                     sx={{ fontWeight: "bold" }}
                                 >
-                                    {formatPrice(finalTotal)}
+                                    {discountAmountText}
                                 </Typography>
                             </Grid>
                         </Box>
@@ -1367,9 +1408,8 @@ const Checkout = () => {
                 >
                     {vouchers.map((voucher) => {
                         // Kiểm tra nếu voucher đã hết hạn
-                        const isExpired = moment(voucher.expiryDate).isBefore(
-                            moment()
-                        );
+                        const isExpired = moment(voucher.expiryDate).startOf("day").isBefore(moment().startOf("day"));
+
                         const isBelowMinPrice = totalPrice < voucher.minPrice;
                         return (
                             <div

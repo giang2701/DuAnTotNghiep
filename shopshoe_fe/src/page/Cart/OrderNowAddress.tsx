@@ -278,6 +278,42 @@ const CheckoutNow = () => {
     const handleChange = (value: string) => {
         setSelectedValue(value);
     };
+    // const handleApplyVoucher = async (voucher: Voucher) => {
+    //     console.log(`Đã áp dụng voucher: ${voucher.name}`);
+    //     try {
+    //         const response = await instance.post("/voucher/verify", {
+    //             code: voucher.code,
+    //         });
+    //         console.log(response.data);
+
+    //         const { discount, type } = response.data;
+
+    //         if (type === "percent") {
+    //             setDiscount(discount); // Giảm giá theo %
+    //             setDiscountAmount(0); // Không áp dụng giảm giá theo số tiền
+    //             setFinalTotal(totalPriceNow - (totalPriceNow * discount) / 100);
+    //         } else if (type === "fixed") {
+    //             setDiscountAmount(discount); // Giảm giá theo số tiền
+    //             setDiscount(0); // Không áp dụng giảm giá theo %
+    //             setFinalTotal(totalPriceNow - discount);
+    //         }
+
+    //         setMessage("Áp dụng mã giảm giá thành công!");
+    //     } catch (error) {
+    //         const errorResponse = error as AxiosError<{ message: string }>;
+    //         setMessage(
+    //             errorResponse.response?.data?.message ||
+    //                 "Có lỗi xảy ra. Vui lòng thử lại!"
+    //         );
+    //         setDiscount(0);
+    //         setDiscountAmount(0);
+    //         setFinalTotal(totalPriceNow);
+    //     }
+    // };
+   
+    const [discountAmountText, setDiscountAmountText] = useState(0);
+    console.log("discountAmountText", discountAmountText);
+
     const handleApplyVoucher = async (voucher: Voucher) => {
         console.log(`Đã áp dụng voucher: ${voucher.name}`);
         try {
@@ -292,10 +328,14 @@ const CheckoutNow = () => {
                 setDiscount(discount); // Giảm giá theo %
                 setDiscountAmount(0); // Không áp dụng giảm giá theo số tiền
                 setFinalTotal(totalPriceNow - (totalPriceNow * discount) / 100);
+                setDiscountAmountText(
+                    `${formatPrice((totalPriceNow * discount) / 100)}`
+                );
             } else if (type === "fixed") {
                 setDiscountAmount(discount); // Giảm giá theo số tiền
                 setDiscount(0); // Không áp dụng giảm giá theo %
                 setFinalTotal(totalPriceNow - discount);
+                setDiscountAmountText(`${formatPrice(discount)}`);
             }
 
             setMessage("Áp dụng mã giảm giá thành công!");
@@ -937,14 +977,14 @@ const CheckoutNow = () => {
                                         mb={1}
                                         sx={{ fontWeight: "bold" }}
                                     >
-                                        Tiền thanh toán
+                                        Voucher
                                     </Typography>
                                     <Typography
                                         variant="h5"
                                         color="red"
                                         sx={{ fontWeight: "bold" }}
                                     >
-                                        {formatPrice(finalTotal)}
+                                        {discountAmountText}
                                     </Typography>
                                 </Grid>
                             </Box>
@@ -1570,11 +1610,12 @@ const CheckoutNow = () => {
                 >
                     {vouchers.map((voucher) => {
                         // Kiểm tra nếu voucher đã hết hạn
-                        const isExpired = moment(voucher.expiryDate).isBefore(
+                        const isExpired = moment(voucher.expiryDate).isSame(
                             moment()
                         );
+                        
                         const isBelowMinPrice =
-                            totalPriceNow < voucher.minPrice;
+                        totalPriceNow < voucher.minPrice;
                         return (
                             <div
                                 key={voucher._id}

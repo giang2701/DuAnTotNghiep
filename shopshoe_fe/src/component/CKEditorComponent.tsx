@@ -3,10 +3,9 @@ import { CKEditor, useCKEditorCloud } from "@ckeditor/ckeditor5-react";
 import "../App.css";
 
 const LICENSE_KEY =
-    "eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3MzY0NjcxOTksImp0aSI6ImU3NGQ4YzczLWMwMTYtNDA4Mi1iMDE2LTEyNTJlZGJmZjUzMiIsImxpY2Vuc2VkSG9zdHMiOlsiKi53ZWJjb250YWluZXIuaW8iLCIqLmpzaGVsbC5uZXQiLCIqLmNzcC5hcHAiLCJjZHBuLmlvIiwiMTI3LjAuMC4xIiwibG9jYWxob3N0IiwiMTkyLjE2OC4qLioiLCIxMC4qLiouKiIsIjE3Mi4qLiouKiIsIioudGVzdCIsIioubG9jYWxob3N0IiwiKi5sb2NhbCJdLCJkaXN0cmlidXRpb25DaGFubmVsIjpbImNsb3VkIiwiZHJ1cGFsIiwic2giXSwibGljZW5zZVR5cGUiOiJldmFsdWF0aW9uIiwidmMiOiIzOTJkYWQ5MyJ9.Ol3LiKG17tGUA_qqZJP4YtOpH21yu7Yvty0ADQ2Nok9qIBjZG7NufCELTGusEnrSkQMQnpYSmFEVY9ZZYMieJQ";
+'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3MzczMzExOTksImp0aSI6ImIyMmZlZjBmLTBhNGQtNDE5NC1hZjFjLWM0NmY3MDdhMjA2ZiIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6IjY0MjlmOGYyIn0.8t1ephX4Glfng-QxuqlzaUcgirSR1LS0ST54zr_qUHHl9YJDzhuUgbwxwptHtuvJlrZAwApREu_uRrGjvQq8yA'
 const CLOUD_SERVICES_TOKEN_URL =
-    "https://5uc0hddq1ox4.cke-cs.com/token/dev/9d92204d4edfc18bb3dd0feb4608bdf9d391682d1aae266dbdfc5220046a?limit=10";
-
+"https://_pfxy6r_kwk4.cke-cs.com/token/dev/8a5e2bc6e986b7fa34a1820b2820a27b59a52fe78e135b7933a64e7e3241?limit=10"
 export const CKEditorComponent = ({ value, onChange }: any) => {
     const editorContainerRef = useRef(null);
     const editorRef = useRef(null);
@@ -74,6 +73,7 @@ export const CKEditorComponent = ({ value, onChange }: any) => {
         return {
             ClassicEditor,
             editorConfig: {
+                // Các công cụ hiển thị trên thanh công cụ
                 toolbar: {
                     items: [
                         "heading",
@@ -97,6 +97,7 @@ export const CKEditorComponent = ({ value, onChange }: any) => {
                     ],
                     shouldNotGroupWhenFull: false,
                 },
+                // Danh sách các plugin được sử dụng
                 plugins: [
                     Autoformat,
                     AutoImage,
@@ -139,9 +140,11 @@ export const CKEditorComponent = ({ value, onChange }: any) => {
                     TodoList,
                     Underline,
                 ],
+                // Cấu hình URL kết nối cloud.
                 cloudServices: {
                     tokenUrl: CLOUD_SERVICES_TOKEN_URL,
                 },
+                // heading: Định dạng các tiêu đề (h1, h2, h3...).
                 heading: {
                     options: [
                         {
@@ -187,6 +190,7 @@ export const CKEditorComponent = ({ value, onChange }: any) => {
                         },
                     ],
                 },
+                // image: Công cụ chỉnh sửa ảnh,
                 image: {
                     toolbar: [
                         "toggleImageCaption",

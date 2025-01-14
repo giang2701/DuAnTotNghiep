@@ -212,7 +212,7 @@ const PermissionDenied = () => {
                                         ],
                                     },
                                     {
-                                        name: "Quản Lý Nhân Viên",
+                                        name: "Quản Lý Người Dùng",
                                         ids: [
                                             null, // Thêm không có
                                             "6767915fabc2de264978c17d", // Sửa

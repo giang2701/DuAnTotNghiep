@@ -84,23 +84,34 @@ export const CreateVoucher = async (req, res, next) => {
 export const verify = async (req, res, next) => {
     try {
         const { code } = req.body;
-        const coupon = await Voucher.findOne({ code, isActive: true });
+
+        // Tìm mã giảm giá và kiểm tra trạng thái
+        const coupon = await Voucher.findOne(
+            { code, isActive: true },
+            { expiryDate: 1, discount: 1, type: 1 }
+        );
 
         if (!coupon)
-            return res
-                .status(400)
-                .json({ message: "Mã giảm giá không hợp lệ!" });
-        if (new Date() > coupon.expiryDate)
+            return res.status(400).json({ message: "Mã giảm giá không hợp lệ!" });
+
+        // So sánh ngày hết hạn
+        const currentDate = moment().tz("Asia/Ho_Chi_Minh").startOf("day");
+        const expiryDate = moment(coupon.expiryDate).tz("Asia/Ho_Chi_Minh").startOf("day");
+
+        if (currentDate.isAfter(expiryDate))
             return res.status(400).json({ message: "Mã giảm giá đã hết hạn!" });
+
+        // Trả về dữ liệu nếu hợp lệ
         res.status(200).json({
             message: "Mã giảm giá hợp lệ!",
             discount: coupon.discount,
-            type: coupon.type, // Trả về loại giảm giá
+            type: coupon.type,
         });
     } catch (error) {
         next(error);
     }
 };
+
 export const updateVoucherStatus = async (req, res, next) => {
     try {
         const { id } = req.params;

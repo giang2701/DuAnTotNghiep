@@ -107,6 +107,9 @@ const FlashSaleSection = () => {
                         Hôm Nay
                     </h2>
                     <div className="timer-buttons flex items-center mt-3">
+                    <button className="bg-blue-700 text-white py-1 px-3 rounded mr-2">
+                            {timeLeft.days} Ngày
+                        </button>
                         <button className="bg-blue-700 text-white py-1 px-3 rounded mr-2">
                             {timeLeft.hours} Giờ
                         </button>

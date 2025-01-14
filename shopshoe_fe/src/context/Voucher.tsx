@@ -50,33 +50,33 @@ export const VoucherProvider = ({
             },
             buttonsStyling: false,
         });
-
+    
         try {
             const result = await swalWithBootstrapButtons.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
+                title: "Bạn có chắc chắn?",
+                text: "Bạn sẽ không thể hoàn tác điều này!",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: "Yes, delete it!",
-                cancelButtonText: "No, cancel!",
+                confirmButtonText: "Có, xóa nó!",
+                cancelButtonText: "Không, hủy bỏ!",
                 reverseButtons: true,
             });
-
+    
             if (result.isConfirmed) {
                 await instance.delete(`/voucher/${_id}`);
                 swalWithBootstrapButtons.fire({
-                    title: "Deleted!",
-                    text: "Your file has been deleted.",
+                    title: "Đã xóa!",
+                    text: "Voucher của bạn đã bị xóa.",
                     icon: "success",
                 });
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 swalWithBootstrapButtons.fire({
-                    title: "Cancelled",
-                    text: "Your file is safe :)",
+                    title: "Đã hủy",
+                    text: "Voucher của bạn vẫn an toàn :)",
                     icon: "error",
                 });
             }
-
+    
             await GetAllVoucher();
         } catch (error: any) {
             const errorMessage =
@@ -85,10 +85,11 @@ export const VoucherProvider = ({
             Swal.fire({
                 icon: "error",
                 title: "Có lỗi xảy ra",
-                text: errorMessage, // Hiển thị nội dung của message
+                text: errorMessage,
             });
         }
     };
+    
 
     const handleVoucher = async (voucher: Voucher) => {
         try {

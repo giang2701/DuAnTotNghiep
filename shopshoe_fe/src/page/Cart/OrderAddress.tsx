@@ -22,10 +22,12 @@ import { toast } from "react-toastify";
 import { useCart } from "../../context/cart";
 import instance from "../../api";
 import Swal from "sweetalert2";
-import moment from "moment";
+// import moment from "moment";
 import { Voucher } from "../../interface/Voucher";
 import { useForm } from "react-hook-form";
 import { User } from "../../interface/User";
+import moment from "moment-timezone";//+
+
 interface Province {
     code: string;
     name: string;
@@ -267,6 +269,66 @@ const OrderAddress = () => {
     const handleChange = (value: string) => {
         setSelectedValue(value);
     };
+    // const handleApplyVoucher = async (voucher: Voucher) => {
+    //     console.log(`Đã áp dụng voucher: ${voucher.name}`);
+    
+    //     let tempDiscount = 0; // Giảm giá tạm thời
+    //     let tempFinalTotal = totalPrice; // Tổng tiền tạm thời
+    
+    //     // Tạm tính giá trước khi gửi yêu cầu tới server
+    //     if (voucher.type === "percent") {
+    //         tempDiscount = (totalPrice * voucher.discount) / 100;
+    //         tempFinalTotal = totalPrice - tempDiscount;
+    //     } else if (voucher.type === "fixed") {
+    //         tempDiscount = voucher.discount;
+    //         tempFinalTotal = totalPrice - tempDiscount;
+    //     }
+    
+    //     // Hiển thị giá tạm thời
+    //     setMessage("Đang xác nhận mã giảm giá...");
+    //     setDiscount(voucher.type === "percent" ? voucher.discount : 0);
+    //     setDiscountAmount(voucher.type === "fixed" ? voucher.discount : 0);
+    //     setFinalTotal(tempFinalTotal);
+    
+    //     try {
+    //         // Gửi yêu cầu tới server
+    //         const response = await instance.post("/voucher/verify", {
+    //             code: voucher.code,
+    //         });
+    
+    //         console.log("server res", response.data);
+    
+    //         const { discount, type } = response.data;
+    
+    //         // Đồng bộ giá từ server
+    //         if (type === "percent") {
+    //             setDiscount(discount); // Giảm giá theo %
+    //             setDiscountAmount(0); // Không áp dụng giảm giá theo số tiền
+    //             setFinalTotal(totalPrice - (totalPrice * discount) / 100);
+    //         } else if (type === "fixed") {
+    //             setDiscountAmount(discount); // Giảm giá theo số tiền
+    //             setDiscount(0); // Không áp dụng giảm giá theo %
+    //             setFinalTotal(totalPrice - discount);
+    //         }
+    
+    //         setMessage("Áp dụng mã giảm giá thành công!");
+    //     } catch (error) {
+    //         const errorResponse = error as AxiosError<{ message: string }>;
+    
+    //         // Xử lý lỗi, khôi phục giá trị gốc
+    //         setMessage(
+    //             errorResponse.response?.data?.message ||
+    //                 "Có lỗi xảy ra. Vui lòng thử lại!"
+    //         );
+    //         setDiscount(0);
+    //         setDiscountAmount(0);
+    //         setFinalTotal(totalPrice);
+    //     }
+    // };
+    
+    const [discountAmountText, setDiscountAmountText] = useState(0);
+    console.log("discountAmountText", discountAmountText);
+
     const handleApplyVoucher = async (voucher: Voucher) => {
         console.log(`Đã áp dụng voucher: ${voucher.name}`);
         try {
@@ -281,10 +343,14 @@ const OrderAddress = () => {
                 setDiscount(discount); // Giảm giá theo %
                 setDiscountAmount(0); // Không áp dụng giảm giá theo số tiền
                 setFinalTotal(totalPrice - (totalPrice * discount) / 100);
+                setDiscountAmountText(
+                    `${formatPrice((totalPrice * discount) / 100)}`
+                );
             } else if (type === "fixed") {
                 setDiscountAmount(discount); // Giảm giá theo số tiền
                 setDiscount(0); // Không áp dụng giảm giá theo %
                 setFinalTotal(totalPrice - discount);
+                setDiscountAmountText(`${formatPrice(discount)}`);
             }
 
             setMessage("Áp dụng mã giảm giá thành công!");
@@ -299,6 +365,7 @@ const OrderAddress = () => {
             setFinalTotal(totalPrice);
         }
     };
+    
     const handleQueryPaymentStatus = async (orderId: any) => {
         try {
             const response = await axios.post(
@@ -774,14 +841,14 @@ const OrderAddress = () => {
                                         mb={1}
                                         sx={{ fontWeight: "bold" }}
                                     >
-                                        Tiền thanh toán
+                                       Voucher
                                     </Typography>
                                     <Typography
                                         variant="h5"
                                         color="red"
                                         sx={{ fontWeight: "bold" }}
                                     >
-                                        {formatPrice(finalTotal)}
+                                        {discountAmountText}
                                     </Typography>
                                 </Grid>
                             </Box>
@@ -1416,10 +1483,12 @@ const OrderAddress = () => {
                     }}
                 >
                     {vouchers.map((voucher) => {
+
                         // Kiểm tra nếu voucher đã hết hạn
-                        const isExpired = moment(voucher.expiryDate).isBefore(
-                            moment()
-                        );
+                        const isExpired = moment(voucher.expiryDate)
+                        .tz("Asia/Ho_Chi_Minh")
+                        .isBefore(moment().tz("Asia/Ho_Chi_Minh"), "day");
+                    
                         const isBelowMinPrice = totalPrice < voucher.minPrice;
                         return (
                             <div

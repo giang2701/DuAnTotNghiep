@@ -5,19 +5,40 @@ interface CountdownTimerProps {
 }
 
 const CountdownTimer: React.FC<CountdownTimerProps> = ({ endDate }) => {
+    // const calculateTimeLeft = () => {
+    //     const difference = new Date(endDate).getTime() - new Date().getTime();
+    //     let timeLeft = {
+    //         hours: 0,
+    //         minutes: 0,
+    //         seconds: 0,
+    //     };
+
+    //     if (difference > 0) {
+    //         timeLeft = {
+    //             hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+    //             minutes: Math.floor((difference / (1000 * 60)) % 60),
+    //             seconds: Math.floor((difference / 1000) % 60),
+    //         };
+    //     }
+
+    //     return timeLeft;
+    // };
     const calculateTimeLeft = () => {
         const difference = new Date(endDate).getTime() - new Date().getTime();
         let timeLeft = {
             hours: 0,
             minutes: 0,
             seconds: 0,
+            days: 0
         };
 
         if (difference > 0) {
             timeLeft = {
+                days: Math.floor(difference / (1000 * 60 * 60 * 24)),
                 hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
                 minutes: Math.floor((difference / (1000 * 60)) % 60),
                 seconds: Math.floor((difference / 1000) % 60),
+                
             };
         }
 
@@ -35,9 +56,11 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ endDate }) => {
     }, [endDate]);
 
     if (
+        timeLeft.days === 0 &&
         timeLeft.hours === 0 &&
         timeLeft.minutes === 0 &&
         timeLeft.seconds === 0
+
     ) {
         return <div>Flash Sale đã kết thúc!</div>;
     }
@@ -57,6 +80,18 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ endDate }) => {
         >
             <span>Kết thúc sau:</span>
             <div style={{ display: "flex", marginLeft: "5px" }}>
+            <div
+                    style={{
+                        padding: "0 5px",
+                        background: "white",
+                        color: "black",
+                        marginRight: "5px",
+                        borderRadius: "3px",
+                    }}
+                >
+                    {String(timeLeft.days).padStart(2, "0")}
+                </div>
+                :
                 <div
                     style={{
                         padding: "0 5px",

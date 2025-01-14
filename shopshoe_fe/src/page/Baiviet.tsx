@@ -14,25 +14,30 @@ const BaivietPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const { data } = await instance.get("/baiviet");
-        if (data.data && data.data.length > 0) {
-          const activeBaiviets = data.data.filter(
-            (item: Baiviet) => item.isActive === true
-          );
-          setBaivietList(activeBaiviets);
-        } else {
-          Swal.fire("Thông báo", "Không có bài viết nào", "info");
+        try {
+            const { data } = await instance.get("/baiviet");
+            if (data.data && data.data.length > 0) {
+                const activeBaiviets = data.data
+                    .filter((item: Baiviet) => item.isActive === true)
+                    .sort((a: Baiviet, b: Baiviet) => {
+                        const dateA = new Date(a.publishDate).getTime();
+                        const dateB = new Date(b.publishDate).getTime();
+                        return dateB - dateA; // Sắp xếp giảm dần theo ngày đăng
+                    });
+                setBaivietList(activeBaiviets);
+            } else {
+                Swal.fire("Thông báo", "Không có bài viết nào", "info");
+            }
+        } catch (error) {
+            Swal.fire("Lỗi", "Không thể tải bài viết", "error");
+        } finally {
+            setLoading(false);
         }
-      } catch (error) {
-        Swal.fire("Lỗi", "Không thể tải bài viết", "error");
-      } finally {
-        setLoading(false);
-      }
     };
 
     fetchData();
-  }, []);
+}, []);
+
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;

@@ -247,6 +247,60 @@ const CheckoutNow = () => {
     const handleChange = (value: string) => {
         setSelectedValue(value);
     };
+    // const handleApplyVoucher = async (voucher: Voucher) => {
+    //     console.log(`Đã áp dụng voucher: ${voucher.name}`);
+    //     let tempDiscount = 0; // Giảm giá tạm thời
+    //     let tempFinalTotal = totalPriceNow; // Tổng tiền tạm thờ
+    //     try {
+    //         // Tạm tính giá trước khi gửi yêu cầu tới server
+    //         if (voucher.type === "percent") {
+    //             tempDiscount = (totalPriceNow * voucher.discount) / 100;
+    //             tempFinalTotal = totalPriceNow - tempDiscount;
+    //         } else if (voucher.type === "fixed") {
+    //             tempDiscount = voucher.discount;
+    //             tempFinalTotal = totalPriceNow - tempDiscount;
+    //         }
+    
+    //         setFinalTotal(tempFinalTotal); // Hiển thị giá tạm thời
+    //         setMessage("Đang xác nhận mã giảm giá...");
+    
+    //         // Gửi yêu cầu tới server
+    //         const response = await instance.post("/voucher/verify", {
+    //             code: voucher.code,
+    //         });
+    //         console.log("server res", response.data);
+    
+    //         const { discount, type } = response.data;
+    
+    //         // Đồng bộ giá từ server
+    //         if (type === "percent") {
+    //             setDiscount(discount); // Giảm giá theo %
+    //             setDiscountAmount(0); // Không áp dụng giảm giá theo số tiền
+    //             setFinalTotal(totalPriceNow - (totalPriceNow * discount) / 100);
+    //         } else if (type === "fixed") {
+    //             setDiscountAmount(discount); // Giảm giá theo số tiền
+    //             setDiscount(0); // Không áp dụng giảm giá theo %
+    //             setFinalTotal(totalPriceNow - discount);
+    //         }
+    
+    //         setMessage("Áp dụng mã giảm giá thành công!");
+    //     } catch (error) {
+    //         const errorResponse = error as AxiosError<{ message: string }>;
+    
+    //         // Xử lý lỗi, khôi phục giá trị gốc
+    //         setMessage(
+    //             errorResponse.response?.data?.message ||
+    //                 "Có lỗi xảy ra. Vui lòng thử lại!"
+    //         );
+    //         setDiscount(0);
+    //         setDiscountAmount(0);
+    //         setFinalTotal(totalPriceNow);
+    //     }
+    // };
+   
+    const [discountAmountText, setDiscountAmountText] = useState(0);
+    console.log("discountAmountText", discountAmountText);
+
     const handleApplyVoucher = async (voucher: Voucher) => {
         console.log(`Đã áp dụng voucher: ${voucher.name}`);
         try {
@@ -261,10 +315,14 @@ const CheckoutNow = () => {
                 setDiscount(discount); // Giảm giá theo %
                 setDiscountAmount(0); // Không áp dụng giảm giá theo số tiền
                 setFinalTotal(totalPriceNow - (totalPriceNow * discount) / 100);
+                setDiscountAmountText(
+                    `${formatPrice((totalPriceNow * discount) / 100)}`
+                );
             } else if (type === "fixed") {
                 setDiscountAmount(discount); // Giảm giá theo số tiền
                 setDiscount(0); // Không áp dụng giảm giá theo %
                 setFinalTotal(totalPriceNow - discount);
+                setDiscountAmountText(`${formatPrice(discount)}`);
             }
 
             setMessage("Áp dụng mã giảm giá thành công!");
@@ -712,14 +770,14 @@ const CheckoutNow = () => {
                                     mb={1}
                                     sx={{ fontWeight: "bold" }}
                                 >
-                                    Tiền thanh toán
+                                    Voucher
                                 </Typography>
                                 <Typography
                                     variant="h5"
                                     color="red"
                                     sx={{ fontWeight: "bold" }}
                                 >
-                                    {formatPrice(finalTotal)}
+                                    {discountAmountText}
                                 </Typography>
                             </Grid>
                         </Box>
@@ -1349,7 +1407,7 @@ const CheckoutNow = () => {
                             moment()
                         );
                         const isBelowMinPrice =
-                            totalPriceNow < voucher.minPrice;
+                        totalPriceNow < voucher.minPrice;
                         return (
                             <div
                                 key={voucher._id}

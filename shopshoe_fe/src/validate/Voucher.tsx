@@ -15,10 +15,12 @@ const voucherSchema = Joi.object({
         "string.max": `"code" không được vượt quá 255 ký tự`,
         "any.required": `"code" là bắt buộc`,
     }),
-    discount: Joi.number().min(0).required().messages({
+    discount: Joi.number().min(1).required().messages({
         "number.base": `"discount" phải là một số`,
-        "number.min": `"discount" phải lớn hơn hoặc bằng 0`,
+        "number.min": `"discount" phải lớn hơn hoặc bằng 1`,
         "any.required": `"discount" là bắt buộc`,
+        "number.empty": " không được để trống",
+
     }),
     type: Joi.string().valid("percent", "fixed").required().messages({
         "any.only": `"type" chỉ nhận giá trị "percent" hoặc "fixed"`,
@@ -32,6 +34,7 @@ const voucherSchema = Joi.object({
         "number.base": `"minPrice" phải là một số`,
         "number.min": `"minPrice" phải lớn hơn hoặc bằng 0`,
         "any.required": `"minPrice" là bắt buộc`,
+        "number.empty": "Giá trị tối thiểu không được để trống",
     }),
 });
 
