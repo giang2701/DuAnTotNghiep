@@ -23,7 +23,7 @@ import Swal from "sweetalert2";
 interface RefundRequest {
     _id: string;
     orderId: { _id: string };
-    userId: { _id: string; name: string };
+    userId: { _id: string; username: string };
     bankName: string;
     accountNumber: string;
     accountName: string;
@@ -247,7 +247,7 @@ const RefundManagement = () => {
                                             )}
                                         </td>
                                         <td>{item.status}</td>
-                                        <td
+                                          <td
                                             style={{
                                                 display: "flex",
                                                 justifyContent: "center",
@@ -327,7 +327,7 @@ const RefundManagement = () => {
                                 ID Đơn hàng: {selectedRefund.orderId._id}
                             </Typography>
                             <Typography>
-                                Tên khách hàng: {selectedRefund.userId.name}
+                                Tên khách hàng: {selectedRefund.userId.username}
                             </Typography>
                             <Typography>
                                 Số điện thoại: {selectedRefund.phoneNumber}

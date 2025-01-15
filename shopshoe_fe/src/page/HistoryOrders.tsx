@@ -239,6 +239,31 @@ const HistoryOrders = () => {
                     icon: "success",
                 });
                 toast.success("Đơn hàng đã được hủy.");
+                   // Cập nhật trạng thái đơn hàng trong local state
+            const updatedOrders = orders.map((order) =>
+            order._id === orderId
+                ? { ...order, status: "Cancelled" }
+                : order
+        );
+
+        // Sắp xếp lại danh sách đơn hàng theo thời gian, đơn mới nhất lên đầu
+        const sortedOrders = updatedOrders.sort((a, b) => {
+            const dateA = new Date(a.createdAt).getTime();
+            const dateB = new Date(b.createdAt).getTime();
+            return dateB - dateA; // Đảm bảo đơn mới nhất lên đầu
+        });
+
+        // Cập nhật lại danh sách đơn hàng sau khi sắp xếp
+        setOrders(sortedOrders);
+
+        // Nếu người dùng đang lọc theo trạng thái 'Đã hủy', thì lọc lại đơn hàng
+        setFilteredOrders(
+            sortedOrders.filter((order) => order.status === "Cancelled")
+        );
+
+        // Cập nhật lại trạng thái lọc hiện tại
+        setSelectedStatus("Cancelled");
+        // getOrderByid();
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 swalWithBootstrapButtons.fire({
                     title: "Cancelled",
@@ -247,31 +272,7 @@ const HistoryOrders = () => {
                 });
             }
 
-            // Cập nhật trạng thái đơn hàng trong local state
-            const updatedOrders = orders.map((order) =>
-                order._id === orderId
-                    ? { ...order, status: "Cancelled" }
-                    : order
-            );
-
-            // Sắp xếp lại danh sách đơn hàng theo thời gian, đơn mới nhất lên đầu
-            const sortedOrders = updatedOrders.sort((a, b) => {
-                const dateA = new Date(a.createdAt).getTime();
-                const dateB = new Date(b.createdAt).getTime();
-                return dateB - dateA; // Đảm bảo đơn mới nhất lên đầu
-            });
-
-            // Cập nhật lại danh sách đơn hàng sau khi sắp xếp
-            setOrders(sortedOrders);
-
-            // Nếu người dùng đang lọc theo trạng thái 'Đã hủy', thì lọc lại đơn hàng
-            setFilteredOrders(
-                sortedOrders.filter((order) => order.status === "Cancelled")
-            );
-
-            // Cập nhật lại trạng thái lọc hiện tại
-            setSelectedStatus("Cancelled");
-            // getOrderByid();
+         
         } catch (error: any) {
             const errorMessage =
                 error.response?.data?.message ||

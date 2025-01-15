@@ -328,7 +328,7 @@ const BaivietList = () => {
                                             ).toLocaleDateString()}
                                         </td>
                                         <td>
-                                            {item.isActive ? "Hiện thị" : "Ẩn"}
+                                            {item.isActive ? "Hiển thị" : "Ẩn"}
                                         </td>
                                         <td className="text-center">
                                             <div className="d-flex justify-content-center">

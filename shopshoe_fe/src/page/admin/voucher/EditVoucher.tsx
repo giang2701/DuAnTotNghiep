@@ -17,6 +17,7 @@ const EditVoucher = () => {
     register,
     handleSubmit,
     setValue, // Để gán giá trị cho form
+    watch,
     formState: { errors },
   } = useForm<Voucher>({
     resolver: joiResolver(voucherSchema),
