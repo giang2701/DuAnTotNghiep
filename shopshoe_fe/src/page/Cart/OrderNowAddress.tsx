@@ -174,7 +174,7 @@ const CheckoutNow = () => {
             const response = await instance.post("/voucher/verify", {
                 code: couponCode,
             });
-            console.log(response.data);
+            // console.log(response.data);
 
             const { discount, type } = response.data;
 
@@ -310,17 +310,17 @@ const CheckoutNow = () => {
     //         setFinalTotal(totalPriceNow);
     //     }
     // };
-   
-    const [discountAmountText, setDiscountAmountText] = useState(0);
-    console.log("discountAmountText", discountAmountText);
 
+    const [discountAmountText, setDiscountAmountText] = useState(0);
+    // console.log("discountAmountText", discountAmountText);
+    const [selectedVoucher, setSelectedVoucher] = useState(null);
     const handleApplyVoucher = async (voucher: Voucher) => {
         console.log(`Đã áp dụng voucher: ${voucher.name}`);
         try {
             const response = await instance.post("/voucher/verify", {
                 code: voucher.code,
             });
-            console.log(response.data);
+            // console.log(response.data);
 
             const { discount, type } = response.data;
 
@@ -393,7 +393,7 @@ const CheckoutNow = () => {
                 paymentMethod: selectedValue.toUpperCase(),
                 status: "PENDING",
             };
-            console.log("orderData", orderData);
+            // console.log("orderData", orderData);
 
             let response;
             // Xử lý theo phương thức thanh toán
@@ -1610,12 +1610,12 @@ const CheckoutNow = () => {
                 >
                     {vouchers.map((voucher) => {
                         // Kiểm tra nếu voucher đã hết hạn
-                        const isExpired = moment(voucher.expiryDate).isSame(
-                            moment()
-                        );
-                        
+                        const isExpired = moment(voucher.expiryDate)
+                            .tz("Asia/Ho_Chi_Minh")
+                            .isBefore(moment().tz("Asia/Ho_Chi_Minh"), "day");
+
                         const isBelowMinPrice =
-                        totalPriceNow < voucher.minPrice;
+                            totalPriceNow < voucher.minPrice;
                         return (
                             <div
                                 key={voucher._id}
@@ -1760,8 +1760,13 @@ const CheckoutNow = () => {
                                         onClick={() => {
                                             handleApplyVoucher(voucher);
                                             setHiddenVoucher(false);
+                                            setSelectedVoucher(voucher); // lưu voucher đang chọn vào biến trạng thái
                                         }}
-                                        disabled={isExpired || isBelowMinPrice} // Vô hiệu hóa nếu không khả dụng
+                                        disabled={
+                                            isExpired ||
+                                            isBelowMinPrice ||
+                                            selectedVoucher === voucher
+                                        } // ẩn nút nếu voucher đã chọn
                                         onMouseOver={(e) => {
                                             e.currentTarget.style.backgroundColor =
                                                 "#ed4d2b";
@@ -1770,7 +1775,9 @@ const CheckoutNow = () => {
                                         }}
                                         onMouseOut={(e) => {
                                             e.currentTarget.style.backgroundColor =
-                                                isExpired || isBelowMinPrice
+                                                isExpired ||
+                                                isBelowMinPrice ||
+                                                selectedVoucher === voucher
                                                     ? "#ccc"
                                                     : "white";
                                             e.currentTarget.style.color =
@@ -1781,16 +1788,22 @@ const CheckoutNow = () => {
                                             width: "100px",
                                             marginTop: "60px",
                                             marginRight: "10px",
-                                            // padding: "10px 20px",
                                             backgroundColor:
-                                                isExpired || isBelowMinPrice
-                                                    ? "#ccsc"
+                                                isExpired ||
+                                                isBelowMinPrice ||
+                                                selectedVoucher === voucher
+                                                    ? "#ccc"
                                                     : "white",
                                             color: "#ed4d2b",
-                                            border: "1px solid #ed4d2b",
+                                            border:
+                                                selectedVoucher === voucher
+                                                    ? "1px solid #ff0000" // thêm border màu đỏ nếu voucher đã chọn
+                                                    : "1px solid #ed4d2b",
                                             borderRadius: "5px",
                                             cursor:
-                                                isExpired || isBelowMinPrice
+                                                isExpired ||
+                                                isBelowMinPrice ||
+                                                selectedVoucher === voucher
                                                     ? "not-allowed"
                                                     : "pointer",
                                         }}

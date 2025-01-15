@@ -266,10 +266,10 @@ const Checkout = () => {
     //         setFinalTotal(totalPrice);
     //     }
     // };
-   
-    const [discountAmountText, setDiscountAmountText] = useState(0);
-    console.log("discountAmountText", discountAmountText);
 
+    const [discountAmountText, setDiscountAmountText] = useState(0);
+    // console.log("discountAmountText", discountAmountText);
+    const [selectedVoucher, setSelectedVoucher] = useState(null);
     const handleApplyVoucher = async (voucher: Voucher) => {
         console.log(`Đã áp dụng voucher: ${voucher.name}`);
         try {
@@ -765,7 +765,7 @@ const Checkout = () => {
                                     mb={1}
                                     sx={{ fontWeight: "bold" }}
                                 >
-                                   Voucher
+                                    Voucher
                                 </Typography>
                                 <Typography
                                     variant="h5"
@@ -1408,8 +1408,10 @@ const Checkout = () => {
                 >
                     {vouchers.map((voucher) => {
                         // Kiểm tra nếu voucher đã hết hạn
-                        const isExpired = moment(voucher.expiryDate).startOf("day").isBefore(moment().startOf("day"));
-
+                        // const isExpired = moment(voucher.expiryDate).startOf("day").isBefore(moment().startOf("day"));
+                        const isExpired = moment(voucher.expiryDate)
+                            .tz("Asia/Ho_Chi_Minh")
+                            .isBefore(moment().tz("Asia/Ho_Chi_Minh"), "day");
                         const isBelowMinPrice = totalPrice < voucher.minPrice;
                         return (
                             <div
@@ -1556,8 +1558,13 @@ const Checkout = () => {
                                         onClick={() => {
                                             handleApplyVoucher(voucher);
                                             setHiddenVoucher(false);
+                                            setSelectedVoucher(voucher); // lưu voucher đang chọn vào biến trạng thái
                                         }}
-                                        disabled={isExpired || isBelowMinPrice} // Vô hiệu hóa nếu không khả dụng
+                                        disabled={
+                                            isExpired ||
+                                            isBelowMinPrice ||
+                                            selectedVoucher === voucher
+                                        } // ẩn nút nếu voucher đã chọn
                                         onMouseOver={(e) => {
                                             e.currentTarget.style.backgroundColor =
                                                 "#ed4d2b";
@@ -1566,7 +1573,9 @@ const Checkout = () => {
                                         }}
                                         onMouseOut={(e) => {
                                             e.currentTarget.style.backgroundColor =
-                                                isExpired || isBelowMinPrice
+                                                isExpired ||
+                                                isBelowMinPrice ||
+                                                selectedVoucher === voucher
                                                     ? "#ccc"
                                                     : "white";
                                             e.currentTarget.style.color =
@@ -1577,16 +1586,22 @@ const Checkout = () => {
                                             width: "100px",
                                             marginTop: "60px",
                                             marginRight: "10px",
-                                            // padding: "10px 20px",
                                             backgroundColor:
-                                                isExpired || isBelowMinPrice
-                                                    ? "#ccsc"
+                                                isExpired ||
+                                                isBelowMinPrice ||
+                                                selectedVoucher === voucher
+                                                    ? "#ccc"
                                                     : "white",
                                             color: "#ed4d2b",
-                                            border: "1px solid #ed4d2b",
+                                            border:
+                                                selectedVoucher === voucher
+                                                    ? "1px solid #ff0000" // thêm border màu đỏ nếu voucher đã chọn
+                                                    : "1px solid #ed4d2b",
                                             borderRadius: "5px",
                                             cursor:
-                                                isExpired || isBelowMinPrice
+                                                isExpired ||
+                                                isBelowMinPrice ||
+                                                selectedVoucher === voucher
                                                     ? "not-allowed"
                                                     : "pointer",
                                         }}

@@ -212,10 +212,40 @@ const HistoryOrders = () => {
     };
 
     const handleCancelOrder = async (orderId: string) => {
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "custom-confirm-button",
+                cancelButton: "custom-cancel-button",
+            },
+            buttonsStyling: false,
+        });
         try {
-            // Gửi yêu cầu hủy đơn hàng tới API
-            await instance.put(`/orders/statusCancel/${orderId}`);
-            toast.success("Đơn hàng đã được hủy.");
+            const result = await swalWithBootstrapButtons.fire({
+                title: "Are you sure?",
+                text: "Bạn Muốn Hủy Đơn Hàng Này Không!!!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel!",
+                reverseButtons: true,
+            });
+
+            if (result.isConfirmed) {
+                // Gửi yêu cầu hủy đơn hàng tới API
+                await instance.put(`/orders/statusCancel/${orderId}`);
+                swalWithBootstrapButtons.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success",
+                });
+                toast.success("Đơn hàng đã được hủy.");
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                swalWithBootstrapButtons.fire({
+                    title: "Cancelled",
+                    text: "Your file is safe :)",
+                    icon: "error",
+                });
+            }
 
             // Cập nhật trạng thái đơn hàng trong local state
             const updatedOrders = orders.map((order) =>

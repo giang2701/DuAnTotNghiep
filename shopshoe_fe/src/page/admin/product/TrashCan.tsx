@@ -76,11 +76,42 @@ const TrashCan = () => {
             }
         });
     const hanldeRestore = async (_id: string) => {
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "custom-confirm-button",
+                cancelButton: "custom-cancel-button",
+            },
+            buttonsStyling: false,
+        });
         try {
-            await instance.put(`/products/status/${_id}`, {
-                isActive: true,
+            const result = await swalWithBootstrapButtons.fire({
+                title: "Are you sure?",
+                text: "Bạn Muốn Khôi Phục Sản Phẩm Này Không!!!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel!",
+                reverseButtons: true,
             });
-            toast.success("Kho/INFO: Sản phẩm đã khoi phuc");
+
+            if (result.isConfirmed) {
+                // Gửi yêu cầu hủy đơn hàng tới API
+                await instance.put(`/products/status/${_id}`, {
+                    isActive: true,
+                });
+                swalWithBootstrapButtons.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success",
+                });
+                toast.success("Kho/INFO: Sản phẩm đã khoi phuc");
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                swalWithBootstrapButtons.fire({
+                    title: "Cancelled",
+                    text: "Your file is safe :)",
+                    icon: "error",
+                });
+            }
         } catch (error: any) {
             const errorMessage =
                 error.response?.data?.message ||
@@ -240,7 +271,7 @@ const TrashCan = () => {
                                             </td>
                                             <td>
                                                 <div className="d-flex justify-content-center">
-                                                    <button
+                                                    {/* <button
                                                         className="me-3"
                                                         onClick={() =>
                                                             handleDelete(
@@ -258,7 +289,7 @@ const TrashCan = () => {
                                                         }}
                                                     >
                                                         <i className="fa-solid fa-trash"></i>
-                                                    </button>
+                                                    </button> */}
                                                     <button
                                                         style={{
                                                             borderRadius: "5px",
