@@ -386,6 +386,10 @@ function App() {
                                 }
                             />
                         </Route>
+                        <Route
+                            path="/admin/Authorization403"
+                            element={<Authorization403 />}
+                        />
                         <Route path="*" element={<Page404 />} />
                     </Routes>
                 </CartProvider>

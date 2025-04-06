@@ -278,21 +278,25 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
                         {/* Category */}
                         <li>
                             <Link to="/admin/category">
-                            <i  style={{
-                                    fontSize: "1.2rem",
-                                }}
-                             className="fa-solid fa-table-list"></i>                                <span className="menu-text">QL Danh Mục</span>
+                                <i
+                                    style={{
+                                        fontSize: "1.2rem",
+                                    }}
+                                    className="fa-solid fa-table-list"
+                                ></i>{" "}
+                                <span className="menu-text">QL Danh Mục</span>
                             </Link>
                         </li>
                         {/* **End-Category** */}
                         {/* Flash Sale */}
                         <li>
                             <Link to="/admin/flashSale">
-                            <i
-                            style={{
-                                fontSize:"1.5rem"
-                            }}
-                             className="fa-solid fa-bolt"></i>
+                                <i
+                                    style={{
+                                        fontSize: "1.5rem",
+                                    }}
+                                    className="fa-solid fa-bolt"
+                                ></i>
                                 <span className="menu-text">QL Flash Sale</span>
                             </Link>
                         </li>
@@ -368,7 +372,10 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
                         {/* Voucher */}
                         <li>
                             <Link to="/admin/voucher">
-                            <i style={{fontSize:"1.2rem"}} className="fa-solid fa-ticket"></i>
+                                <i
+                                    style={{ fontSize: "1.2rem" }}
+                                    className="fa-solid fa-ticket"
+                                ></i>
                                 <span className="menu-text">QL Voucher</span>
                             </Link>
                         </li>
@@ -409,14 +416,13 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
                                 </Link>
                             ) : (
                                 <Link
-                                    to="/authorization403"
+                                    to="Authorization403"
                                     style={{
                                         textDecoration: "none",
                                     }}
                                     className="disabled-link"
-                                    onClick={(e) => e.preventDefault()}
+                                    // onClick={(e) => e.preventDefault()}
                                 >
-                                    
                                     Quản Lý Nhân Viên
                                 </Link>
                             )}
@@ -429,8 +435,10 @@ c-19 14 -62 53 -94 85 -59 59 -59 59 -52 26z"
                                 <span className="menu-text">QL Đơn Hàng</span>
                             </Link> */}
                             <p onClick={HiddenOrder}>
-                            <i
-                            style={{fontSize:"1.2rem"}} className="fa-solid fa-shop"></i>
+                                <i
+                                    style={{ fontSize: "1.2rem" }}
+                                    className="fa-solid fa-shop"
+                                ></i>
                                 <span className="menu-text">QL Đơn Hàng</span>
                                 <i
                                     className={`fa-solid fa-chevron-down ${
