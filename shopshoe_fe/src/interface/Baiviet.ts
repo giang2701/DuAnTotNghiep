@@ -1,5 +1,3 @@
-
-
 export interface Baiviet {
     _id: string; // ID bài viết (do MongoDB tự sinh)
     title: string; // Tiêu đề bài viết
@@ -8,6 +6,4 @@ export interface Baiviet {
     images?: string[]; // Mảng URL ảnh (nếu có)
     isActive: boolean; // Trạng thái kích hoạt
     publishDate: Date; // Ngày đăng
-  }
-  
-  
+}

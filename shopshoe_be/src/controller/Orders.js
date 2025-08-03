@@ -458,7 +458,7 @@ export const checkAndUpdatePaymentStatus = async (req, res) => {
         }
 
         if (!(await checkProductStock(order))) {
-            console.log("Số lượng sản phẩm trong kho không đủ");
+            // console.log("Số lượng sản phẩm trong kho không đủ");// Khi sử dụng session
             order.paymentStatus = "Failed";
             await order.save();
             await deleteOrderStautus(orderId);

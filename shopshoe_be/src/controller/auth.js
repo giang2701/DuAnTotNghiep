@@ -11,8 +11,8 @@ export const register = async (req, res, next) => {
          * 3. Khoi tao user moi
          * 4. Thong bao thanh cong
          */
-        const { username, email, password, level } = req.body;
-        const useExists = await User.findOne({ email });
+        const { username, password } = req.body;
+        const useExists = await User.findOne({ username });
         console.log(useExists);
         if (useExists) {
             return res.status(400).json({
@@ -29,9 +29,7 @@ export const register = async (req, res, next) => {
 
         const user = await User.create({
             username,
-            email,
             password: hassPass,
-            level,
         });
 
         user.password = undefined;
